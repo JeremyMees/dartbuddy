@@ -6,7 +6,7 @@ const store = usePlayerStore()
   <main class="px-4">
     <Icon name="hugeicons:dart" />
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger as-child>
         <Button>Hello world</Button>
       </DialogTrigger>
       <DialogContent>
