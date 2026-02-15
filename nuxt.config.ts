@@ -1,7 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
-
   modules: [
     '@nuxt/eslint',
     '@nuxt/icon',
@@ -22,10 +21,6 @@ export default defineNuxtConfig({
       // @ts-expect-error - Temporary fix for tailwindcss plugin types mismatch
       tailwindcss(),
     ],
-  },
-
-  eslint: {
-    config: { stylistic: true },
   },
 
   shadcn: { prefix: '' },
