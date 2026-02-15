@@ -5,3 +5,4 @@
 /.husky
 /.vscode
 pnpm-lock.yaml
+/server/generated
