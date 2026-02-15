@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "prepare": "husky",
-    "postinstall": "nuxt prepare",
+    "postinstall": "npx prisma generate && nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --check",
