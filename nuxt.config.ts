@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/icon',
     '@nuxt/fonts',
+    '@nuxt/hints',
   ],
 
   devtools: { enabled: true },
