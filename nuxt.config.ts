@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@nuxt/hints',
     'shadcn-nuxt',
     '@vueuse/nuxt',
+    '@pinia/nuxt',
   ],
 
   devtools: { enabled: true },
