@@ -4,6 +4,7 @@ const store = usePlayerStore()
 
 <template>
   <main class="pt-4 px-4 sm:px-10">
+    <NuxtImg src="/images/mascot.webp" alt="" />
     <h1>heading 1</h1>
     <h2>heading 2</h2>
     <h3>heading 3</h3>

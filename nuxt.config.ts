@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxt/fonts',
     '@nuxt/hints',
+    '@nuxt/image',
     'shadcn-nuxt',
     '@vueuse/nuxt',
     '@pinia/nuxt',
