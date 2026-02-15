@@ -7,6 +7,8 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxt/fonts',
     '@nuxt/hints',
+    'shadcn-nuxt',
+    '@vueuse/nuxt',
   ],
 
   devtools: { enabled: true },
@@ -25,4 +27,6 @@ export default defineNuxtConfig({
   eslint: {
     config: { stylistic: true },
   },
+
+  shadcn: { prefix: '' },
 })
