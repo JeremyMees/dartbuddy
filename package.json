@@ -23,6 +23,8 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
-    "@iconify-json/hugeicons": "^1.2.23"
+    "@iconify-json/hugeicons": "^1.2.23",
+    "@tailwindcss/vite": "^4.1.18",
+    "tailwindcss": "^4.1.18"
   }
 }
