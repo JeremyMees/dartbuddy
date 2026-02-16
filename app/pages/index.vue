@@ -1,6 +1,4 @@
-<script setup lang="ts">
-const store = usePlayerStore()
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <NuxtLayout>
@@ -26,8 +24,5 @@ const store = usePlayerStore()
         </DialogHeader>
       </DialogContent>
     </Dialog>
-    <pre
-      >{{ store.players }}
-    </pre>
   </NuxtLayout>
 </template>
