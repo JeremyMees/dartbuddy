@@ -1,8 +1,19 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import type { HTMLAttributes } from 'vue'
+
+const props = defineProps<{
+  class?: HTMLAttributes['class']
+}>()
+</script>
 
 <template>
   <header
-    class="w-full flex items-center px-4 sm:px-10 py-2 mb-4 border-b gap-2 bg-card"
+    :class="
+      cn(
+        'w-full flex items-center px-4 sm:px-10 py-2 border-b gap-2',
+        props.class,
+      )
+    "
   >
     <NuxtImg
       src="/images/mascot.webp"
