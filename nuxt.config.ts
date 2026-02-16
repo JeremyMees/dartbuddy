@@ -9,7 +9,6 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'shadcn-nuxt',
     '@vueuse/nuxt',
-    '@pinia/nuxt',
   ],
 
   devtools: { enabled: true },
