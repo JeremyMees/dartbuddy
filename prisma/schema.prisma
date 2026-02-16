@@ -7,12 +7,101 @@ datasource db {
   provider = "postgresql"
 }
 
+enum OutType {
+  DOUBLE
+  MASTER
+  STRAIGHT
+}
+
+enum GameEndReason {
+  COMPLETED
+  MANUAL
+  TIME
+}
+
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  firstName String
-  lastName  String
-  nickName  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String       @id @default(uuid())
+  firstName   String
+  lastName    String
+  nickName    String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  gamePlayers GamePlayer[]
+  turns       Turn[]
+  throws      Throw[]
+  wonGames    Game[]       @relation("GameWinner")
+  wonLegs     Leg[]        @relation("LegWinner")
+}
+
+model Game {
+  id          String         @id @default(uuid())
+  createdAt   DateTime       @default(now())
+  completedAt DateTime?
+  startScore  Int            @default(501)
+  outType     OutType        @default(DOUBLE)
+  legsToWin   Int            @default(6)
+  endReason   GameEndReason?
+  winnerId    String?
+  winner      User?          @relation("GameWinner", fields: [winnerId], references: [id])
+  players     GamePlayer[]
+  legs        Leg[]
+}
+
+model GamePlayer {
+  id        String @id @default(uuid())
+  gameId    String
+  playerId  String
+  seatOrder Int
+  legsWon   Int    @default(0)
+  game      Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  player    User   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([gameId, playerId])
+  @@index([playerId])
+}
+
+model Leg {
+  id        String    @id @default(uuid())
+  gameId    String
+  number    Int
+  createdAt DateTime  @default(now())
+  endedAt   DateTime?
+  winnerId  String?
+  winner    User?     @relation("LegWinner", fields: [winnerId], references: [id])
+  game      Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  turns     Turn[]
+
+  @@unique([gameId, number])
+  @@index([gameId])
+}
+
+model Turn {
+  id             String   @id @default(uuid())
+  legId          String
+  playerId       String
+  startedAt      DateTime @default(now())
+  startingScore  Int
+  totalScored    Int
+  remainingScore Int
+  isBust         Boolean  @default(false)
+  leg            Leg      @relation(fields: [legId], references: [id], onDelete: Cascade)
+  player         User     @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  throws         Throw[]
+
+  @@index([playerId])
+  @@index([legId])
+}
+
+model Throw {
+  id       String @id @default(uuid())
+  turnId   String
+  playerId String
+  order    Int
+  segment  String
+  scored   Int
+  turn     Turn   @relation(fields: [turnId], references: [id], onDelete: Cascade)
+  player   User   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId])
+  @@index([turnId])
 }
