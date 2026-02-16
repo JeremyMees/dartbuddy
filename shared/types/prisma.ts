@@ -4,6 +4,7 @@ export type {
   User,
   Game,
   GamePlayer,
+  Set,
   Leg,
   Turn,
   Throw,
@@ -17,6 +18,8 @@ export type CreateGame = Prisma.GameCreateInput
 export type UpdateGame = Prisma.GameUpdateInput
 export type CreateGamePlayer = Prisma.GamePlayerCreateInput
 export type UpdateGamePlayer = Prisma.GamePlayerUpdateInput
+export type CreateSet = Prisma.SetCreateInput
+export type UpdateSet = Prisma.SetUpdateInput
 export type CreateLeg = Prisma.LegCreateInput
 export type UpdateLeg = Prisma.LegUpdateInput
 export type CreateTurn = Prisma.TurnCreateInput
@@ -42,9 +45,14 @@ export type GameOverview = Prisma.GameGetPayload<{
         player: true
       }
     }
-    legs: {
+    sets: {
       include: {
         winner: true
+        legs: {
+          include: {
+            winner: true
+          }
+        }
       }
     }
     winner: true
@@ -58,13 +66,18 @@ export type GameFull = Prisma.GameGetPayload<{
         player: true
       }
     }
-    legs: {
+    sets: {
       include: {
         winner: true
-        turns: {
+        legs: {
           include: {
-            throws: true
-            player: true
+            winner: true
+            turns: {
+              include: {
+                throws: true
+                player: true
+              }
+            }
           }
         }
       }
@@ -100,7 +113,36 @@ export type UserWithGames = Prisma.UserGetPayload<{
       }
     }
     wonGames: true
+    wonSets: true
     wonLegs: true
+  }
+}>
+
+export type SetWithLegs = Prisma.SetGetPayload<{
+  include: {
+    legs: {
+      include: {
+        winner: true
+      }
+    }
+    winner: true
+  }
+}>
+
+export type SetFull = Prisma.SetGetPayload<{
+  include: {
+    legs: {
+      include: {
+        winner: true
+        turns: {
+          include: {
+            throws: true
+            player: true
+          }
+        }
+      }
+    }
+    winner: true
   }
 }>
 

@@ -30,6 +30,7 @@ model User {
   turns       Turn[]
   throws      Throw[]
   wonGames    Game[]       @relation("GameWinner")
+  wonSets     Set[]        @relation("SetWinner")
   wonLegs     Leg[]        @relation("LegWinner")
 }
 
@@ -40,11 +41,12 @@ model Game {
   startScore  Int            @default(501)
   outType     OutType        @default(DOUBLE)
   legsToWin   Int            @default(6)
+  setsToWin   Int            @default(1)
   endReason   GameEndReason?
   winnerId    String?
   winner      User?          @relation("GameWinner", fields: [winnerId], references: [id])
   players     GamePlayer[]
-  legs        Leg[]
+  sets        Set[]
 }
 
 model GamePlayer {
@@ -52,7 +54,7 @@ model GamePlayer {
   gameId    String
   playerId  String
   seatOrder Int
-  legsWon   Int    @default(0)
+  setsWon   Int    @default(0)
   game      Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
   player    User   @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
@@ -60,19 +62,34 @@ model GamePlayer {
   @@index([playerId])
 }
 
-model Leg {
+model Set {
   id        String    @id @default(uuid())
   gameId    String
   number    Int
   createdAt DateTime  @default(now())
   endedAt   DateTime?
   winnerId  String?
-  winner    User?     @relation("LegWinner", fields: [winnerId], references: [id])
+  winner    User?     @relation("SetWinner", fields: [winnerId], references: [id])
   game      Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  turns     Turn[]
+  legs      Leg[]
 
   @@unique([gameId, number])
   @@index([gameId])
+}
+
+model Leg {
+  id        String    @id @default(uuid())
+  setId     String
+  number    Int
+  createdAt DateTime  @default(now())
+  endedAt   DateTime?
+  winnerId  String?
+  winner    User?     @relation("LegWinner", fields: [winnerId], references: [id])
+  set       Set       @relation(fields: [setId], references: [id], onDelete: Cascade)
+  turns     Turn[]
+
+  @@unique([setId, number])
+  @@index([setId])
 }
 
 model Turn {
