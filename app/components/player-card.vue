@@ -29,15 +29,15 @@ const nextThrows = computed<Segment[]>(() => {
         ? 'bg-primary text-primary-foreground border-transparent'
         : 'bg-transparent text-foreground'
     "
-    class="border rounded-lg w-full p-4 flex flex-col gap-4 transition-colors duration-300"
+    class="border rounded-lg w-full py-2 flex flex-col gap-2 transition-colors duration-300"
   >
-    <span class="text-lg">
+    <span class="text-lg px-4">
       {{ firstName }}
       <span class="font-bold">"{{ nickName }}"</span>
       {{ lastName }}
     </span>
 
-    <div class="flex gap-4 items-center justify-between">
+    <div class="px-4 pt-2 flex gap-4 items-center justify-between">
       <div class="text-3xl font-black">
         {{ points }}
       </div>
@@ -61,16 +61,18 @@ const nextThrows = computed<Segment[]>(() => {
       </div>
     </div>
 
-    <div
-      :class="active ? 'border-primary-foreground/50' : 'border-border'"
-      class="flex gap-2 items-center justify-between border-t pt-2 transition-colors duration-300"
-    >
+    <Separator
+      :class="active ? 'bg-primary-foreground/50' : 'bg-border'"
+      class="transition-colors duration-300"
+    />
+
+    <div class="px-4 flex gap-2 items-center justify-between">
       <span class="text-sm">Possible throws:</span>
       <div class="flex gap-2 items-center">
         <div
           v-for="bestThrow in nextThrows"
           :key="bestThrow"
-          class="px-2 py-1 w-14 rounded-lg text-center font-bold bg-accent"
+          class="p-1 w-14 rounded-lg text-center font-bold bg-accent"
         >
           {{ bestThrow }}
         </div>

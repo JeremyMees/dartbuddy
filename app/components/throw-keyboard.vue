@@ -23,24 +23,22 @@ function toggleSelectedAmount(amount: number) {
     <div class="grid grid-cols-7 gap-2">
       <template v-for="i in 20" :key="i">
         <Button
-          size="sm"
           :variant="selectedAmount === i ? 'default' : 'outline'"
           :disabled="
             disabled || (selectedAmount !== null && selectedAmount !== i)
           "
-          class="w-full h-12"
+          class="w-full"
           @click="toggleSelectedAmount(i)"
         >
           {{ i }}
         </Button>
       </template>
       <Button
-        size="sm"
         :variant="selectedAmount === 25 ? 'default' : 'outline'"
         :disabled="
           disabled || (selectedAmount !== null && selectedAmount !== 25)
         "
-        class="w-full h-12"
+        class="w-full"
         @click="toggleSelectedAmount(25)"
       >
         25
@@ -49,10 +47,9 @@ function toggleSelectedAmount(amount: number) {
 
     <div class="grid grid-cols-4 gap-2">
       <Button
-        size="sm"
         variant="outline"
         :disabled="disabled || selectedAmount !== null"
-        class="w-full h-12"
+        class="w-full"
         @click="
           () => {
             $emit('throw', 'MISS')
@@ -63,10 +60,9 @@ function toggleSelectedAmount(amount: number) {
         Missed
       </Button>
       <Button
-        size="sm"
         variant="outline"
         :disabled="disabled || selectedAmount === null"
-        class="w-full h-12"
+        class="w-full"
         @click="
           () => {
             $emit('throw', calculateSegment(selectedAmount, 1))
@@ -77,10 +73,9 @@ function toggleSelectedAmount(amount: number) {
         Single
       </Button>
       <Button
-        size="sm"
         variant="outline"
         :disabled="disabled || selectedAmount === null"
-        class="w-full h-12"
+        class="w-full"
         @click="
           () => {
             $emit('throw', calculateSegment(selectedAmount, 2))
@@ -91,10 +86,9 @@ function toggleSelectedAmount(amount: number) {
         Double
       </Button>
       <Button
-        size="sm"
         variant="outline"
         :disabled="disabled || selectedAmount === null || selectedAmount === 25"
-        class="w-full h-12"
+        class="w-full"
         @click="
           () => {
             $emit('throw', calculateSegment(selectedAmount, 3))
