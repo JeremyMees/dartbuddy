@@ -65,7 +65,35 @@ export const segments = [
 ] as const
 
 export type Segment = (typeof segments)[number]
+export type SegmentMultiplier = 'S' | 'D' | 'T'
+
+export function getSegmentPrefix(multiplier: number): SegmentMultiplier {
+  let prefix: SegmentMultiplier = 'S'
+  if (multiplier === 2) {
+    prefix = 'D'
+  } else if (multiplier === 3) {
+    prefix = 'T'
+  }
+
+  return prefix
+}
 
 export function isValidSegment(s: string): s is Segment {
   return (segments as readonly string[]).includes(s)
+}
+
+export function calculateSegment(
+  number: number | null,
+  multiplier: number,
+): Segment {
+  if (number === null) return 'MISS'
+
+  if (number === 25 && multiplier <= 2) {
+    return multiplier === 1 ? 'SB' : 'DB'
+  }
+
+  const prefix = getSegmentPrefix(multiplier)
+  const concatenatedSegment = `${prefix}${number}`
+
+  return isValidSegment(concatenatedSegment) ? concatenatedSegment : 'MISS'
 }
