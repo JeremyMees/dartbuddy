@@ -7,7 +7,8 @@ const props = defineProps<{
 </script>
 
 <template>
-  <header
+  <NuxtLink
+    to="/"
     :class="
       cn('w-full flex items-center px-4 sm:px-10 py-2 gap-2', props.class)
     "
@@ -21,5 +22,5 @@ const props = defineProps<{
       height="32"
     />
     <h1 class="text-xl font-bold">DartBuddy</h1>
-  </header>
+  </NuxtLink>
 </template>
