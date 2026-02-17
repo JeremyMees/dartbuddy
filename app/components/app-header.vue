@@ -9,10 +9,7 @@ const props = defineProps<{
 <template>
   <header
     :class="
-      cn(
-        'w-full flex items-center px-4 sm:px-10 py-2 border-b gap-2',
-        props.class,
-      )
+      cn('w-full flex items-center px-4 sm:px-10 py-2 gap-2', props.class)
     "
   >
     <NuxtImg
