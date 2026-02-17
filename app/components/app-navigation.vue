@@ -32,7 +32,7 @@ const navigation = [
       v-for="item in navigation"
       :key="item.name"
       :to="item.href"
-      class="flex items-center gap-2 bg-accent rounded-lg p-2"
+      class="flex items-center gap-2 rounded-lg p-2"
       active-class="ring-2 ring-primary"
     >
       <Icon :name="item.icon" class="size-6! min-w-6!" />
