@@ -97,3 +97,21 @@ export function calculateSegment(
 
   return isValidSegment(concatenatedSegment) ? concatenatedSegment : 'MISS'
 }
+
+export function calculateSegmentScore(segment: Segment): number {
+  if (segment === 'MISS') return 0
+  if (segment === 'SB') return 25
+  if (segment === 'DB') return 50
+
+  const multiplier = segment[0]
+  const number = +segment.slice(1)
+
+  let score = number
+  if (multiplier === 'D') {
+    score *= 2
+  } else if (multiplier === 'T') {
+    score *= 3
+  }
+
+  return score
+}

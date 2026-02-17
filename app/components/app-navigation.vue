@@ -23,7 +23,7 @@ const navigation = [
   <header
     :class="
       cn(
-        'w-full flex items-center justify-center p-4 sm:px-10 border-t gap-4',
+        'w-full flex items-center justify-center py-2 px-4 sm:px-10 border-t gap-4',
         props.class,
       )
     "
