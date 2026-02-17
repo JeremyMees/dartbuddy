@@ -14,7 +14,7 @@
     </main>
 
     <div class="shrink-0">
-      <div v-if="$slots.bottom" class="p-4 sm:px-10">
+      <div v-if="$slots.bottom" class="px-4 pb-4 sm:px-10">
         <slot name="bottom" />
       </div>
       <AppNavigation />

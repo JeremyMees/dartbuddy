@@ -2,7 +2,6 @@
 const {
   thrownSegments,
   maxThrowsHit,
-  totalThrowScore,
   addThrownSegment,
   resetThrownSegments,
   removeThrownSegment,
@@ -16,14 +15,68 @@ function submitThrows() {
 
 <template>
   <NuxtLayout>
-    <pre>
-      {{ thrownSegments }}
-    </pre>
-    <pre>Total Score: {{ totalThrowScore }}</pre>
+    <div class="flex flex-col gap-2 w-full">
+      <PlayerCard
+        :active="true"
+        first-name="Jeremy"
+        last-name="Mees"
+        nick-name="per ongeluk 123"
+        :sets="3"
+        :legs="2"
+        :points="13"
+        :average="60.5"
+        :thrown="6"
+      />
+      <PlayerCard
+        :active="false"
+        first-name="Zyon"
+        last-name="Devolder"
+        nick-name="weeral in de surround"
+        :sets="1"
+        :legs="5"
+        :points="170"
+        :average="80.5"
+        :thrown="3"
+      />
+      <PlayerCard
+        :active="false"
+        first-name="Zyon"
+        last-name="Devolder"
+        nick-name="weeral in de surround"
+        :sets="1"
+        :legs="5"
+        :points="170"
+        :average="80.5"
+        :thrown="3"
+      />
+      <PlayerCard
+        :active="false"
+        first-name="Zyon"
+        last-name="Devolder"
+        nick-name="weeral in de surround"
+        :sets="1"
+        :legs="5"
+        :points="170"
+        :average="80.5"
+        :thrown="3"
+      />
+      <PlayerCard
+        :active="false"
+        first-name="Zyon"
+        last-name="Devolder"
+        nick-name="weeral in de surround"
+        :sets="1"
+        :legs="5"
+        :points="170"
+        :average="80.5"
+        :thrown="3"
+      />
+    </div>
+
     <template #bottom>
       <div
         :class="thrownSegments.length && 'mb-2'"
-        class="pt-4 grid grid-cols-4 gap-2 items-center border-t"
+        class="pt-2 grid grid-cols-4 gap-2 items-center border-t"
       >
         <SingleThrowCard
           v-for="thrownSegment in thrownSegments"
