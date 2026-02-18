@@ -5,8 +5,6 @@ export default defineEventHandler(async (event) => {
     userCreateSchema.safeParse(body),
   )
 
-  console.log({ success, data, error })
-
   if (!success) throw error.issues
 
   const user = await prisma.user.create({
