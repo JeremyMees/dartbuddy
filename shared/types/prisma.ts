@@ -151,3 +151,10 @@ export type GamePlayerWithUser = Prisma.GamePlayerGetPayload<{
     player: true
   }
 }>
+
+export interface PaginationData {
+  page: number
+  amount: number
+  total: number
+  totalPages: number
+}
