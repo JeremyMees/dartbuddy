@@ -43,11 +43,11 @@ const nextThrows = computed<Segment[]>(() => {
       </div>
       <div class="flex gap-4">
         <div class="flex gap-2 items-center">
-          <Icon name="hugeicons:award-01" />
+          <Icon name="hugeicons:medal-02" />
           <span class="font-bold">{{ sets }}</span>
         </div>
         <div class="flex gap-2 items-center">
-          <Icon name="hugeicons:medal-06" />
+          <Icon name="hugeicons:stack-star" />
           <span class="font-bold">{{ legs }}</span>
         </div>
         <div class="flex gap-2 items-center">
