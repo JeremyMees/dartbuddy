@@ -75,12 +75,12 @@ function deleteGame(id: Game['id']) {
               : 'No games found for the page that is selected.'
           }}
         </EmptyDescription>
-        <EmptyContent v-if="page > 1">
-          <Button variant="outline" size="sm" @click="setPage(1)">
-            Go back to first page
-          </Button>
-        </EmptyContent>
       </EmptyHeader>
+      <EmptyContent v-if="page > 1">
+        <Button variant="outline" size="sm" @click="setPage(1)">
+          Go back to first page
+        </Button>
+      </EmptyContent>
     </Empty>
 
     <div v-else-if="data.games.length" class="w-full flex flex-col gap-2">

@@ -4,7 +4,10 @@ import { useForm, Field as VeeField } from 'vee-validate'
 import { userCreateSchema, userUpdateSchema } from '#shared/form-schemas/user'
 
 const props = defineProps<{ user?: User }>()
-const emit = defineEmits<(event: 'saved') => void>()
+const emit = defineEmits<{
+  saved: []
+  refresh: []
+}>()
 
 const formSchema = toTypedSchema(
   props.user ? userUpdateSchema : userCreateSchema,
@@ -36,7 +39,7 @@ const onSubmit = handleSubmit(async (data) => {
     const fetchOptions = {
       body: data,
       async onResponse() {
-        await refreshNuxtData('users')
+        emit('refresh')
       },
     }
 

@@ -3,9 +3,15 @@ import { toTypedSchema } from '@vee-validate/zod'
 import { useForm, Field as VeeField } from 'vee-validate'
 import { gameCreateSchema } from '#shared/form-schemas/game'
 
-const { data: users, pending } = await useLazyAsyncData(
+const { data, pending } = await useLazyAsyncData(
   'users',
-  (_nuxtApp, { signal }) => $fetch<User[]>('/api/users', { signal }),
+  (_nuxtApp, { signal }) =>
+    $fetch<{ users: User[]; pagination: PaginationData }>('/api/users', {
+      signal,
+      params: {
+        amount: 20,
+      },
+    }),
 )
 
 const emit = defineEmits<{
@@ -55,14 +61,14 @@ const onSubmit = handleSubmit(async (data) => {
         </div>
 
         <div
-          v-if="!pending && (!users || users.length === 0)"
+          v-if="!pending && (!data?.users || data.users.length === 0)"
           class="text-sm text-muted-foreground rounded-lg border p-3"
         >
           No players available. Create players first.
         </div>
 
         <Select
-          v-else
+          v-else-if="data?.users"
           :model-value="field.value"
           multiple
           @update:model-value="field.onChange"
@@ -71,7 +77,11 @@ const onSubmit = handleSubmit(async (data) => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem v-for="user in users" :key="user.id" :value="user.id">
+            <SelectItem
+              v-for="user in data.users"
+              :key="user.id"
+              :value="user.id"
+            >
               {{ user.firstName }}
             </SelectItem>
           </SelectContent>

@@ -1,12 +1,21 @@
 <script setup lang="ts">
-const {
-  data: users,
-  pending,
-  error,
-  refresh,
-} = await useAsyncData('users', (_nuxtApp, { signal }) =>
-  $fetch<User[]>('/api/users', { signal }),
+const { page, setPage } = usePageQuery()
+
+const { data, pending, error, refresh } = await useLazyAsyncData(
+  () => `users-${page.value}`,
+  (_nuxtApp, { signal }) =>
+    $fetch<{ users: User[]; pagination: PaginationData }>('/api/users', {
+      signal,
+      params: {
+        page: page.value - 1,
+        amount: 10,
+      },
+    }),
+  {
+    watch: [page],
+  },
 )
+
 const dialogOpen = ref(false)
 const selectedUser = ref<User>()
 
@@ -16,7 +25,7 @@ async function deleteUser(id: User['id']) {
       method: 'DELETE',
     })
 
-    await refreshNuxtData('users')
+    await refresh()
   } catch (error) {
     console.error('Error deleting user:', error)
   }
@@ -42,17 +51,25 @@ async function deleteUser(id: User['id']) {
       :retry-fn="refresh"
     />
 
-    <Empty v-else-if="!users?.length" class="w-full">
+    <Empty v-else-if="!data?.users.length" class="w-full">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Icon name="hugeicons:user" />
         </EmptyMedia>
         <EmptyTitle>No users found</EmptyTitle>
         <EmptyDescription>
-          There are no users yet. Click the button above to create your first
-          user.
+          {{
+            page === 1
+              ? ' There are no users yet. Click the button above to create your first user.'
+              : 'No users found for the page that is selected.'
+          }}
         </EmptyDescription>
       </EmptyHeader>
+      <EmptyContent v-if="page > 1">
+        <Button variant="outline" size="sm" @click="setPage(1)">
+          Go back to first page
+        </Button>
+      </EmptyContent>
     </Empty>
 
     <div v-else class="border rounded-lg w-full">
@@ -64,7 +81,7 @@ async function deleteUser(id: User['id']) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow v-for="user in users" :key="user.id">
+          <TableRow v-for="user in data.users" :key="user.id">
             <TableCell>
               {{ user.firstName }}
               "{{ user.nickName }}"
@@ -121,6 +138,12 @@ async function deleteUser(id: User['id']) {
           </TableRow>
         </TableBody>
       </Table>
+      <TablePagination
+        :page="page"
+        :per-page="data.pagination.amount"
+        :total="data.pagination.total"
+        @update:page="setPage"
+      />
     </div>
 
     <Dialog
@@ -137,7 +160,11 @@ async function deleteUser(id: User['id']) {
             selectedUser ? 'Edit User' : 'Create User'
           }}</DialogTitle>
         </DialogHeader>
-        <FormUser :user="selectedUser" @saved="dialogOpen = false" />
+        <FormUser
+          :user="selectedUser"
+          @saved="dialogOpen = false"
+          @refresh="refresh"
+        />
       </DialogContent>
     </Dialog>
   </NuxtLayout>
