@@ -31,7 +31,7 @@ function isFinishingDouble(dart: DartThrow): boolean {
 }
 
 export function isCheckoutPossible(score: number): boolean {
-  return score >= 2 && score <= 501
+  return score >= 2 && score <= 170
 }
 
 function makeDartThrow(number: number, multiplier: number): DartThrow | null {
@@ -103,11 +103,17 @@ function enumerateTurnSequences(
   }
 }
 
+const checkoutCache = new Map<number, CheckoutResult | null>()
+
 export function findCheckoutPath(startingScore: number): CheckoutResult | null {
-  if (startingScore < 2 || startingScore > 501) {
+  if (startingScore < 2 || startingScore > 170) {
     throw new RangeError(
-      `Starting score must be between 2 and 501, got ${startingScore}`,
+      `Starting score must be between 2 and 170, got ${startingScore}`,
     )
+  }
+
+  if (checkoutCache.has(startingScore)) {
+    return checkoutCache.get(startingScore)!
   }
 
   const visited = new Set<number>([startingScore])
@@ -148,8 +154,12 @@ export function findCheckoutPath(startingScore: number): CheckoutResult | null {
       },
     )
 
-    if (found) return found
+    if (found) {
+      checkoutCache.set(startingScore, found)
+      return found
+    }
   }
 
+  checkoutCache.set(startingScore, null)
   return null
 }
