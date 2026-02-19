@@ -19,21 +19,9 @@ defineProps<PlayerStats>()
         {{ points }}
       </div>
       <div class="flex gap-4">
-        <div class="flex flex-col items-center gap-0.5">
-          <Icon name="hugeicons:medal-02" />
-          <span class="text-xs font-bold">{{ sets }}</span>
-          <span class="text-xs text-muted-foreground">Sets</span>
-        </div>
-        <div class="flex flex-col items-center gap-0.5">
-          <Icon name="hugeicons:stack-star" />
-          <span class="text-xs font-bold">{{ legs }}</span>
-          <span class="text-xs text-muted-foreground">Legs</span>
-        </div>
-        <div class="flex flex-col items-center gap-0.5">
-          <Icon name="hugeicons:dart" />
-          <span class="text-xs font-bold">{{ thrown }}</span>
-          <span class="text-xs text-muted-foreground">Darts</span>
-        </div>
+        <IconStat icon="hugeicons:medal-02" name="Sets" :value="sets" />
+        <IconStat icon="hugeicons:stack-star" name="Legs" :value="legs" />
+        <IconStat icon="hugeicons:dart" name="Darts" :value="thrown" />
       </div>
     </div>
 
