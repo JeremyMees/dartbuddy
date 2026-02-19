@@ -126,7 +126,7 @@ async function submitThrows() {
         <SingleThrowCard
           v-for="thrownSegment in thrownSegments"
           :key="thrownSegment"
-          :points="calculateSegmentScore(thrownSegment)"
+          :segment="thrownSegment"
           @remove="removeThrownSegment(thrownSegment)"
         />
 
