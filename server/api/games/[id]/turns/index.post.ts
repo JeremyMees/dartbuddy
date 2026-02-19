@@ -43,5 +43,7 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  return await $fetch(`/api/games/${gameId}`)
+  const game = await $fetch(`/api/games/${gameId}`)
+
+  return game
 })
