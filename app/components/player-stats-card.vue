@@ -15,9 +15,7 @@ defineProps<PlayerStats>()
     </span>
 
     <div class="px-4 pt-1 flex gap-4 items-center justify-between">
-      <div class="text-4xl font-black">
-        {{ points }}
-      </div>
+      <PlayerScore :points="points" />
       <div class="flex gap-4">
         <IconStat icon="hugeicons:medal-02" name="Sets" :value="sets" />
         <IconStat icon="hugeicons:stack-star" name="Legs" :value="legs" />

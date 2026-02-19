@@ -30,9 +30,7 @@ const nextThrows = computed<Segment[]>(() => {
     </span>
 
     <div class="px-4 pt-2 flex gap-4 items-center justify-between">
-      <div class="text-4xl font-black">
-        {{ points }}
-      </div>
+      <PlayerScore :points="points" />
       <div class="flex gap-4">
         <IconStat icon="hugeicons:medal-02" name="Sets" :value="sets" />
         <IconStat icon="hugeicons:stack-star" name="Legs" :value="legs" />
@@ -47,7 +45,7 @@ const nextThrows = computed<Segment[]>(() => {
     />
 
     <div class="px-4 flex gap-2 items-center justify-between">
-      <span class="text-sm">Possible throws:</span>
+      <span class="text-xs">Possible throws:</span>
       <div class="flex gap-2 items-center">
         <div
           v-for="(bestThrow, index) in nextThrows"
