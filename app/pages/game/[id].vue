@@ -77,6 +77,13 @@ async function submitThrows() {
 
   resetThrownSegments()
   await refresh()
+
+  await nextTick()
+  const element = document.getElementById(game.value.activePlayerId)
+  element?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+  })
 }
 </script>
 
@@ -94,7 +101,7 @@ async function submitThrows() {
       />
     </template>
 
-    <div class="flex flex-col gap-2 w-full">
+    <div class="flex flex-col gap-2 w-full overflow-auto pb-12">
       <template v-if="isMatchOver">
         <IconCard icon="hugeicons:award-01">
           {{ game?.winner?.firstName }}
@@ -111,6 +118,7 @@ async function submitThrows() {
       <template v-else>
         <PlayerCard
           v-for="stat in players"
+          :id="stat.playerId"
           :key="stat.playerId"
           v-bind="stat"
           :active="stat.playerId === game?.activePlayerId"
