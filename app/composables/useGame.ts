@@ -1,7 +1,3 @@
-function findUser(game: GameFull, playerId: string) {
-  return game.players.find((p) => p.playerId === playerId)?.player ?? null
-}
-
 export function useGame() {
   const route = useRoute()
   const gameId = computed(() => route.params.id as string)
@@ -82,11 +78,11 @@ export function useGame() {
         const merged = { ...current, ...updates }
 
         if (updates.activePlayerId) {
-          merged.activePlayer = findUser(current, updates.activePlayerId)
+          merged.activePlayer = findPlayer(current, updates.activePlayerId)
         }
 
         if (updates.winnerId) {
-          merged.winner = findUser(current, updates.winnerId)
+          merged.winner = findPlayer(current, updates.winnerId)
         } else if (updates.winnerId === null) {
           merged.winner = null
         }
@@ -105,7 +101,7 @@ export function useGame() {
   }) {
     if (!cachedGame.value) return
 
-    const player = findUser(cachedGame.value, data.playerId)
+    const player = findPlayer(cachedGame.value, data.playerId)
     if (!player) return
 
     const totalScored = data.throws.reduce((sum, t) => sum + t.scored, 0)
@@ -173,7 +169,7 @@ export function useGame() {
 
     const legUpdates: Partial<GameLeg> = { ...updates }
     if (updates.winnerId) {
-      legUpdates.winner = findUser(cachedGame.value, updates.winnerId)
+      legUpdates.winner = findPlayer(cachedGame.value, updates.winnerId)
     }
 
     await $fetch(`/api/games/${gameId.value}/legs/${legId}`, {
@@ -225,7 +221,7 @@ export function useGame() {
 
     const setUpdates: Partial<GameSet> = { ...updates }
     if (updates.winnerId) {
-      setUpdates.winner = findUser(cachedGame.value, updates.winnerId)
+      setUpdates.winner = findPlayer(cachedGame.value, updates.winnerId)
     }
 
     await $fetch(`/api/games/${gameId.value}/sets/${setId}`, {

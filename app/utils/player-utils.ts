@@ -1,4 +1,6 @@
-import type { PlayerStats } from '~/types/player'
+export function findPlayer(game: GameFull, playerId: string) {
+  return game.players.find((p) => p.playerId === playerId)?.player ?? null
+}
 
 function getPlayerTurns(game: GameFull, playerId: string): GameTurn[] {
   return game.sets.flatMap((set) =>
