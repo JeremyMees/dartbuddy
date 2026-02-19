@@ -28,30 +28,12 @@ defineProps<PlayerStats>()
     <Separator />
 
     <div class="px-4 grid grid-cols-3 gap-x-4 gap-y-3">
-      <div class="flex flex-col gap-0.5">
-        <span class="text-xs text-muted-foreground">3-dart avg</span>
-        <span class="font-bold">{{ average }}</span>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-xs text-muted-foreground">Best turn</span>
-        <span class="font-bold">{{ highestTurn || '—' }}</span>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-xs text-muted-foreground">180s</span>
-        <span class="font-bold">{{ oneEighties }}</span>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-xs text-muted-foreground">Best checkout</span>
-        <span class="font-bold">{{ highestCheckout || '—' }}</span>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-xs text-muted-foreground">Checkout tries</span>
-        <span class="font-bold">{{ checkoutAttempts }}</span>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-xs text-muted-foreground">Busts</span>
-        <span class="font-bold">{{ busts }}</span>
-      </div>
+      <SingleStat name="3-dart avg" :value="average" />
+      <SingleStat name="Best turn" :value="highestTurn || '-'" />
+      <SingleStat name="180s" :value="oneEighties" />
+      <SingleStat name="Best checkout" :value="highestCheckout || '-'" />
+      <SingleStat name="Checkout tries" :value="checkoutAttempts" />
+      <SingleStat name="Busts" :value="busts" />
     </div>
   </div>
 </template>
