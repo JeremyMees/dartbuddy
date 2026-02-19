@@ -13,11 +13,22 @@ export default defineEventHandler(async (event) => {
       outType: data.outType,
       legsToWin: data.legsToWin,
       setsToWin: data.setsToWin,
+      activePlayerId: data.playerIds[0],
       players: {
         create: data.playerIds.map((playerId, index) => ({
           playerId,
           seatOrder: index,
         })),
+      },
+      sets: {
+        create: {
+          number: 1,
+          legs: {
+            create: {
+              number: 1,
+            },
+          },
+        },
       },
     },
     include: {
@@ -26,6 +37,12 @@ export default defineEventHandler(async (event) => {
           player: true,
         },
       },
+      sets: {
+        include: {
+          legs: true,
+        },
+      },
+      activePlayer: true,
     },
   })
 
