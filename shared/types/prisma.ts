@@ -27,6 +27,10 @@ export type UpdateTurn = Prisma.TurnUpdateInput
 export type CreateThrow = Prisma.ThrowCreateInput
 export type UpdateThrow = Prisma.ThrowUpdateInput
 
+export type GameSet = GameFull['sets'][number]
+export type GameLeg = GameSet['legs'][number]
+export type GameTurn = GameLeg['turns'][number]
+
 export type GameWithPlayers = Prisma.GameGetPayload<{
   include: {
     players: {
@@ -83,6 +87,7 @@ export type GameFull = Prisma.GameGetPayload<{
       }
     }
     winner: true
+    activePlayer: true
   }
 }>
 

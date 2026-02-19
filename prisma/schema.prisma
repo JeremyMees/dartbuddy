@@ -20,33 +20,36 @@ enum GameEndReason {
 }
 
 model User {
-  id          String       @id @default(uuid())
-  firstName   String
-  lastName    String
-  nickName    String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  gamePlayers GamePlayer[]
-  turns       Turn[]
-  throws      Throw[]
-  wonGames    Game[]       @relation("GameWinner")
-  wonSets     Set[]        @relation("SetWinner")
-  wonLegs     Leg[]        @relation("LegWinner")
+  id           String       @id @default(uuid())
+  firstName    String
+  lastName     String
+  nickName     String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  gamePlayers  GamePlayer[]
+  turns        Turn[]
+  throws       Throw[]
+  wonGames     Game[]       @relation("GameWinner")
+  activeGames  Game[]       @relation("ActivePlayer")
+  wonSets      Set[]        @relation("SetWinner")
+  wonLegs      Leg[]        @relation("LegWinner")
 }
 
 model Game {
-  id          String         @id @default(uuid())
-  createdAt   DateTime       @default(now())
-  completedAt DateTime?
-  startScore  Int            @default(501)
-  outType     OutType        @default(DOUBLE)
-  legsToWin   Int            @default(6)
-  setsToWin   Int            @default(1)
-  endReason   GameEndReason?
-  winnerId    String?
-  winner      User?          @relation("GameWinner", fields: [winnerId], references: [id])
-  players     GamePlayer[]
-  sets        Set[]
+  id             String         @id @default(uuid())
+  createdAt      DateTime       @default(now())
+  completedAt    DateTime?
+  startScore     Int            @default(501)
+  outType        OutType        @default(DOUBLE)
+  legsToWin      Int            @default(6)
+  setsToWin      Int            @default(1)
+  endReason      GameEndReason?
+  winnerId       String?
+  activePlayerId String
+  winner         User?          @relation("GameWinner", fields: [winnerId], references: [id])
+  activePlayer   User?          @relation("ActivePlayer", fields: [activePlayerId], references: [id])
+  players        GamePlayer[]
+  sets           Set[]
 }
 
 model GamePlayer {
