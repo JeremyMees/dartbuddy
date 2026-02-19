@@ -30,36 +30,39 @@ defineProps<{ game: GameOverview }>()
         </li>
       </ul>
     </CardContent>
-    <CardFooter class="gap-2">
-      <AlertDialog>
-        <AlertDialogTrigger as-child>
-          <Button variant="outline" class="grow">
-            <Icon name="hugeicons:delete-01" />
-            Remove
+    <CardFooter>
+      <ButtonGroup class="grow">
+        <AlertDialog>
+          <AlertDialogTrigger as-child>
+            <Button variant="outline" class="flex-1">
+              <Icon name="hugeicons:delete-01" />
+              Remove
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle> Are you absolutely sure? </AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete this
+                game and remove all associated data.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel> Cancel </AlertDialogCancel>
+              <AlertDialogAction @click="$emit('delete', game.id)">
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+        <NuxtLink :to="`/game/${game.id}`" class="flex-1">
+          <Button variant="outline" class="w-full border-l-0 rounded-l-none">
+            <Icon v-if="game.winnerId" name="hugeicons:search-01" />
+            <Icon v-else name="hugeicons:dart" />
+            {{ game.winnerId ? 'Watch' : 'Play' }}
           </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle> Are you absolutely sure? </AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this
-              game and remove all associated data.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel> Cancel </AlertDialogCancel>
-            <AlertDialogAction @click="$emit('delete', game.id)">
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      <NuxtLink :to="`/game/${game.id}`" as-child class="grow">
-        <Button variant="outline" class="w-full">
-          <Icon name="hugeicons:dart" />
-          Play
-        </Button>
-      </NuxtLink>
+        </NuxtLink>
+      </ButtonGroup>
     </CardFooter>
   </Card>
 </template>
