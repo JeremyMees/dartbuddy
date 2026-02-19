@@ -1,44 +1,43 @@
 import type { PlayerStats } from '~/types/player'
 
+function getPlayerTurns(game: GameFull, playerId: string): GameTurn[] {
+  return game.sets.flatMap((set) =>
+    set.legs.flatMap((leg) =>
+      leg.turns.filter((turn) => turn.playerId === playerId),
+    ),
+  )
+}
+
+function getPlayerCurrentLegTurns(
+  game: GameFull,
+  playerId: string,
+): GameTurn[] {
+  const currentLeg = game.sets.at(-1)?.legs.at(-1)
+
+  return currentLeg?.turns.filter((turn) => turn.playerId === playerId) ?? []
+}
+
 export function calculatePlayerStats(
   game: GameFull,
   player: GameFull['players'][number],
 ): PlayerStats {
-  const playerTurns = game.sets.flatMap((set) =>
-    set.legs.flatMap((leg) =>
-      leg.turns.filter((turn) => turn.playerId === player.playerId),
-    ),
-  )
-
-  const legsWon = game.sets
-    .flatMap((set) => set.legs)
-    .filter((leg) => leg.winnerId === player.playerId).length
-
-  const lastTurn = playerTurns.length > 0 ? playerTurns.at(-1) : null
-  const currentPoints = lastTurn?.remainingScore ?? game.startScore
-
-  const totalThrows = playerTurns.reduce(
-    (sum, turn) => sum + turn.throws.length,
-    0,
-  )
-
-  const totalScored = playerTurns.reduce(
-    (sum, turn) => sum + turn.totalScored,
-    0,
-  )
-
-  const average = totalThrows > 0 ? (totalScored / totalThrows) * 3 : 0
+  const { playerId } = player
+  const allTurns = getPlayerTurns(game, playerId)
+  const currentLegTurns = getPlayerCurrentLegTurns(game, playerId)
+  const { legs, totalLegsWon } = calculateLegsWon(game, playerId)
 
   return {
-    playerId: player.playerId,
+    playerId,
     firstName: player.player.firstName,
     lastName: player.player.lastName,
     nickName: player.player.nickName,
-    sets: player.setsWon,
-    legs: legsWon,
-    points: currentPoints,
-    thrown: totalThrows,
-    average: Math.round(average * 100) / 100,
+    sets: calculateSetsWon(game, playerId),
+    legs,
+    totalLegsWon,
+    points: calculateCurrentPoints(game, currentLegTurns),
+    thrown: currentLegTurns.reduce((sum, t) => sum + t.throws.length, 0),
+    average: calculateThreeDartAverage(allTurns),
+    ...calculateTurnStats(allTurns),
   }
 }
 
