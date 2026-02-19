@@ -38,25 +38,54 @@ const nextThrows = computed<Segment[]>(() => {
     </span>
 
     <div class="px-4 pt-2 flex gap-4 items-center justify-between">
-      <div class="text-3xl font-black">
+      <div class="text-4xl font-black">
         {{ points }}
       </div>
       <div class="flex gap-4">
-        <div class="flex gap-2 items-center">
+        <div class="flex flex-col items-center gap-0.5">
           <Icon name="hugeicons:medal-02" />
-          <span class="font-bold">{{ sets }}</span>
+          <span class="text-xs font-bold">{{ sets }}</span>
+          <span
+            :class="
+              active ? 'text-primary-foreground/50' : 'text-muted-foreground'
+            "
+            class="text-xs transition-colors duration-300"
+            >Sets</span
+          >
         </div>
-        <div class="flex gap-2 items-center">
+        <div class="flex flex-col items-center gap-0.5">
           <Icon name="hugeicons:stack-star" />
-          <span class="font-bold">{{ legs }}</span>
+          <span class="text-xs font-bold">{{ legs }}</span>
+          <span
+            :class="
+              active ? 'text-primary-foreground/50' : 'text-muted-foreground'
+            "
+            class="text-xs transition-colors duration-300"
+            >Legs</span
+          >
         </div>
-        <div class="flex gap-2 items-center">
+        <div class="flex flex-col items-center gap-0.5">
           <Icon name="hugeicons:dart" />
-          <span class="font-bold">{{ thrown }}</span>
+          <span class="text-xs font-bold">{{ thrown }}</span>
+          <span
+            c
+            :class="
+              active ? 'text-primary-foreground/50' : 'text-muted-foreground'
+            "
+            class="text-xs transition-colors duration-300"
+            >Darts</span
+          >
         </div>
-        <div class="flex gap-2 items-center">
+        <div class="flex flex-col items-center gap-0.5">
           <Icon name="hugeicons:chart-01" />
-          <span class="font-bold">{{ average }}</span>
+          <span class="text-xs font-bold">{{ average }}</span>
+          <span
+            :class="
+              active ? 'text-primary-foreground/50' : 'text-muted-foreground'
+            "
+            class="text-xs transition-colors duration-300"
+            >Average</span
+          >
         </div>
       </div>
     </div>
