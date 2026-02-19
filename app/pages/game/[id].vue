@@ -1,26 +1,93 @@
 <script setup lang="ts">
 const {
+  game,
+  players,
+  pending,
+  error,
+  isMatchOver,
+  currentSet,
+  currentLeg,
+  addTurn,
+  handleWinningThrow,
+  setNextPlayer,
+  refresh,
+} = useGame()
+
+const {
   thrownSegments,
   maxThrowsHit,
+  totalThrowScore,
   addThrownSegment,
   resetThrownSegments,
   removeThrownSegment,
 } = useThrownSegments()
 
-function submitThrows() {
-  // Implement the logic for submitting throws here
+const activePlayerStats = computed(() =>
+  players.value.find((p) => p.playerId === game.value?.activePlayerId),
+)
+
+const canSubmit = computed(() => {
+  if (!thrownSegments.value.length || !game.value || !activePlayerStats.value) {
+    return false
+  }
+
+  if (maxThrowsHit.value) return true
+
+  const remaining = activePlayerStats.value.points - totalThrowScore.value
+  const lastSegment = thrownSegments.value.at(-1)
+  const bust = isBust(game.value.outType, remaining, lastSegment)
+
+  return remaining === 0 || bust
+})
+
+async function submitThrows() {
+  if (
+    !game.value ||
+    !currentSet.value ||
+    !currentLeg.value ||
+    !activePlayerStats.value
+  ) {
+    return
+  }
+
+  const startingScore = activePlayerStats.value.points
+
+  const throwsData = thrownSegments.value.map((segment) => ({
+    segment,
+    scored: calculateSegmentScore(segment),
+  }))
+
+  const remaining = startingScore - totalThrowScore.value
+  const lastSegment = thrownSegments.value.at(-1)
+  const bust = isBust(game.value.outType, remaining, lastSegment)
+
+  await addTurn({
+    legId: currentLeg.value.id,
+    playerId: game.value.activePlayerId,
+    startingScore,
+    throws: throwsData,
+    isBust: bust,
+  })
+
+  if (remaining === 0 && !bust) {
+    await handleWinningThrow()
+  } else {
+    await setNextPlayer()
+  }
+
   resetThrownSegments()
+  await refresh()
 }
 </script>
 
 <template>
   <NuxtLayout>
-    <template #top>
+    <template v-if="game" #top>
       <GameControls
-        :score-limit="501"
-        :out-type="'DOUBLE'"
-        :sets-to-win="3"
-        :legs-to-win="5"
+        :score-limit="game.startScore"
+        :out-type="game.outType"
+        :sets-to-win="game.setsToWin"
+        :legs-to-win="game.legsToWin"
         @end="console.log('Session ended')"
         @reset="console.log('Session reset')"
         @new="console.log('New session started')"
@@ -28,42 +95,30 @@ function submitThrows() {
     </template>
 
     <div class="flex flex-col gap-2 w-full">
-      <PlayerCard
-        :active="true"
-        first-name="Jeremy"
-        last-name="Mees"
-        nick-name="per ongeluk 123"
-        :sets="3"
-        :legs="2"
-        :points="13"
-        :average="60.5"
-        :thrown="6"
-      />
-      <PlayerCard
-        :active="false"
-        first-name="Zyon"
-        last-name="Devolder"
-        nick-name="weeral in de surround"
-        :sets="1"
-        :legs="5"
-        :points="170"
-        :average="80.5"
-        :thrown="3"
-      />
-      <PlayerCard
-        :active="false"
-        first-name="Karel"
-        last-name="van Gils"
-        nick-name="ernaast"
-        :sets="2"
-        :legs="1"
-        :points="120"
-        :average="20"
-        :thrown="3"
-      />
+      <template v-if="isMatchOver">
+        <IconCard icon="hugeicons:award-01">
+          {{ game?.winner?.firstName }}
+          <span class="font-bold">"{{ game?.winner?.nickName }}"</span>
+          {{ game?.winner?.lastName }}
+          has won this match!
+        </IconCard>
+        <PlayerStatsCard
+          v-for="stat in players"
+          :key="stat.playerId"
+          v-bind="stat"
+        />
+      </template>
+      <template v-else>
+        <PlayerCard
+          v-for="stat in players"
+          :key="stat.playerId"
+          v-bind="stat"
+          :active="stat.playerId === game?.activePlayerId"
+        />
+      </template>
     </div>
 
-    <template #bottom>
+    <template v-if="!isMatchOver" #bottom>
       <div
         :class="thrownSegments.length && 'mb-2'"
         class="pt-2 grid grid-cols-4 gap-2 items-center border-t"
@@ -74,9 +129,13 @@ function submitThrows() {
           :points="calculateSegmentScore(thrownSegment)"
           @remove="removeThrownSegment(thrownSegment)"
         />
-        <Button v-if="maxThrowsHit" @click="submitThrows">Submit</Button>
+
+        <Button v-if="canSubmit" @click="submitThrows">Submit</Button>
       </div>
-      <ThrowKeyboard :disabled="maxThrowsHit" @throw="addThrownSegment" />
+      <ThrowKeyboard
+        :disabled="maxThrowsHit || pending || !!error"
+        @throw="addThrownSegment"
+      />
     </template>
   </NuxtLayout>
 </template>
