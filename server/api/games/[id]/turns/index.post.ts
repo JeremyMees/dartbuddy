@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
   const totalScored = throws.reduce((sum, t) => sum + (t.scored || 0), 0)
   const remainingScore = isBust ? startingScore : startingScore - totalScored
 
-  await prisma.turn.create({
+  const turn = await prisma.turn.create({
     data: {
       legId,
       playerId,
@@ -43,7 +43,5 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  const game = await $fetch(`/api/games/${gameId}`)
-
-  return game
+  return turn
 })

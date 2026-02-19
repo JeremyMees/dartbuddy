@@ -24,12 +24,10 @@ export default defineEventHandler(async (event) => {
 
   const updateData = removeEmptyValues(data)
 
-  await prisma.leg.update({
+  const leg = await prisma.leg.update({
     where: { id: legId },
     data: updateData,
   })
 
-  const game = await $fetch(`/api/games/${gameId}`)
-
-  return game
+  return leg
 })

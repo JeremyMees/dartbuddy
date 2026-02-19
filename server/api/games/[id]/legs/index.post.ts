@@ -17,14 +17,12 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  await prisma.leg.create({
+  const leg = await prisma.leg.create({
     data: {
       setId,
       number,
     },
   })
 
-  const game = await $fetch(`/api/games/${gameId}`)
-
-  return game
+  return leg
 })

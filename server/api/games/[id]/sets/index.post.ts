@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  await prisma.set.create({
+  const set = await prisma.set.create({
     data: {
       gameId,
       number,
@@ -27,9 +27,10 @@ export default defineEventHandler(async (event) => {
         },
       },
     },
+    include: {
+      legs: true,
+    },
   })
 
-  const game = await $fetch(`/api/games/${gameId}`)
-
-  return game
+  return set
 })
