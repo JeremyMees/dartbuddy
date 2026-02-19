@@ -124,8 +124,8 @@ async function submitThrows() {
         class="pt-2 grid grid-cols-4 gap-2 items-center border-t"
       >
         <SingleThrowCard
-          v-for="thrownSegment in thrownSegments"
-          :key="thrownSegment"
+          v-for="(thrownSegment, index) in thrownSegments"
+          :key="`${index}-${thrownSegment}`"
           :segment="thrownSegment"
           @remove="removeThrownSegment(thrownSegment)"
         />

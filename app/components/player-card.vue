@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { PlayerStats } from '~~/shared/types/player'
+
 const props = defineProps<PlayerStats & { active: boolean }>()
 
 const nextThrows = computed<Segment[]>(() => {
