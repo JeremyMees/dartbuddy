@@ -1,75 +1,53 @@
-# Nuxt Minimal Starter
+# DartBuddy
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+DartBuddy is a darts scoring and game management application. It lets you create players, set up games, and track every throw across a full match — from individual darts to sets and legs.
 
-## Setup
+## Features
 
-Make sure to install dependencies:
+### Player Management
 
-```bash
-# npm
-npm install
+Create and manage players with a first name, last name, and nickname. Player profiles persist across games and accumulate statistics over time.
 
-# pnpm
-pnpm install
+### Game Setup
 
-# yarn
-yarn install
+Configure games before they start:
 
-# bun
-bun install
+- **Start score** — typically 501, but freely adjustable
+- **Out type** — Double out, Master out, or Straight out
+- **Legs to win** — number of legs required to win a set
+- **Sets to win** — number of sets required to win the match
+
+### Game Structure
+
+Matches follow the standard darts format:
+
+```
+Game → Sets → Legs → Turns → Throws
 ```
 
-## Development Server
+Each turn records the player's starting score, total scored, remaining score, and whether the turn was a bust. Individual throws store the exact board segment hit (e.g. `D20`, `T19`, `25`) and the points scored.
 
-Start the development server on `http://localhost:3000`:
+### Live Scoring
 
-```bash
-# npm
-npm run dev
+During a game the app tracks:
 
-# pnpm
-pnpm dev
+- Current score per player
+- Active player indicator
+- Bust detection based on the configured out type (e.g. finishing on a single when double out is required counts as a bust)
+- Three-dart average per player
+- Sets and legs won per player
 
-# yarn
-yarn dev
+### Checkout Suggestions
 
-# bun
-bun run dev
-```
+A path finder utility suggests possible checkout routes for the remaining score, helping players plan their finish.
 
-## Production
+### Game History
 
-Build the application for production:
+Completed games are stored with a completion timestamp, end reason (completed, manual, or timed out), and the winner. Full turn and throw history is retained for review and statistics.
 
-```bash
-# npm
-npm run build
+## Tech Stack
 
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- **Nuxt 4** — full-stack Vue framework
+- **Nitro** — server engine for API routes and backend logic
+- **Prisma** — database ORM with PostgreSQL
+- **Tailwind CSS + shadcn/ui** — styling and UI components
