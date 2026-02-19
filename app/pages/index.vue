@@ -20,13 +20,13 @@ const { data, pending, error, refresh } = await useLazyAsyncData(
   },
 )
 
-function deleteGame(id: Game['id']) {
+async function deleteGame(id: Game['id']) {
   try {
-    $fetch(`/api/games/${id}`, {
+    await $fetch(`/api/games/${id}`, {
       method: 'DELETE',
     })
 
-    refresh()
+    await refresh()
   } catch (error) {
     console.error('Error deleting game:', error)
   }
