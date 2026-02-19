@@ -18,10 +18,5 @@ export const turnCreateSchema = z.object({
     }),
   ),
   isBust: z.boolean().optional().default(false),
-  setId: z.string(),
-  number: z
-    .number()
-    .min(1, 'Turn number must be at least 1')
-    .max(100, 'Turn number must be less than 100'),
   winnerId: z.string().optional(),
 })
