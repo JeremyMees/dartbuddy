@@ -1,15 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
-  active: boolean
-  firstName: string
-  lastName: string
-  nickName: string
-  sets: number
-  legs: number
-  points: number
-  thrown: number
-  average: number
-}>()
+const props = defineProps<PlayerStats & { active: boolean }>()
 
 const nextThrows = computed<Segment[]>(() => {
   if (!isCheckoutPossible(props.points)) return ['T20', 'T20', 'T20']
