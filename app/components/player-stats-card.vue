@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import type { PlayerStats } from '~~/shared/types/player'
 
-const props = defineProps<PlayerStats>()
-
-const checkoutPct = computed(() => {
-  if (!props.checkoutAttempts) return '—'
-  return `${Math.round((props.checkoutSuccesses / props.checkoutAttempts) * 100)}%`
-})
+defineProps<PlayerStats>()
 </script>
 
 <template>
@@ -62,8 +57,8 @@ const checkoutPct = computed(() => {
         <span class="font-bold">{{ highestCheckout || '—' }}</span>
       </div>
       <div class="flex flex-col gap-0.5">
-        <span class="text-xs text-muted-foreground">Checkout %</span>
-        <span class="font-bold">{{ checkoutPct }}</span>
+        <span class="text-xs text-muted-foreground">Checkout tries</span>
+        <span class="font-bold">{{ checkoutAttempts }}</span>
       </div>
       <div class="flex flex-col gap-0.5">
         <span class="text-xs text-muted-foreground">Busts</span>
