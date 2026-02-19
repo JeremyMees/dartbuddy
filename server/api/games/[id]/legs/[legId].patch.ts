@@ -22,20 +22,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const updateData: Record<string, unknown> = {}
-
-  for (const key of Object.keys(data)) {
-    if (data[key as keyof typeof data] !== undefined) {
-      updateData[key] = data[key as keyof typeof data]
-    }
-  }
-
-  if (Object.keys(updateData).length === 0) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'No valid fields to update',
-    })
-  }
+  const updateData = removeEmptyValues(data)
 
   await prisma.leg.update({
     where: { id: legId },
