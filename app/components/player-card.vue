@@ -91,8 +91,8 @@ const nextThrows = computed<Segment[]>(() => {
       <span class="text-sm">Possible throws:</span>
       <div class="flex gap-2 items-center">
         <div
-          v-for="bestThrow in nextThrows"
-          :key="bestThrow"
+          v-for="(bestThrow, index) in nextThrows"
+          :key="`${index}-${bestThrow}`"
           class="p-1 w-14 rounded-lg text-center font-bold bg-accent"
         >
           {{ bestThrow }}
