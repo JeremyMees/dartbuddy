@@ -22,7 +22,7 @@ export default defineNuxtConfig({
       name: 'DartBuddy',
       short_name: 'Buddy',
       description: 'Dart scoring app',
-      theme_color: '#D97757',
+      theme_color: '#262624',
       background_color: '#262624',
       display: 'standalone',
       icons: [
