@@ -14,19 +14,25 @@ export default defineEventHandler(async (event) => {
     },
     include: {
       players: {
+        orderBy: { seatOrder: 'asc' },
         include: {
           player: true,
         },
       },
       sets: {
+        orderBy: { number: 'asc' },
         include: {
           winner: true,
           legs: {
+            orderBy: { number: 'asc' },
             include: {
               winner: true,
               turns: {
+                orderBy: { startedAt: 'asc' },
                 include: {
-                  throws: true,
+                  throws: {
+                    orderBy: { order: 'asc' },
+                  },
                   player: true,
                 },
               },

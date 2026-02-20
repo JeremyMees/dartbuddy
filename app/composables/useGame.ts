@@ -299,6 +299,26 @@ export function useGame() {
     await updateGame({ activePlayerId: nextStarterId })
   }
 
+  async function undoLastTurn() {
+    if (!game.value || !currentLeg.value) return
+
+    const allTurns = currentLeg.value.turns
+    if (allTurns.length === 0) return
+
+    const lastTurn = allTurns.at(-1)
+    if (!lastTurn) return
+
+    await $fetch<{ success: boolean }>(
+      `/api/games/${gameId.value}/turns/${lastTurn.id}`,
+      {
+        method: 'DELETE' as const,
+        ...optimistic((current) => withTurnRemoved(current, lastTurn.id)),
+      },
+    )
+
+    await updateGame({ activePlayerId: lastTurn.playerId })
+  }
+
   return {
     game,
     players,
@@ -313,5 +333,6 @@ export function useGame() {
     handleWinningThrow,
     addTurn,
     setNextPlayer,
+    undoLastTurn,
   }
 }

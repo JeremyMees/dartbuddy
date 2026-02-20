@@ -59,3 +59,16 @@ export function withSetUpdated(
     ),
   } as GameFull
 }
+
+export function withTurnRemoved(game: GameFull, turnId: string): GameFull {
+  return {
+    ...game,
+    sets: game.sets.map((set) => ({
+      ...set,
+      legs: set.legs.map((leg) => ({
+        ...leg,
+        turns: leg.turns.filter((turn) => turn.id !== turnId),
+      })),
+    })),
+  } as GameFull
+}
