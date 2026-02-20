@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import type { PlayerStats } from '~~/shared/types/player'
 
-const props = defineProps<PlayerStats & { active: boolean }>()
+const props = defineProps<
+  PlayerStats & {
+    active: boolean
+    livePoints: number | null
+  }
+>()
 
 const nextThrows = computed<Segment[]>(() => {
-  if (!isCheckoutPossible(props.points)) return ['T20', 'T20', 'T20']
+  const pointsToUse = props.livePoints ?? props.points
 
-  const result = findCheckoutPath(props.points)
+  if (!isCheckoutPossible(pointsToUse)) return ['T20', 'T20', 'T20']
+
+  const result = findCheckoutPath(pointsToUse)
 
   if (!result) return []
 
@@ -45,7 +52,7 @@ const nextThrows = computed<Segment[]>(() => {
     />
 
     <div class="px-4 flex gap-2 items-center justify-between">
-      <span class="text-xs">Possible throws:</span>
+      <span class="text-xs">Best throws:</span>
       <div class="flex gap-2 items-center">
         <div
           v-for="(bestThrow, index) in nextThrows"

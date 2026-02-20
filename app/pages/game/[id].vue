@@ -26,6 +26,12 @@ const activePlayerStats = computed(() =>
   players.value.find((p) => p.playerId === game.value?.activePlayerId),
 )
 
+const livePoints = computed(() => {
+  if (!activePlayerStats.value || !thrownSegments.value.length) return null
+
+  return activePlayerStats.value.points - totalThrowScore.value
+})
+
 const canSubmit = computed(() => {
   if (!thrownSegments.value.length || !game.value || !activePlayerStats.value) {
     return false
@@ -122,6 +128,9 @@ async function submitThrows() {
           :key="stat.playerId"
           v-bind="stat"
           :active="stat.playerId === game?.activePlayerId"
+          :live-points="
+            stat.playerId === game?.activePlayerId ? livePoints : null
+          "
         />
       </template>
     </div>
