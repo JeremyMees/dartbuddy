@@ -13,6 +13,7 @@ const {
   setNextPlayer,
   refresh,
   undoLastTurn,
+  resetGame,
 } = useGame()
 
 const {
@@ -95,6 +96,12 @@ async function handleUndo() {
   resetThrownSegments()
   await refresh()
 }
+
+async function handleReset() {
+  await resetGame()
+  resetThrownSegments()
+  await refresh()
+}
 </script>
 
 <template>
@@ -105,10 +112,10 @@ async function handleUndo() {
         :out-type="game.outType"
         :sets-to-win="game.setsToWin"
         :legs-to-win="game.legsToWin"
-        :is-match-over
+        :is-match-over="isMatchOver"
         :current-leg="currentLeg"
         @end="console.log('Session ended')"
-        @reset="console.log('Session reset')"
+        @reset="handleReset"
         @undo="handleUndo"
       />
     </template>

@@ -319,6 +319,14 @@ export function useGame() {
     await updateGame({ activePlayerId: lastTurn.playerId })
   }
 
+  async function resetGame() {
+    if (!game.value) return
+
+    await $fetch(`/api/games/${gameId.value}/reset`, {
+      method: 'POST' as const,
+    })
+  }
+
   return {
     game,
     players,
@@ -334,5 +342,6 @@ export function useGame() {
     addTurn,
     setNextPlayer,
     undoLastTurn,
+    resetGame,
   }
 }
