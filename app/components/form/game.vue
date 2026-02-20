@@ -34,7 +34,7 @@ const { handleSubmit, resetForm } = useForm({
 
 const onSubmit = handleSubmit(async (data) => {
   try {
-    await $fetch('/api/games', {
+    const game = await $fetch('/api/games', {
       method: 'POST',
       body: data,
     })
@@ -42,6 +42,8 @@ const onSubmit = handleSubmit(async (data) => {
     emit('refresh')
     resetForm()
     emit('saved')
+
+    navigateTo(`/game/${game.id}`)
   } catch (error) {
     console.error('Error creating game:', error)
   }

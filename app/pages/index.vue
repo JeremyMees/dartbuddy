@@ -49,7 +49,7 @@ async function deleteGame(id: Game['id']) {
           <DialogHeader>
             <DialogTitle> Create Game </DialogTitle>
           </DialogHeader>
-          <FormGame @saved="dialogOpen = false" @refresh="refresh" />
+          <FormGame @refresh="refresh" />
         </DialogContent>
       </Dialog>
     </div>
