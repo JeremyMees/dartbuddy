@@ -34,6 +34,10 @@ export function useGame() {
     )
   })
 
+  const activePlayerStats = computed(() =>
+    players.value.find((p) => p.playerId === game.value?.activePlayerId),
+  )
+
   const isMatchOver = computed(() => !!game.value?.winnerId)
 
   const currentSet = computed<GameSet | null>(
@@ -298,6 +302,7 @@ export function useGame() {
   return {
     game,
     players,
+    activePlayerStats,
     isMatchOver,
     currentSet,
     currentLeg,

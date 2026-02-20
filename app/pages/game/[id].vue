@@ -2,11 +2,12 @@
 const {
   game,
   players,
-  pending,
-  error,
+  activePlayerStats,
   isMatchOver,
   currentSet,
   currentLeg,
+  pending,
+  error,
   addTurn,
   handleWinningThrow,
   setNextPlayer,
@@ -21,10 +22,6 @@ const {
   resetThrownSegments,
   removeThrownSegment,
 } = useThrownSegments()
-
-const activePlayerStats = computed(() =>
-  players.value.find((p) => p.playerId === game.value?.activePlayerId),
-)
 
 const livePoints = computed(() => {
   if (!activePlayerStats.value || !thrownSegments.value.length) return null
