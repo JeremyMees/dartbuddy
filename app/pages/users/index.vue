@@ -89,9 +89,11 @@ async function deleteUser(id: User['id']) {
             </TableCell>
             <TableCell>
               <div class="flex items-center gap-2">
-                <Button variant="outline" size="icon" disabled>
-                  <Icon name="hugeicons:chart-01" />
-                </Button>
+                <NuxtLink :to="`/users/${user.id}`">
+                  <Button variant="outline" size="icon">
+                    <Icon name="hugeicons:chart-01" />
+                  </Button>
+                </NuxtLink>
 
                 <Button
                   variant="outline"
