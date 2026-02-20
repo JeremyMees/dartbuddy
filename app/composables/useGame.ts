@@ -327,6 +327,42 @@ export function useGame() {
     })
   }
 
+  async function endGameEarly() {
+    if (!game.value) return
+
+    let winnerId: string | null = null
+    let maxSetsWon = -1
+    let maxLegsWon = -1
+
+    for (const player of game.value.players) {
+      const setsWon = game.value.sets.filter(
+        (set) => set.winnerId === player.playerId,
+      ).length
+
+      const legsWon = game.value.sets.reduce((total, set) => {
+        const playerLegs = set.legs.filter(
+          (leg) => leg.winnerId === player.playerId,
+        ).length
+        return total + playerLegs
+      }, 0)
+
+      if (
+        setsWon > maxSetsWon ||
+        (setsWon === maxSetsWon && legsWon > maxLegsWon)
+      ) {
+        maxSetsWon = setsWon
+        maxLegsWon = legsWon
+        winnerId = player.playerId
+      }
+    }
+
+    await updateGame({
+      winnerId,
+      completedAt: new Date(),
+      endReason: 'MANUAL',
+    })
+  }
+
   return {
     game,
     players,
@@ -343,5 +379,6 @@ export function useGame() {
     setNextPlayer,
     undoLastTurn,
     resetGame,
+    endGameEarly,
   }
 }
