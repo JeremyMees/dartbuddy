@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@vueuse/nuxt',
     '@vite-pwa/nuxt',
+    '@nuxt/test-utils/module',
   ],
 
   devtools: { enabled: true },
