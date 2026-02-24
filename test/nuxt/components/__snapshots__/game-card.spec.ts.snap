@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GameCard > should render correctly with default props 1`] = `
+"<div data-slot="card" class="bg-card flex flex-col gap-6 rounded-xl border py-4 shadow-sm">
+  <div data-slot="card-header" class="@container/card-header auto-rows-min grid-rows-[auto_auto] px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4 border-b flex items-center gap-4">
+    <div class="flex gap-2 items-center"><span class="iconify i-hugeicons:medal-02" aria-hidden="true"></span><span data-test-sets="" class="font-bold">2/2</span></div>
+    <div class="flex gap-2 items-center"><span class="iconify i-hugeicons:award-01" aria-hidden="true"></span><span data-test-winner="" class="font-bold">...</span></div>
+    <div class="flex gap-2 items-center"><span class="iconify i-hugeicons:calendar-04" aria-hidden="true"></span><span class="font-bold">21/02/26</span></div>
+  </div>
+  <div data-slot="card-content" class="px-4">
+    <ul class="text-sm list-disc list-inside">
+      <li data-test-player="">Player <span class="font-bold">"tweede speler"</span> Two</li>
+      <li data-test-player="">Player <span class="font-bold">"een speler"</span> One</li>
+    </ul>
+  </div>
+  <div data-slot="card-footer" class="flex items-center px-4 [.border-t]:pt-4">
+    <div role="group" data-slot="button-group" class="flex w-fit items-stretch [&amp;>*]:focus-visible:z-10 [&amp;>*]:focus-visible:relative [&amp;>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&amp;>input]:flex-1 has-[select[aria-hidden=true]:last-child]:[&amp;>[data-slot=select-trigger]:last-of-type]:rounded-r-md has-[>[data-slot=button-group]]:gap-2 [&amp;>*:not(:first-child)]:rounded-l-none [&amp;>*:not(:first-child)]:border-l-0 [&amp;>*:not(:last-child)]:rounded-r-none grow"><button data-slot="alert-dialog-trigger" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 flex-1" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed"><span class="iconify i-hugeicons:delete-01" aria-hidden="true"></span> Remove </button>
+      <!--teleport start-->
+      <!--teleport end--><a href="/game/2c8ae5cc-9993-4415-9ea7-e4a82d76c717" class="flex-1"><button data-slot="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3 w-full border-l-0 rounded-l-none" data-test-watch-or-play=""><span class="iconify i-hugeicons:dart" aria-hidden="true"></span> Play</button></a>
+    </div>
+  </div>
+</div>"
+`;

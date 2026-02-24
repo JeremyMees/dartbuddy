@@ -8,13 +8,15 @@ defineProps<{ game: GameOverview }>()
     <CardHeader class="border-b flex items-center gap-4">
       <div class="flex gap-2 items-center">
         <Icon name="hugeicons:medal-02" />
-        <span class="font-bold">
+        <span data-test-sets class="font-bold">
           {{ `${game.sets.length}/${game.setsToWin}` }}
         </span>
       </div>
       <div class="flex gap-2 items-center">
         <Icon name="hugeicons:award-01" />
-        <span class="font-bold">{{ game.winner?.firstName || '...' }}</span>
+        <span data-test-winner class="font-bold">{{
+          game.winner?.firstName || '...'
+        }}</span>
       </div>
       <div class="flex gap-2 items-center">
         <Icon name="hugeicons:calendar-04" />
@@ -23,7 +25,11 @@ defineProps<{ game: GameOverview }>()
     </CardHeader>
     <CardContent>
       <ul class="text-sm list-disc list-inside">
-        <li v-for="{ player } in game.players" :key="player.id">
+        <li
+          v-for="{ player } in game.players"
+          :key="player.id"
+          data-test-player
+        >
           {{ player.firstName }}
           <span class="font-bold">"{{ player.nickName }}"</span>
           {{ player.lastName }}
@@ -56,7 +62,11 @@ defineProps<{ game: GameOverview }>()
           </AlertDialogContent>
         </AlertDialog>
         <NuxtLink :to="`/game/${game.id}`" class="flex-1">
-          <Button variant="outline" class="w-full border-l-0 rounded-l-none">
+          <Button
+            variant="outline"
+            class="w-full border-l-0 rounded-l-none"
+            data-test-watch-or-play
+          >
             <Icon v-if="game.winnerId" name="hugeicons:search-01" />
             <Icon v-else name="hugeicons:dart" />
             {{ game.winnerId ? 'Watch' : 'Play' }}
