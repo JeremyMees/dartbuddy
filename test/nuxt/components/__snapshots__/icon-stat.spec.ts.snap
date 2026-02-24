@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`IconStat > should render correctly with default props 1`] = `"<div class="flex flex-col items-center gap-0.5"><span class="iconify i-example-icon" aria-hidden="true" data-test-icon=""></span><span data-test-value="" class="text-xs font-bold pt-0.5">42</span><span data-test-name="" class="text-xs">Example Stat</span></div>"`;
