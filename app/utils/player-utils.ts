@@ -36,7 +36,7 @@ export function calculatePlayerStats(
     sets: calculateSetsWon(game, playerId),
     legs,
     totalLegsWon,
-    points: calculateCurrentPoints(game, currentLegTurns),
+    points: calculateCurrentPoints(currentLegTurns, game.startScore),
     thrown: currentLegTurns.reduce((sum, t) => sum + t.throws.length, 0),
     average: calculateThreeDartAverage(allTurns),
     ...calculateTurnStats(allTurns),

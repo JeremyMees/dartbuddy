@@ -33,10 +33,10 @@ export function calculateLegsWon(game: GameFull, playerId: string) {
 }
 
 export function calculateCurrentPoints(
-  game: GameFull,
   currentLegTurns: GameTurn[],
+  fallback: number = 0,
 ): number {
-  return currentLegTurns.at(-1)?.remainingScore ?? game.startScore
+  return currentLegTurns.at(-1)?.remainingScore ?? fallback
 }
 
 export function calculateThreeDartAverage(turns: GameTurn[]): number {
