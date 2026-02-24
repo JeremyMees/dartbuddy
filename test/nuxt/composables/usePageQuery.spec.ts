@@ -21,6 +21,9 @@ mockNuxtImport('useRouter', () => {
   return () => ({
     push: routerPushMock,
     afterEach: vi.fn(),
+    beforeEach: vi.fn(),
+    beforeResolve: vi.fn(),
+    onError: vi.fn(),
   })
 })
 

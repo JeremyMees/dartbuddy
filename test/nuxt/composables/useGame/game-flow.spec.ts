@@ -38,9 +38,9 @@ describe('useGame - game flow', () => {
     cachedGameValue.value = { ...gameFull }
     routeParamsMock.mockReturnValue({ id: gameFull.id })
     useLazyAsyncDataMock.mockReturnValue({
-      data: { value: gameFull },
-      pending: { value: false },
-      error: { value: null },
+      data: ref(gameFull),
+      pending: ref(false),
+      error: ref(null),
       refresh: vi.fn(),
     })
     fetchMock.mockImplementation(async (_url, options) => {
@@ -89,9 +89,9 @@ describe('useGame - game flow', () => {
 
     it('should not handle winning throw if game is not loaded', async () => {
       useLazyAsyncDataMock.mockReturnValue({
-        data: { value: null },
-        pending: { value: false },
-        error: { value: null },
+        data: ref(null),
+        pending: ref(false),
+        error: ref(null),
         refresh: vi.fn(),
       })
 
@@ -106,9 +106,9 @@ describe('useGame - game flow', () => {
       const gameWithoutSets = { ...gameFull, sets: [] }
 
       useLazyAsyncDataMock.mockReturnValue({
-        data: { value: gameWithoutSets },
-        pending: { value: false },
-        error: { value: null },
+        data: ref(gameWithoutSets),
+        pending: ref(false),
+        error: ref(null),
         refresh: vi.fn(),
       })
 
@@ -136,9 +136,9 @@ describe('useGame - game flow', () => {
 
     it('should not reset if game is not loaded', async () => {
       useLazyAsyncDataMock.mockReturnValue({
-        data: { value: null },
-        pending: { value: false },
-        error: { value: null },
+        data: ref(null),
+        pending: ref(false),
+        error: ref(null),
         refresh: vi.fn(),
       })
 
@@ -186,9 +186,9 @@ describe('useGame - game flow', () => {
       }
 
       useLazyAsyncDataMock.mockReturnValue({
-        data: { value: gameWithOneSetWon },
-        pending: { value: false },
-        error: { value: null },
+        data: ref(gameWithOneSetWon),
+        pending: ref(false),
+        error: ref(null),
         refresh: vi.fn(),
       })
 
@@ -210,9 +210,9 @@ describe('useGame - game flow', () => {
 
     it('should not end game early if game is not loaded', async () => {
       useLazyAsyncDataMock.mockReturnValue({
-        data: { value: null },
-        pending: { value: false },
-        error: { value: null },
+        data: ref(null),
+        pending: ref(false),
+        error: ref(null),
         refresh: vi.fn(),
       })
 

@@ -38,9 +38,9 @@ describe('useGame - updateGame', () => {
     cachedGameValue.value = { ...gameFull }
     routeParamsMock.mockReturnValue({ id: gameFull.id })
     useLazyAsyncDataMock.mockReturnValue({
-      data: { value: gameFull },
-      pending: { value: false },
-      error: { value: null },
+      data: ref(gameFull),
+      pending: ref(false),
+      error: ref(null),
       refresh: vi.fn(),
     })
     fetchMock.mockImplementation(async (_url, options) => {

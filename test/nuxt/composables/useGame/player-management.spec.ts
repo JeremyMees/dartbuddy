@@ -38,9 +38,9 @@ describe('useGame - player management', () => {
     cachedGameValue.value = { ...gameFull }
     routeParamsMock.mockReturnValue({ id: gameFull.id })
     useLazyAsyncDataMock.mockReturnValue({
-      data: { value: gameFull },
-      pending: { value: false },
-      error: { value: null },
+      data: ref(gameFull),
+      pending: ref(false),
+      error: ref(null),
       refresh: vi.fn(),
     })
     fetchMock.mockImplementation(async (_url, options) => {
@@ -69,9 +69,9 @@ describe('useGame - player management', () => {
 
     it('should not set next player if game is not loaded', async () => {
       useLazyAsyncDataMock.mockReturnValue({
-        data: { value: null },
-        pending: { value: false },
-        error: { value: null },
+        data: ref(null),
+        pending: ref(false),
+        error: ref(null),
         refresh: vi.fn(),
       })
 
@@ -89,9 +89,9 @@ describe('useGame - player management', () => {
       }
 
       useLazyAsyncDataMock.mockReturnValue({
-        data: { value: gameWithInvalidActivePlayer },
-        pending: { value: false },
-        error: { value: null },
+        data: ref(gameWithInvalidActivePlayer),
+        pending: ref(false),
+        error: ref(null),
         refresh: vi.fn(),
       })
 

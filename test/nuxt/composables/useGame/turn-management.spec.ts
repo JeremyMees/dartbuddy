@@ -40,9 +40,9 @@ describe('useGame - turn management', () => {
     cachedGameValue.value = { ...gameFull }
     routeParamsMock.mockReturnValue({ id: gameFull.id })
     useLazyAsyncDataMock.mockReturnValue({
-      data: { value: gameFull },
-      pending: { value: false },
-      error: { value: null },
+      data: ref(gameFull),
+      pending: ref(false),
+      error: ref(null),
       refresh: vi.fn(),
     })
     fetchMock.mockImplementation(async (_url, options) => {
@@ -167,9 +167,9 @@ describe('useGame - turn management', () => {
 
     it('should not undo if game is not loaded', async () => {
       useLazyAsyncDataMock.mockReturnValue({
-        data: { value: null },
-        pending: { value: false },
-        error: { value: null },
+        data: ref(null),
+        pending: ref(false),
+        error: ref(null),
         refresh: vi.fn(),
       })
 
@@ -192,9 +192,9 @@ describe('useGame - turn management', () => {
       }
 
       useLazyAsyncDataMock.mockReturnValue({
-        data: { value: gameWithoutTurns },
-        pending: { value: false },
-        error: { value: null },
+        data: ref(gameWithoutTurns),
+        pending: ref(false),
+        error: ref(null),
         refresh: vi.fn(),
       })
 

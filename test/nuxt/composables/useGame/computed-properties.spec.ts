@@ -33,11 +33,11 @@ describe('useGame - computed properties', () => {
     vi.clearAllMocks()
 
     routeParamsMock.mockReturnValue({ id: gameFull.id })
-    nuxtDataMock.mockReturnValue({ value: gameFull })
+    nuxtDataMock.mockReturnValue(ref(gameFull))
     useLazyAsyncDataMock.mockReturnValue({
-      data: { value: gameFull },
-      pending: { value: false },
-      error: { value: null },
+      data: ref(gameFull),
+      pending: ref(false),
+      error: ref(null),
       refresh: vi.fn(),
     })
   })
@@ -54,9 +54,9 @@ describe('useGame - computed properties', () => {
 
   it('should return empty array for players when game is not loaded', () => {
     useLazyAsyncDataMock.mockReturnValue({
-      data: { value: null },
-      pending: { value: false },
-      error: { value: null },
+      data: ref(null),
+      pending: ref(false),
+      error: ref(null),
       refresh: vi.fn(),
     })
 
@@ -79,9 +79,9 @@ describe('useGame - computed properties', () => {
     }
 
     useLazyAsyncDataMock.mockReturnValue({
-      data: { value: gameWithoutActivePlayer },
-      pending: { value: false },
-      error: { value: null },
+      data: ref(gameWithoutActivePlayer),
+      pending: ref(false),
+      error: ref(null),
       refresh: vi.fn(),
     })
 
@@ -100,9 +100,9 @@ describe('useGame - computed properties', () => {
     const completedGame = { ...gameFull, winnerId: playerOne.id }
 
     useLazyAsyncDataMock.mockReturnValue({
-      data: { value: completedGame },
-      pending: { value: false },
-      error: { value: null },
+      data: ref(completedGame),
+      pending: ref(false),
+      error: ref(null),
       refresh: vi.fn(),
     })
 
@@ -122,9 +122,9 @@ describe('useGame - computed properties', () => {
     const gameWithoutSets = { ...gameFull, sets: [] }
 
     useLazyAsyncDataMock.mockReturnValue({
-      data: { value: gameWithoutSets },
-      pending: { value: false },
-      error: { value: null },
+      data: ref(gameWithoutSets),
+      pending: ref(false),
+      error: ref(null),
       refresh: vi.fn(),
     })
 
@@ -144,9 +144,9 @@ describe('useGame - computed properties', () => {
     const gameWithoutSets = { ...gameFull, sets: [] }
 
     useLazyAsyncDataMock.mockReturnValue({
-      data: { value: gameWithoutSets },
-      pending: { value: false },
-      error: { value: null },
+      data: ref(gameWithoutSets),
+      pending: ref(false),
+      error: ref(null),
       refresh: vi.fn(),
     })
 
