@@ -52,7 +52,7 @@ export function calculateSegment(
   number: number | null,
   multiplier: number,
 ): Segment {
-  if (number === null) return 'MISS'
+  if (number === null || multiplier < 1 || multiplier > 3) return 'MISS'
 
   if (number === 25 && multiplier <= 2) {
     return multiplier === 1 ? 'SB' : 'DB'
