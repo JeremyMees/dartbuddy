@@ -1,0 +1,8 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`IconCard > should render correctly with default props 1`] = `
+"<div class="bg-primary/10 text-primary rounded-lg p-4 border border-primary flex items-center gap-6">
+  <div><span class="iconify i-example-icon size-10!" aria-hidden="true" data-test-icon=""></span></div>
+  <div></div>
+</div>"
+`;
