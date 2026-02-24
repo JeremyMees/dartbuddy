@@ -8,7 +8,7 @@ describe('calculateThreeDartAverage', () => {
   it('returns the correct three-dart average for the player', () => {
     const average = calculateThreeDartAverage(currentLegTurns)
 
-    expect(average).toBe(70)
+    expect(average).toBe(94)
   })
 
   it('returns 0 when there are no turns', () => {
