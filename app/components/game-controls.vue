@@ -40,8 +40,12 @@ function emitAndClose(event: string) {
 <template>
   <div class="flex gap-4 items-center justify-between">
     <div class="flex flex-col text-sm">
-      <span> {{ scoreLimit }} - {{ outTypeText[outType] }} </span>
-      <span> First to {{ setsToWin }} sets {{ legsToWin }} legs </span>
+      <span data-test-score>
+        {{ scoreLimit }} - {{ outTypeText[outType] }}
+      </span>
+      <span data-test-win-conditions>
+        First to {{ setsToWin }} sets {{ legsToWin }} legs
+      </span>
     </div>
 
     <Popover v-model:open="popoverOpen" @update:open="popoverOpen = $event">
