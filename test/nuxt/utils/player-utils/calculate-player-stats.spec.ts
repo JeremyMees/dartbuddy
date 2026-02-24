@@ -5,7 +5,7 @@ import { gameFull, playerTwo } from '~~/test/fixtures'
 const player = gameFull.players[0]!
 
 describe('calculatePlayerStats', () => {
-  it('returns the correct player stats', () => {
+  it('should return the correct player stats', () => {
     const stats = calculatePlayerStats(gameFull, player)
 
     expect(stats.average).toBe(99)
@@ -26,7 +26,7 @@ describe('calculatePlayerStats', () => {
     expect(stats.playerId).toBe(playerTwo.id)
   })
 
-  it('returns the default stats for a non-existent player', () => {
+  it('should return the default stats for a non-existent player', () => {
     const stats = calculatePlayerStats(gameFull, {
       ...player,
       playerId: 'nonExistentPlayerId',

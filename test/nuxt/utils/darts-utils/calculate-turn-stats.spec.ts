@@ -5,7 +5,7 @@ import { unfinishedSet } from '~~/test/fixtures'
 const currentLegTurns = unfinishedSet.legs.at(-1)?.turns ?? []
 
 describe('calculateTurnStats', () => {
-  it('returns the correct turn stats for the player', () => {
+  it('should return the correct turn stats for the player', () => {
     const stats = calculateTurnStats(currentLegTurns)
 
     expect(stats.highestTurn).toBe(180)

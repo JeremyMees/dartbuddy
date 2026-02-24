@@ -20,7 +20,7 @@ function createMockGame(
 }
 
 describe('getNextPlayerId', () => {
-  it('returns the next player in sequence', () => {
+  it('should return the next player in sequence', () => {
     const game = createMockGame(
       ['player-one', 'player-two', 'player-three'],
       'player-one',
@@ -29,7 +29,7 @@ describe('getNextPlayerId', () => {
     expect(getNextPlayerId(game as GameFull)).toBe('player-two')
   })
 
-  it('wraps around to first player when current player is last', () => {
+  it('should wrap around to first player when current player is last', () => {
     const game = createMockGame(
       ['player-one', 'player-two', 'player-three'],
       'player-three',
@@ -38,7 +38,7 @@ describe('getNextPlayerId', () => {
     expect(getNextPlayerId(game as GameFull)).toBe('player-one')
   })
 
-  it('returns undefined when active player is not in players array', () => {
+  it('should return undefined when active player is not in players array', () => {
     const game = createMockGame(
       ['player-one', 'player-two'],
       'non-existent-player',
@@ -47,13 +47,13 @@ describe('getNextPlayerId', () => {
     expect(getNextPlayerId(game as GameFull)).toBeUndefined()
   })
 
-  it('wraps to itself when there is only one player', () => {
+  it('should wrap to itself when there is only one player', () => {
     const game = createMockGame(['solo-player'], 'solo-player')
 
     expect(getNextPlayerId(game as GameFull)).toBe('solo-player')
   })
 
-  it('alternates correctly between two players', () => {
+  it('should alternate correctly between two players', () => {
     const game = createMockGame(['player-one', 'player-two'], 'player-two')
 
     expect(getNextPlayerId(game as GameFull)).toBe('player-one')

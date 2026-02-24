@@ -5,13 +5,13 @@ import { unfinishedSet } from '~~/test/fixtures'
 const currentLegTurns = unfinishedSet.legs.at(-1)?.turns ?? []
 
 describe('calculateThreeDartAverage', () => {
-  it('returns the correct three-dart average for the player', () => {
+  it('should return the correct three-dart average for the player', () => {
     const average = calculateThreeDartAverage(currentLegTurns)
 
     expect(average).toBe(94)
   })
 
-  it('returns 0 when there are no turns', () => {
+  it('should return 0 when there are no turns', () => {
     const average = calculateThreeDartAverage([])
 
     expect(average).toBe(0)

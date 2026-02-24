@@ -3,7 +3,7 @@ import { calculateLegsWon } from '~/utils/darts-utils'
 import { playerOne, playerTwo, gameFull } from '~~/test/fixtures'
 
 describe('calculateLegsWon', () => {
-  it('returns the correct number of legs won by the player', () => {
+  it('should return the correct number of legs won by the player', () => {
     const legsWonByPlayer1 = calculateLegsWon(gameFull, playerOne.id)
     const legsWonByPlayer2 = calculateLegsWon(gameFull, playerTwo.id)
 
