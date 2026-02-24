@@ -31,6 +31,7 @@ const navigation = [
     <NuxtLink
       v-for="item in navigation"
       :key="item.name"
+      data-test-nav-link
       :to="item.href"
       class="flex items-center gap-2 rounded-lg p-2"
       active-class="ring-2 ring-primary"
