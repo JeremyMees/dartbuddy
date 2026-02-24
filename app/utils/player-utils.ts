@@ -2,7 +2,7 @@ export function findPlayer(game: GameFull, playerId: string) {
   return game.players.find((p) => p.playerId === playerId)?.player ?? null
 }
 
-function getPlayerTurns(game: GameFull, playerId: string): GameTurn[] {
+export function getPlayerTurns(game: GameFull, playerId: string): GameTurn[] {
   return game.sets.flatMap((set) =>
     set.legs.flatMap((leg) =>
       leg.turns.filter((turn) => turn.playerId === playerId),
@@ -10,7 +10,7 @@ function getPlayerTurns(game: GameFull, playerId: string): GameTurn[] {
   )
 }
 
-function getPlayerCurrentLegTurns(
+export function getPlayerCurrentLegTurns(
   game: GameFull,
   playerId: string,
 ): GameTurn[] {
