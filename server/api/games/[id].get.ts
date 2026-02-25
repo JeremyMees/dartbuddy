@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     where: {
       id,
     },
-    include: gameFullInclude,
+    include: gameActiveInclude,
   })
 
   if (!game) {

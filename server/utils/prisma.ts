@@ -13,7 +13,7 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter })
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
-export const gameFullInclude = {
+export const gameActiveInclude = {
   players: {
     orderBy: { seatOrder: 'asc' } as const,
     include: { player: true },
@@ -25,6 +25,7 @@ export const gameFullInclude = {
         orderBy: { number: 'asc' } as const,
         include: {
           turns: {
+            where: { leg: { endedAt: null } },
             orderBy: { startedAt: 'asc' } as const,
             include: {
               _count: {

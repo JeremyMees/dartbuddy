@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { gameFull, playerOne, playerTwo } from '~~/test/fixtures'
+import { createMockGame } from '~~/test/mocks/game'
 
 const { routeParamsMock, useLazyAsyncDataMock, fetchMock, cachedGameValue } =
   vi.hoisted(() => {
@@ -115,18 +116,15 @@ const gameWithSetWin: GameFull = {
   ],
 }
 
+const mockGame = createMockGame(useLazyAsyncDataMock)
+
 describe('useGame - game flow', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
     cachedGameValue.value = { ...gameFull }
     routeParamsMock.mockReturnValue({ id: gameFull.id })
-    useLazyAsyncDataMock.mockReturnValue({
-      data: ref(gameFull),
-      pending: ref(false),
-      error: ref(null),
-      refresh: vi.fn(),
-    })
+    mockGame(gameFull)
     fetchMock.mockImplementation(async (_url, options) => {
       if (options?.onRequest) {
         options.onRequest()
@@ -139,12 +137,7 @@ describe('useGame - game flow', () => {
   describe('submitTurn - winning scenarios', () => {
     it('should include legUpdate and newLeg when player wins a leg but not the set', async () => {
       cachedGameValue.value = { ...gameWithLegWin }
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(gameWithLegWin),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(gameWithLegWin)
 
       const { submitTurn } = useGame()
 
@@ -176,12 +169,7 @@ describe('useGame - game flow', () => {
 
     it('should include legUpdate, setUpdate and newSet when player wins the set but not the match', async () => {
       cachedGameValue.value = { ...gameWithSetWin }
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(gameWithSetWin),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(gameWithSetWin)
 
       const { submitTurn } = useGame()
 
@@ -216,12 +204,7 @@ describe('useGame - game flow', () => {
         setsToWin: 1,
       }
       cachedGameValue.value = { ...gameForMatchWin }
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(gameForMatchWin),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(gameForMatchWin)
 
       const { submitTurn } = useGame()
 
@@ -245,12 +228,7 @@ describe('useGame - game flow', () => {
     })
 
     it('should not call the API when game is not loaded', async () => {
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(null),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(null)
 
       const { submitTurn } = useGame()
 
@@ -275,12 +253,7 @@ describe('useGame - game flow', () => {
     })
 
     it('should not reset if game is not loaded', async () => {
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(null),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(null)
 
       const { resetGame } = useGame()
 
@@ -325,12 +298,7 @@ describe('useGame - game flow', () => {
         ],
       }
 
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(gameWithOneSetWon),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(gameWithOneSetWon as GameFull)
 
       const { endGameEarly } = useGame()
 
@@ -349,12 +317,7 @@ describe('useGame - game flow', () => {
     })
 
     it('should not end game early if game is not loaded', async () => {
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(null),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(null)
 
       const { endGameEarly } = useGame()
 

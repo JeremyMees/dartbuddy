@@ -2,8 +2,11 @@ export function useGame() {
   const route = useRoute()
   const gameId = computed(() => route.params.id as string)
   const cacheKey = `game-${gameId.value}`
+  const statsCacheKey = `game-stats-${gameId.value}`
 
   const { data: cachedGame } = useNuxtData<GameFull>(cacheKey)
+  const { data: cachedStats } =
+    useNuxtData<PlayerAggregatedStats[]>(statsCacheKey)
 
   const {
     data: game,
@@ -15,6 +18,15 @@ export function useGame() {
     (_nuxtApp, { signal }) =>
       $fetch<GameFull>(`/api/games/${gameId.value}`, { signal }),
     { ...(cachedGame.value && { default: () => cachedGame.value }) },
+  )
+
+  const { data: stats, refresh: refreshStats } = useLazyAsyncData(
+    statsCacheKey,
+    (_nuxtApp, { signal }) =>
+      $fetch<PlayerAggregatedStats[]>(`/api/games/${gameId.value}/stats`, {
+        signal,
+      }),
+    { ...(cachedStats.value && { default: () => cachedStats.value }) },
   )
 
   watch(error, (newError) => {
@@ -30,7 +42,7 @@ export function useGame() {
   const players = computed(() => {
     if (!game.value) return []
     return game.value.players.map((player) =>
-      calculatePlayerStats(game.value!, player),
+      calculatePlayerStats(game.value!, player, stats.value ?? []),
     )
   })
 
@@ -233,6 +245,7 @@ export function useGame() {
 
     if (updatedGame && 'id' in updatedGame) {
       cachedGame.value = updatedGame
+      refreshStats()
     }
   }
 
@@ -259,6 +272,7 @@ export function useGame() {
 
     if (updatedGame && 'id' in updatedGame) {
       cachedGame.value = updatedGame
+      refreshStats()
     }
   }
 
@@ -272,6 +286,7 @@ export function useGame() {
 
     if (updatedGame && 'id' in updatedGame) {
       cachedGame.value = updatedGame
+      refreshStats()
     }
   }
 

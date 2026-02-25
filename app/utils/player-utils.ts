@@ -2,14 +2,6 @@ export function findPlayer(game: GameFull, playerId: string) {
   return game.players.find((p) => p.playerId === playerId)?.player ?? null
 }
 
-export function getPlayerTurns(game: GameFull, playerId: string): GameTurn[] {
-  return game.sets.flatMap((set) =>
-    set.legs.flatMap((leg) =>
-      leg.turns.filter((turn) => turn.playerId === playerId),
-    ),
-  )
-}
-
 export function getPlayerCurrentLegTurns(
   game: GameFull,
   playerId: string,
@@ -22,24 +14,41 @@ export function getPlayerCurrentLegTurns(
 export function calculatePlayerStats(
   game: GameFull,
   player: GameFull['players'][number],
+  aggregatedStats: PlayerAggregatedStats[] = [],
 ): PlayerStats {
   const { playerId } = player
-  const allTurns = getPlayerTurns(game, playerId)
   const currentLegTurns = getPlayerCurrentLegTurns(game, playerId)
-  const { legs, totalLegsWon } = calculateLegsWon(game, playerId)
+
+  const agg = aggregatedStats.find((s) => s.playerId === playerId) ?? {
+    sets: 0,
+    legs: 0,
+    totalLegsWon: 0,
+    average: 0,
+    highestTurn: 0,
+    oneEighties: 0,
+    checkoutAttempts: 0,
+    checkoutSuccesses: 0,
+    highestCheckout: 0,
+    busts: 0,
+  }
 
   return {
     playerId,
     firstName: player.player.firstName,
     lastName: player.player.lastName,
     nickName: player.player.nickName,
-    sets: calculateSetsWon(game, playerId),
-    legs,
-    totalLegsWon,
+    sets: agg.sets,
+    legs: agg.legs,
+    totalLegsWon: agg.totalLegsWon,
     points: calculateCurrentPoints(currentLegTurns, game.startScore),
     thrown: currentLegTurns.reduce((sum, t) => sum + t._count.throws, 0),
-    average: calculateThreeDartAverage(allTurns),
-    ...calculateTurnStats(allTurns),
+    average: agg.average,
+    highestTurn: agg.highestTurn,
+    oneEighties: agg.oneEighties,
+    checkoutAttempts: agg.checkoutAttempts,
+    checkoutSuccesses: agg.checkoutSuccesses,
+    highestCheckout: agg.highestCheckout,
+    busts: agg.busts,
   }
 }
 

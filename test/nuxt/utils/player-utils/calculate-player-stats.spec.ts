@@ -4,9 +4,25 @@ import { gameFull, playerTwo } from '~~/test/fixtures'
 
 const player = gameFull.players[0]!
 
+const aggregatedStats: PlayerAggregatedStats[] = [
+  {
+    playerId: playerTwo.id,
+    sets: 0,
+    legs: 0,
+    totalLegsWon: 1,
+    average: 99,
+    highestTurn: 180,
+    oneEighties: 3,
+    checkoutAttempts: 2,
+    checkoutSuccesses: 2,
+    highestCheckout: 170,
+    busts: 0,
+  },
+]
+
 describe('calculatePlayerStats', () => {
-  it('should return the correct player stats', () => {
-    const stats = calculatePlayerStats(gameFull, player)
+  it('should return the correct player stats from provided aggregatedStats', () => {
+    const stats = calculatePlayerStats(gameFull, player, aggregatedStats)
 
     expect(stats.average).toBe(99)
     expect(stats.busts).toBe(0)
@@ -24,6 +40,23 @@ describe('calculatePlayerStats', () => {
     expect(stats.lastName).toBe(playerTwo.lastName)
     expect(stats.nickName).toBe(playerTwo.nickName)
     expect(stats.playerId).toBe(playerTwo.id)
+  })
+
+  it('should return zeroed aggregated stats when no aggregatedStats provided', () => {
+    const stats = calculatePlayerStats(gameFull, player)
+
+    expect(stats.average).toBe(0)
+    expect(stats.highestTurn).toBe(0)
+    expect(stats.oneEighties).toBe(0)
+    expect(stats.checkoutAttempts).toBe(0)
+    expect(stats.checkoutSuccesses).toBe(0)
+    expect(stats.highestCheckout).toBe(0)
+    expect(stats.busts).toBe(0)
+    expect(stats.sets).toBe(0)
+    expect(stats.legs).toBe(0)
+    expect(stats.totalLegsWon).toBe(0)
+    expect(stats.points).toBe(429)
+    expect(stats.thrown).toBe(6)
   })
 
   it('should return the default stats for a non-existent player', () => {

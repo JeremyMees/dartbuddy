@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { gameFull, playerOne, playerTwo } from '~~/test/fixtures'
+import { createMockGame } from '~~/test/mocks/game'
 
 const { routeParamsMock, useLazyAsyncDataMock, fetchMock, cachedGameValue } =
   vi.hoisted(() => {
@@ -31,18 +32,15 @@ mockNuxtImport('useLazyAsyncData', () => {
 
 vi.stubGlobal('$fetch', fetchMock)
 
+const mockGame = createMockGame(useLazyAsyncDataMock)
+
 describe('useGame - updateGame', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
     cachedGameValue.value = { ...gameFull }
     routeParamsMock.mockReturnValue({ id: gameFull.id })
-    useLazyAsyncDataMock.mockReturnValue({
-      data: ref(gameFull),
-      pending: ref(false),
-      error: ref(null),
-      refresh: vi.fn(),
-    })
+    mockGame(gameFull)
     fetchMock.mockImplementation(async (_url, options) => {
       if (options?.onRequest) {
         options.onRequest()

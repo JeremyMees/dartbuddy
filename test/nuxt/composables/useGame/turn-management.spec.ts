@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { gameFull, playerOne, playerTwo } from '~~/test/fixtures'
+import { createMockGame } from '~~/test/mocks/game'
 
 const { routeParamsMock, useLazyAsyncDataMock, fetchMock, cachedGameValue } =
   vi.hoisted(() => {
@@ -68,18 +69,15 @@ const gameWithPlayerTwoAt40: GameFull = {
   ],
 }
 
+const mockGame = createMockGame(useLazyAsyncDataMock)
+
 describe('useGame - turn management', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
     cachedGameValue.value = { ...gameFull }
     routeParamsMock.mockReturnValue({ id: gameFull.id })
-    useLazyAsyncDataMock.mockReturnValue({
-      data: ref(gameFull),
-      pending: ref(false),
-      error: ref(null),
-      refresh: vi.fn(),
-    })
+    mockGame(gameFull)
     fetchMock.mockImplementation(async (_url, options) => {
       if (options?.onRequest) {
         options.onRequest()
@@ -170,12 +168,7 @@ describe('useGame - turn management', () => {
 
     it('should include legUpdate and newLeg when winning a leg (not enough legs for set)', async () => {
       cachedGameValue.value = { ...gameWithPlayerTwoAt40 }
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(gameWithPlayerTwoAt40),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(gameWithPlayerTwoAt40)
 
       const { submitTurn } = useGame()
 
@@ -206,12 +199,7 @@ describe('useGame - turn management', () => {
 
     it('should not call the API when game is not loaded', async () => {
       cachedGameValue.value = null
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(null),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(null)
 
       const { submitTurn } = useGame()
 
@@ -268,12 +256,7 @@ describe('useGame - turn management', () => {
     })
 
     it('should not undo if game is not loaded', async () => {
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(null),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(null)
 
       const { undoLastTurn } = useGame()
 
@@ -283,22 +266,19 @@ describe('useGame - turn management', () => {
     })
 
     it('should not undo if there are no turns', async () => {
-      const gameWithoutTurns = {
+      const firstSet = gameFull.sets[0]!
+      const firstLeg = firstSet.legs[0]!
+      const gameWithoutTurns: GameFull = {
         ...gameFull,
         sets: [
           {
-            ...gameFull.sets[0],
-            legs: [{ ...gameFull.sets[0]?.legs[0], turns: [] }],
+            ...firstSet,
+            legs: [{ ...firstLeg, turns: [] }],
           },
         ],
       }
 
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(gameWithoutTurns),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(gameWithoutTurns)
 
       const { undoLastTurn } = useGame()
 

@@ -1,5 +1,19 @@
 import type { User } from './prisma'
 
+export interface PlayerAggregatedStats {
+  playerId: string
+  sets: number
+  legs: number
+  totalLegsWon: number
+  average: number
+  highestTurn: number
+  oneEighties: number
+  checkoutAttempts: number
+  checkoutSuccesses: number
+  highestCheckout: number
+  busts: number
+}
+
 export interface PlayerStats {
   playerId: string
   firstName: string

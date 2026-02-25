@@ -54,7 +54,7 @@ export default defineEventHandler(async (event) => {
         },
       },
     },
-    include: gameFullInclude,
+    include: gameActiveInclude,
   })
 
   return game

@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
   const game = await prisma.game.update({
     where: { id },
     data: updateData,
-    include: gameFullInclude,
+    include: gameActiveInclude,
   })
 
   return game

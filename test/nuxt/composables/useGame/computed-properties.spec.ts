@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { gameFull, playerOne, playerTwo } from '~~/test/fixtures'
+import { createMockGame } from '~~/test/mocks/game'
 
 const { routeParamsMock, nuxtDataMock, useLazyAsyncDataMock } = vi.hoisted(
   () => {
@@ -28,18 +29,15 @@ mockNuxtImport('useLazyAsyncData', () => {
   return useLazyAsyncDataMock
 })
 
+const mockGame = createMockGame(useLazyAsyncDataMock)
+
 describe('useGame - computed properties', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
     routeParamsMock.mockReturnValue({ id: gameFull.id })
     nuxtDataMock.mockReturnValue(ref(gameFull))
-    useLazyAsyncDataMock.mockReturnValue({
-      data: ref(gameFull),
-      pending: ref(false),
-      error: ref(null),
-      refresh: vi.fn(),
-    })
+    mockGame(gameFull)
   })
 
   it('should compute players with their stats', () => {
@@ -53,12 +51,7 @@ describe('useGame - computed properties', () => {
   })
 
   it('should return empty array for players when game is not loaded', () => {
-    useLazyAsyncDataMock.mockReturnValue({
-      data: ref(null),
-      pending: ref(false),
-      error: ref(null),
-      refresh: vi.fn(),
-    })
+    mockGame(null)
 
     const { players } = useGame()
 
@@ -78,12 +71,7 @@ describe('useGame - computed properties', () => {
       activePlayerId: 'non-existent-player',
     }
 
-    useLazyAsyncDataMock.mockReturnValue({
-      data: ref(gameWithoutActivePlayer),
-      pending: ref(false),
-      error: ref(null),
-      refresh: vi.fn(),
-    })
+    mockGame(gameWithoutActivePlayer)
 
     const { activePlayerStats } = useGame()
 
@@ -99,12 +87,7 @@ describe('useGame - computed properties', () => {
   it('should compute isMatchOver as true when game has winner', () => {
     const completedGame = { ...gameFull, winnerId: playerOne.id }
 
-    useLazyAsyncDataMock.mockReturnValue({
-      data: ref(completedGame),
-      pending: ref(false),
-      error: ref(null),
-      refresh: vi.fn(),
-    })
+    mockGame(completedGame)
 
     const { isMatchOver } = useGame()
 
@@ -121,12 +104,7 @@ describe('useGame - computed properties', () => {
   it('should return null for currentSet when no sets exist', () => {
     const gameWithoutSets = { ...gameFull, sets: [] }
 
-    useLazyAsyncDataMock.mockReturnValue({
-      data: ref(gameWithoutSets),
-      pending: ref(false),
-      error: ref(null),
-      refresh: vi.fn(),
-    })
+    mockGame(gameWithoutSets)
 
     const { currentSet } = useGame()
 
@@ -143,12 +121,7 @@ describe('useGame - computed properties', () => {
   it('should return null for currentLeg when no sets exist', () => {
     const gameWithoutSets = { ...gameFull, sets: [] }
 
-    useLazyAsyncDataMock.mockReturnValue({
-      data: ref(gameWithoutSets),
-      pending: ref(false),
-      error: ref(null),
-      refresh: vi.fn(),
-    })
+    mockGame(gameWithoutSets)
 
     const { currentLeg } = useGame()
 

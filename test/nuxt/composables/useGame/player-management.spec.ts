@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { gameFull, playerOne, playerTwo } from '~~/test/fixtures'
+import { createMockGame } from '~~/test/mocks/game'
 
 const { routeParamsMock, useLazyAsyncDataMock, fetchMock, cachedGameValue } =
   vi.hoisted(() => {
@@ -31,18 +32,15 @@ mockNuxtImport('useLazyAsyncData', () => {
 
 vi.stubGlobal('$fetch', fetchMock)
 
+const mockGame = createMockGame(useLazyAsyncDataMock)
+
 describe('useGame - player management', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
     cachedGameValue.value = { ...gameFull }
     routeParamsMock.mockReturnValue({ id: gameFull.id })
-    useLazyAsyncDataMock.mockReturnValue({
-      data: ref(gameFull),
-      pending: ref(false),
-      error: ref(null),
-      refresh: vi.fn(),
-    })
+    mockGame(gameFull)
     fetchMock.mockImplementation(async (_url, options) => {
       if (options?.onRequest) {
         options.onRequest()
@@ -81,12 +79,7 @@ describe('useGame - player management', () => {
       }
 
       cachedGameValue.value = { ...singlePlayerGame }
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(singlePlayerGame),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(singlePlayerGame)
 
       const { submitTurn } = useGame()
 
@@ -109,12 +102,7 @@ describe('useGame - player management', () => {
 
     it('should not call the API when game is not loaded', async () => {
       cachedGameValue.value = null
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(null),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
+      mockGame(null)
 
       const { submitTurn } = useGame()
 
