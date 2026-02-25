@@ -17,7 +17,7 @@ const nextThrows = computed<Segment[]>(() => {
 
   if (!result) return []
 
-  return (result.turns[0] ?? { darts: [] }).darts.map((d) => d.segment)
+  return result.darts.map((d) => d.segment)
 })
 </script>
 

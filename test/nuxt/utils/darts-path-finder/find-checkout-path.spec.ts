@@ -34,14 +34,14 @@ describe('findCheckoutPath', () => {
     const result = findCheckoutPath(2)
 
     expect(result).not.toBeNull()
-    expect(result!.turns[0]!.darts[0]!.segment).toBe('D1')
+    expect(result!.darts[0]!.segment).toBe('D1')
   })
 
   it('returns valid checkout for maximum score 170', () => {
     const result = findCheckoutPath(170)
 
     expect(result).not.toBeNull()
-    expect(result!.finishingDouble.segment).toBe('DB')
+    expect(result!.darts.at(-1)!.segment).toBe('DB')
   })
 
   it('throws RangeError for scores below 2', () => {
@@ -64,7 +64,7 @@ describe('findCheckoutPath', () => {
 
       expect(result).not.toBeNull()
 
-      const finishingSegment = result!.finishingDouble.segment
+      const finishingSegment = result!.darts.at(-1)!.segment
 
       expect(
         finishingSegment.startsWith('D') || finishingSegment === 'DB',
@@ -77,10 +77,7 @@ describe('findCheckoutPath', () => {
 
     expect(result).not.toBeNull()
 
-    const dartCount = result!.turns.reduce(
-      (sum, turn) => sum + turn.darts.length,
-      0,
-    )
+    const dartCount = result!.darts.length
 
     expect(result!.totalDarts).toBe(dartCount)
   })
