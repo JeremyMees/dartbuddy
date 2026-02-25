@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PlayerCard > should render correctly with default props 1`] = `
+"<div class="bg-transparent text-foreground border rounded-lg w-full py-2 flex flex-col gap-2 transition-colors duration-300"><span data-test-name="" class="text-lg px-4">Player <span class="font-bold">"tweede speler"</span> Two</span>
+  <div class="px-4 pt-2 flex gap-4 items-center justify-between">
+    <div class="text-4xl font-black" data-test-points="">429 <span class="text-xs font-normal">Score</span></div>
+    <div class="flex gap-4">
+      <div class="flex flex-col items-center gap-0.5"><span class="iconify i-hugeicons:medal-02" aria-hidden="true" data-test-icon=""></span><span data-test-value="" class="text-xs font-bold pt-0.5">0</span><span data-test-name="" class="text-xs">Sets</span></div>
+      <div class="flex flex-col items-center gap-0.5"><span class="iconify i-hugeicons:stack-star" aria-hidden="true" data-test-icon=""></span><span data-test-value="" class="text-xs font-bold pt-0.5">0</span><span data-test-name="" class="text-xs">Legs</span></div>
+      <div class="flex flex-col items-center gap-0.5"><span class="iconify i-hugeicons:dart" aria-hidden="true" data-test-icon=""></span><span data-test-value="" class="text-xs font-bold pt-0.5">6</span><span data-test-name="" class="text-xs">Darts</span></div>
+      <div class="flex flex-col items-center gap-0.5"><span class="iconify i-hugeicons:chart-01" aria-hidden="true" data-test-icon=""></span><span data-test-value="" class="text-xs font-bold pt-0.5">99</span><span data-test-name="" class="text-xs">Average</span></div>
+    </div>
+  </div>
+  <div data-orientation="horizontal" role="none" data-slot="separator" class="shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px bg-border transition-colors duration-300" data-test-separator=""></div>
+  <div class="px-4 flex gap-2 items-center justify-between"><span class="text-xs">Best throws:</span>
+    <div class="flex gap-2 items-center">
+      <div data-test-best-throw="" class="p-1 w-14 rounded-lg text-center font-bold bg-accent">T20</div>
+      <div data-test-best-throw="" class="p-1 w-14 rounded-lg text-center font-bold bg-accent">T20</div>
+      <div data-test-best-throw="" class="p-1 w-14 rounded-lg text-center font-bold bg-accent">T20</div>
+    </div>
+  </div>
+</div>"
+`;

@@ -8,12 +8,12 @@ const props = defineProps<
   }
 >()
 
+const shownPoints = computed(() => props.livePoints ?? props.points)
+
 const nextThrows = computed<Segment[]>(() => {
-  const pointsToUse = props.livePoints ?? props.points
+  if (!isCheckoutPossible(shownPoints.value)) return ['T20', 'T20', 'T20']
 
-  if (!isCheckoutPossible(pointsToUse)) return ['T20', 'T20', 'T20']
-
-  const result = findCheckoutPath(pointsToUse)
+  const result = findCheckoutPath(shownPoints.value)
 
   if (!result) return []
 
@@ -30,14 +30,14 @@ const nextThrows = computed<Segment[]>(() => {
     "
     class="border rounded-lg w-full py-2 flex flex-col gap-2 transition-colors duration-300"
   >
-    <span class="text-lg px-4">
+    <span data-test-name class="text-lg px-4">
       {{ firstName }}
       <span class="font-bold">"{{ nickName }}"</span>
       {{ lastName }}
     </span>
 
     <div class="px-4 pt-2 flex gap-4 items-center justify-between">
-      <PlayerScore :points="points" />
+      <PlayerScore data-test-points :points="shownPoints" />
       <div class="flex gap-4">
         <IconStat icon="hugeicons:medal-02" name="Sets" :value="sets" />
         <IconStat icon="hugeicons:stack-star" name="Legs" :value="legs" />
@@ -47,6 +47,7 @@ const nextThrows = computed<Segment[]>(() => {
     </div>
 
     <Separator
+      data-test-separator
       :class="active ? 'bg-primary-foreground/50' : 'bg-border'"
       class="transition-colors duration-300"
     />
@@ -57,6 +58,7 @@ const nextThrows = computed<Segment[]>(() => {
         <div
           v-for="(bestThrow, index) in nextThrows"
           :key="`${index}-${bestThrow}`"
+          data-test-best-throw
           class="p-1 w-14 rounded-lg text-center font-bold bg-accent"
         >
           {{ bestThrow }}
