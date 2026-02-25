@@ -8,7 +8,6 @@ export function withTurnActionApplied(
   if (action.legUpdate) {
     updated = withLegUpdated(updated, action.legUpdate.legId, {
       winnerId: action.legUpdate.winnerId,
-      winner: findPlayer(game, action.legUpdate.winnerId),
       endedAt: new Date(action.legUpdate.endedAt),
     })
   }
@@ -16,7 +15,6 @@ export function withTurnActionApplied(
   if (action.setUpdate) {
     updated = withSetUpdated(updated, action.setUpdate.setId, {
       winnerId: action.setUpdate.winnerId,
-      winner: findPlayer(game, action.setUpdate.winnerId),
       endedAt: new Date(action.setUpdate.endedAt),
     })
   }
@@ -29,7 +27,6 @@ export function withTurnActionApplied(
       createdAt: new Date(),
       endedAt: null,
       winnerId: null,
-      winner: null,
       turns: [],
     }
     updated = withLegAdded(updated, action.newLeg.setId, optimisticLeg)
@@ -44,7 +41,6 @@ export function withTurnActionApplied(
       createdAt: new Date(),
       endedAt: null,
       winnerId: null,
-      winner: null,
       legs: [
         {
           id: `temp-leg-${Date.now()}`,
@@ -53,7 +49,6 @@ export function withTurnActionApplied(
           createdAt: new Date(),
           endedAt: null,
           winnerId: null,
-          winner: null,
           turns: [],
         },
       ],

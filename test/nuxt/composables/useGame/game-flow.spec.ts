@@ -41,7 +41,6 @@ const gameWithLegWin: GameFull = {
       createdAt: new Date(),
       endedAt: null,
       winnerId: null,
-      winner: null,
       legs: [
         {
           id: 'legwin-leg',
@@ -50,7 +49,6 @@ const gameWithLegWin: GameFull = {
           createdAt: new Date(),
           endedAt: null,
           winnerId: null,
-          winner: null,
           turns: [
             {
               id: 'prev-turn',
@@ -61,8 +59,7 @@ const gameWithLegWin: GameFull = {
               totalScored: 461,
               remainingScore: 40,
               isBust: false,
-              throws: [],
-              player: playerTwo,
+              _count: { throws: 0 },
             },
           ],
         },
@@ -82,7 +79,6 @@ const gameWithSetWin: GameFull = {
       createdAt: new Date(),
       endedAt: null,
       winnerId: null,
-      winner: null,
       legs: [
         {
           id: 'leg-already-won',
@@ -91,7 +87,6 @@ const gameWithSetWin: GameFull = {
           createdAt: new Date(),
           endedAt: new Date(),
           winnerId: playerTwo.id,
-          winner: playerTwo,
           turns: [],
         },
         {
@@ -101,7 +96,6 @@ const gameWithSetWin: GameFull = {
           createdAt: new Date(),
           endedAt: null,
           winnerId: null,
-          winner: null,
           turns: [
             {
               id: 'prev-turn-2',
@@ -112,8 +106,7 @@ const gameWithSetWin: GameFull = {
               totalScored: 461,
               remainingScore: 40,
               isBust: false,
-              throws: [],
-              player: playerTwo,
+              _count: { throws: 0 },
             },
           ],
         },

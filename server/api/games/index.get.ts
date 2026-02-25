@@ -29,13 +29,7 @@ export default defineEventHandler(async (event) => {
         sets: {
           orderBy: { number: 'asc' },
           include: {
-            winner: true,
-            legs: {
-              orderBy: { number: 'asc' },
-              include: {
-                winner: true,
-              },
-            },
+            legs: true,
           },
         },
         winner: true,

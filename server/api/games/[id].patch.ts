@@ -28,31 +28,7 @@ export default defineEventHandler(async (event) => {
   const game = await prisma.game.update({
     where: { id },
     data: updateData,
-    include: {
-      players: {
-        include: {
-          player: true,
-        },
-      },
-      sets: {
-        include: {
-          winner: true,
-          legs: {
-            include: {
-              winner: true,
-              turns: {
-                include: {
-                  throws: true,
-                  player: true,
-                },
-              },
-            },
-          },
-        },
-      },
-      winner: true,
-      activePlayer: true,
-    },
+    include: gameFullInclude,
   })
 
   return game

@@ -184,9 +184,6 @@ export function useGame() {
     const activePlayerId = gameSnapshot.activePlayerId
     const startingScore = activePlayerStats.value.points
 
-    const player = findPlayer(gameSnapshot, activePlayerId)
-    if (!player) return
-
     const totalScored = data.throws.reduce((sum, t) => sum + t.scored, 0)
     const remaining = data.isBust ? startingScore : startingScore - totalScored
     const isWin = remaining === 0 && !data.isBust
@@ -201,15 +198,7 @@ export function useGame() {
       totalScored,
       remainingScore: remaining,
       isBust: data.isBust,
-      throws: data.throws.map((t, i) => ({
-        id: `temp-throw-${Date.now()}-${i}`,
-        turnId: tempId,
-        playerId: activePlayerId,
-        order: i + 1,
-        segment: t.segment,
-        scored: t.scored,
-      })),
-      player,
+      _count: { throws: data.throws.length },
     }
 
     const mutations = computeGameMutations(

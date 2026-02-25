@@ -41,7 +41,6 @@ const gameWithPlayerTwoAt40: GameFull = {
       createdAt: new Date(),
       endedAt: null,
       winnerId: null,
-      winner: null,
       legs: [
         {
           id: 'winning-test-leg',
@@ -50,7 +49,6 @@ const gameWithPlayerTwoAt40: GameFull = {
           createdAt: new Date(),
           endedAt: null,
           winnerId: null,
-          winner: null,
           turns: [
             {
               id: 'prev-turn',
@@ -61,8 +59,7 @@ const gameWithPlayerTwoAt40: GameFull = {
               totalScored: 461,
               remainingScore: 40,
               isBust: false,
-              throws: [],
-              player: playerTwo,
+              _count: { throws: 0 },
             },
           ],
         },

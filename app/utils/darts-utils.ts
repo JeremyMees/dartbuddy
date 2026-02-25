@@ -57,7 +57,7 @@ export function calculateCurrentPoints(
 
 export function calculateThreeDartAverage(turns: GameTurn[]): number {
   const totalScored = turns.reduce((sum, t) => sum + t.totalScored, 0)
-  const totalThrows = turns.reduce((sum, t) => sum + t.throws.length, 0)
+  const totalThrows = turns.reduce((sum, t) => sum + t._count.throws, 0)
 
   if (!totalThrows) return 0
 

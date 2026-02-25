@@ -21,16 +21,17 @@ export const gameFullInclude = {
   sets: {
     orderBy: { number: 'asc' } as const,
     include: {
-      winner: true,
       legs: {
         orderBy: { number: 'asc' } as const,
         include: {
-          winner: true,
           turns: {
             orderBy: { startedAt: 'asc' } as const,
             include: {
-              throws: { orderBy: { order: 'asc' } as const },
-              player: true,
+              _count: {
+                select: {
+                  throws: true,
+                },
+              },
             },
           },
         },
