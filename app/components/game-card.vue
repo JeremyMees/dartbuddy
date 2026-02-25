@@ -24,15 +24,19 @@ defineProps<{ game: GameOverview }>()
       </div>
     </CardHeader>
     <CardContent>
-      <ul class="text-sm list-disc list-inside">
+      <ul class="text-sm list-inside flex flex-col gap-y-0.5">
         <li
           v-for="{ player } in game.players"
           :key="player.id"
           data-test-player
+          class="flex items-center gap-2"
         >
-          {{ player.firstName }}
-          <span class="font-bold">"{{ player.nickName }}"</span>
-          {{ player.lastName }}
+          <Icon name="hugeicons:user" />
+          <span>
+            {{ player.firstName }}
+            <span class="font-bold">"{{ player.nickName }}"</span>
+            {{ player.lastName }}
+          </span>
         </li>
       </ul>
     </CardContent>
