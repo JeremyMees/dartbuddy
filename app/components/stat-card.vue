@@ -8,9 +8,11 @@ defineProps<{
 <template>
   <Card>
     <CardHeader>
-      <span class="text-sm text-muted-foreground">{{ label }}</span>
+      <span data-test-label class="text-sm text-muted-foreground">
+        {{ label }}
+      </span>
     </CardHeader>
-    <CardContent class="pt-0">
+    <CardContent data-test-stat class="pt-0">
       <slot>
         <span class="text-3xl font-bold">
           {{ stat }}
