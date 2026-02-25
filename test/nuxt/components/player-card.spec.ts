@@ -22,6 +22,7 @@ const props = {
   playerId: playerTwo.id,
   active: false,
   livePoints: null,
+  outType: 'DOUBLE' as const,
 }
 
 describe('PlayerCard', () => {

@@ -5,6 +5,7 @@ const props = defineProps<
   PlayerStats & {
     active: boolean
     livePoints: number | null
+    outType: OutType
   }
 >()
 
@@ -38,7 +39,7 @@ const nextThrows = computed<Segment[]>(() => {
     </span>
 
     <div class="px-4 pt-2 flex gap-4 items-center justify-between">
-      <PlayerScore data-test-points :points="shownPoints" />
+      <PlayerScore data-test-points :points="shownPoints" :out-type="outType" />
       <div class="flex gap-4">
         <IconStat icon="hugeicons:medal-02" name="Sets" :value="sets" />
         <IconStat icon="hugeicons:stack-star" name="Legs" :value="legs" />

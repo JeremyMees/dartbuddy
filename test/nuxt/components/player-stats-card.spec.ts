@@ -20,6 +20,7 @@ const props = {
   lastName: playerTwo.lastName,
   nickName: playerTwo.nickName,
   playerId: playerTwo.id,
+  outType: 'DOUBLE' as const,
 }
 
 describe('PlayerStatsCard', () => {

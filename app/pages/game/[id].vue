@@ -109,6 +109,7 @@ async function handleEndGame() {
           v-for="stat in players"
           :key="stat.playerId"
           v-bind="stat"
+          :out-type="game?.outType ?? 'DOUBLE'"
         />
       </template>
       <template v-else>
@@ -121,6 +122,7 @@ async function handleEndGame() {
           :live-points="
             stat.playerId === game?.activePlayerId ? livePoints : null
           "
+          :out-type="game?.outType ?? 'DOUBLE'"
         />
       </template>
     </div>

@@ -1,10 +1,16 @@
 <script lang="ts" setup>
-defineProps<{ points: number }>()
+const props = defineProps<{
+  points: number
+  outType: OutType
+}>()
+
+const bustScore = props.outType === 'STRAIGHT' ? 1 : 2
 </script>
 
 <template>
-  <div class="text-4xl font-black">
+  <div v-if="points >= bustScore" class="text-4xl font-black">
     {{ points }}
     <span class="text-xs font-normal">Score</span>
   </div>
+  <div v-else class="text-4xl font-black">Bust</div>
 </template>

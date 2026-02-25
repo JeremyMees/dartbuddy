@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import type { PlayerStats } from '~~/shared/types/player'
 
-defineProps<PlayerStats>()
+defineProps<
+  PlayerStats & {
+    outType: OutType
+  }
+>()
 </script>
 
 <template>
@@ -15,7 +19,7 @@ defineProps<PlayerStats>()
     </span>
 
     <div class="px-4 pt-1 flex gap-4 items-center justify-between">
-      <PlayerScore data-test-points :points="points" />
+      <PlayerScore data-test-points :points="points" :out-type="outType" />
       <div class="flex gap-4">
         <IconStat icon="hugeicons:medal-02" name="Sets" :value="sets" />
         <IconStat icon="hugeicons:stack-star" name="Legs" :value="legs" />
