@@ -9,7 +9,7 @@ defineProps<{ game: GameOverview }>()
       <div class="flex gap-2 items-center">
         <Icon name="hugeicons:medal-02" />
         <span data-test-sets class="font-bold">
-          {{ `${game.sets.length}/${game.setsToWin}` }}
+          {{ `${game._count.sets}/${game.setsToWin}` }}
         </span>
       </div>
       <div class="flex gap-2 items-center">

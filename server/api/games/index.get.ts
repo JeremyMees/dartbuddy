@@ -26,13 +26,12 @@ export default defineEventHandler(async (event) => {
             player: true,
           },
         },
-        sets: {
-          orderBy: { number: 'asc' },
-          include: {
-            legs: true,
+        winner: true,
+        _count: {
+          select: {
+            sets: true,
           },
         },
-        winner: true,
       },
     }),
     prisma.game.count(),

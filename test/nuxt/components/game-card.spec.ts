@@ -1,6 +1,6 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { describe, expect, it } from 'vitest'
-import { gameOverview, winningSet, playerOne } from '~~/test/fixtures'
+import { gameOverview, playerOne } from '~~/test/fixtures'
 import GameCard from '~/components/game-card.vue'
 
 const props = {
@@ -26,7 +26,9 @@ describe('GameCard', () => {
         game: {
           ...props.game,
           setsToWin: 9,
-          sets: [winningSet],
+          _count: {
+            sets: 1,
+          },
         },
       },
     })

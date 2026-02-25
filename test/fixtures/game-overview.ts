@@ -1,4 +1,4 @@
-import { unfinishedSet, winningSet, playerOne, playerTwo } from '.'
+import { playerOne, playerTwo } from '.'
 
 const gameOverview: GameOverview = {
   id: '2c8ae5cc-9993-4415-9ea7-e4a82d76c717',
@@ -29,7 +29,9 @@ const gameOverview: GameOverview = {
       player: playerOne,
     },
   ],
-  sets: [unfinishedSet, winningSet],
+  _count: {
+    sets: 2,
+  },
   winner: null,
 }
 

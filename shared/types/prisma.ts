@@ -49,9 +49,9 @@ export type GameOverview = Prisma.GameGetPayload<{
         player: true
       }
     }
-    sets: {
-      include: {
-        legs: true
+    _count: {
+      select: {
+        sets: true
       }
     }
     winner: true
