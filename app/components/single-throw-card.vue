@@ -5,10 +5,11 @@ defineProps<{ segment: Segment }>()
 
 <template>
   <div class="border rounded-lg flex grow gap-2 items-center">
-    <span class="text-xl font-bold pl-2 py-0.5">
+    <span data-test-segment class="text-xl font-bold pl-2 py-0.5">
       {{ segment }}
     </span>
     <button
+      data-test-remove
       class="ml-auto flex flex-col items-center justify-center pr-2 py-0.5"
       @click="$emit('remove')"
     >

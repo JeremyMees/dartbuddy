@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SingleThrowCard > should render correctly with default props 1`] = `"<div class="border rounded-lg flex grow gap-2 items-center"><span data-test-segment="" class="text-xl font-bold pl-2 py-0.5">T20</span><button data-test-remove="" class="ml-auto flex flex-col items-center justify-center pr-2 py-0.5"><span class="iconify i-hugeicons:delete-01" aria-hidden="true"></span></button></div>"`;
