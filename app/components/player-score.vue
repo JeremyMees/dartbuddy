@@ -8,7 +8,7 @@ const bustScore = props.outType === 'STRAIGHT' ? 1 : 2
 </script>
 
 <template>
-  <div v-if="points >= bustScore" class="text-4xl font-black">
+  <div v-if="points >= bustScore || points === 0" class="text-4xl font-black">
     {{ points }}
     <span class="text-xs font-normal">Score</span>
   </div>

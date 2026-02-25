@@ -55,11 +55,11 @@ describe('PlayerScore', () => {
     expect(component.text()).not.toBe('Bust')
   })
 
-  it('should show bust when points are 0 and outType is STRAIGHT', async () => {
+  it('should show bust when points are negative', async () => {
     const component = await mountSuspended(PlayerScore, {
       props: {
         ...props,
-        points: 0,
+        points: -1,
         outType: 'STRAIGHT' as const,
       },
     })
