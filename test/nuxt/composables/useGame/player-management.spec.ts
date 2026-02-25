@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
-import { gameFull, playerOne } from '~~/test/fixtures'
+import { gameFull, playerOne, playerTwo } from '~~/test/fixtures'
 
 const { routeParamsMock, useLazyAsyncDataMock, fetchMock, cachedGameValue } =
   vi.hoisted(() => {
@@ -52,22 +52,63 @@ describe('useGame - player management', () => {
     })
   })
 
-  describe('setNextPlayer', () => {
-    it('should set the next player as active', async () => {
-      const { setNextPlayer } = useGame()
+  describe('player rotation via submitTurn', () => {
+    it('should advance to the next player after a non-winning throw', async () => {
+      const { submitTurn } = useGame()
 
-      await setNextPlayer()
+      await submitTurn({
+        throws: [{ segment: 'S1', scored: 1 }],
+        isBust: false,
+      })
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `/api/games/${gameFull.id}`,
+        `/api/games/${gameFull.id}/turns`,
         expect.objectContaining({
-          method: 'PATCH',
-          body: { activePlayerId: playerOne.id },
+          body: expect.objectContaining({
+            gameUpdate: expect.objectContaining({
+              activePlayerId: playerOne.id,
+            }),
+          }),
         }),
       )
     })
 
-    it('should not set next player if game is not loaded', async () => {
+    it('should keep the same player in a single-player game', async () => {
+      const singlePlayerGame: GameFull = {
+        ...gameFull,
+        activePlayerId: playerTwo.id,
+        players: [gameFull.players[0]!],
+      }
+
+      cachedGameValue.value = { ...singlePlayerGame }
+      useLazyAsyncDataMock.mockReturnValue({
+        data: ref(singlePlayerGame),
+        pending: ref(false),
+        error: ref(null),
+        refresh: vi.fn(),
+      })
+
+      const { submitTurn } = useGame()
+
+      await submitTurn({
+        throws: [{ segment: 'S1', scored: 1 }],
+        isBust: false,
+      })
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `/api/games/${gameFull.id}/turns`,
+        expect.objectContaining({
+          body: expect.objectContaining({
+            gameUpdate: expect.objectContaining({
+              activePlayerId: playerTwo.id,
+            }),
+          }),
+        }),
+      )
+    })
+
+    it('should not call the API when game is not loaded', async () => {
+      cachedGameValue.value = null
       useLazyAsyncDataMock.mockReturnValue({
         data: ref(null),
         pending: ref(false),
@@ -75,29 +116,9 @@ describe('useGame - player management', () => {
         refresh: vi.fn(),
       })
 
-      const { setNextPlayer } = useGame()
+      const { submitTurn } = useGame()
 
-      await setNextPlayer()
-
-      expect(fetchMock).not.toHaveBeenCalled()
-    })
-
-    it('should not set next player if next player id is undefined', async () => {
-      const gameWithInvalidActivePlayer = {
-        ...gameFull,
-        activePlayerId: 'non-existent-player',
-      }
-
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(gameWithInvalidActivePlayer),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
-
-      const { setNextPlayer } = useGame()
-
-      await setNextPlayer()
+      await submitTurn({ throws: [], isBust: false })
 
       expect(fetchMock).not.toHaveBeenCalled()
     })

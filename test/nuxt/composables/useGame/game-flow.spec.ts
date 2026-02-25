@@ -31,6 +31,97 @@ mockNuxtImport('useLazyAsyncData', () => {
 
 vi.stubGlobal('$fetch', fetchMock)
 
+const gameWithLegWin: GameFull = {
+  ...gameFull,
+  sets: [
+    {
+      id: 'legwin-set',
+      gameId: gameFull.id,
+      number: 1,
+      createdAt: new Date(),
+      endedAt: null,
+      winnerId: null,
+      winner: null,
+      legs: [
+        {
+          id: 'legwin-leg',
+          setId: 'legwin-set',
+          number: 1,
+          createdAt: new Date(),
+          endedAt: null,
+          winnerId: null,
+          winner: null,
+          turns: [
+            {
+              id: 'prev-turn',
+              legId: 'legwin-leg',
+              playerId: playerTwo.id,
+              startedAt: new Date(),
+              startingScore: 501,
+              totalScored: 461,
+              remainingScore: 40,
+              isBust: false,
+              throws: [],
+              player: playerTwo,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
+
+const gameWithSetWin: GameFull = {
+  ...gameFull,
+  setsToWin: 2,
+  sets: [
+    {
+      id: 'setwin-set',
+      gameId: gameFull.id,
+      number: 1,
+      createdAt: new Date(),
+      endedAt: null,
+      winnerId: null,
+      winner: null,
+      legs: [
+        {
+          id: 'leg-already-won',
+          setId: 'setwin-set',
+          number: 1,
+          createdAt: new Date(),
+          endedAt: new Date(),
+          winnerId: playerTwo.id,
+          winner: playerTwo,
+          turns: [],
+        },
+        {
+          id: 'setwin-leg',
+          setId: 'setwin-set',
+          number: 2,
+          createdAt: new Date(),
+          endedAt: null,
+          winnerId: null,
+          winner: null,
+          turns: [
+            {
+              id: 'prev-turn-2',
+              legId: 'setwin-leg',
+              playerId: playerTwo.id,
+              startedAt: new Date(),
+              startingScore: 501,
+              totalScored: 461,
+              remainingScore: 40,
+              isBust: false,
+              throws: [],
+              player: playerTwo,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
+
 describe('useGame - game flow', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -52,42 +143,115 @@ describe('useGame - game flow', () => {
     })
   })
 
-  describe('handleWinningThrow', () => {
-    it('should update leg winner after winning throw', async () => {
-      const { handleWinningThrow } = useGame()
-      const currentLegId = gameFull.sets.at(-1)?.legs.at(-1)?.id ?? ''
+  describe('submitTurn - winning scenarios', () => {
+    it('should include legUpdate and newLeg when player wins a leg but not the set', async () => {
+      cachedGameValue.value = { ...gameWithLegWin }
+      useLazyAsyncDataMock.mockReturnValue({
+        data: ref(gameWithLegWin),
+        pending: ref(false),
+        error: ref(null),
+        refresh: vi.fn(),
+      })
 
-      await handleWinningThrow()
+      const { submitTurn } = useGame()
 
+      await submitTurn({
+        throws: [{ segment: 'D20', scored: 40 }],
+        isBust: false,
+      })
+
+      expect(fetchMock).toHaveBeenCalledOnce()
       expect(fetchMock).toHaveBeenCalledWith(
-        `/api/games/${gameFull.id}/legs/${currentLegId}`,
+        `/api/games/${gameFull.id}/turns`,
         expect.objectContaining({
-          method: 'PATCH',
           body: expect.objectContaining({
-            winnerId: playerTwo.id,
+            legUpdate: expect.objectContaining({
+              legId: 'legwin-leg',
+              winnerId: playerTwo.id,
+            }),
+            newLeg: expect.objectContaining({
+              setId: 'legwin-set',
+              number: 2,
+            }),
+            gameUpdate: expect.objectContaining({
+              activePlayerId: playerOne.id,
+            }),
           }),
         }),
       )
     })
 
-    it('should add a new leg if legs to win not reached', async () => {
-      const { handleWinningThrow } = useGame()
-      const currentSetId = gameFull.sets.at(-1)?.id ?? ''
+    it('should include legUpdate, setUpdate and newSet when player wins the set but not the match', async () => {
+      cachedGameValue.value = { ...gameWithSetWin }
+      useLazyAsyncDataMock.mockReturnValue({
+        data: ref(gameWithSetWin),
+        pending: ref(false),
+        error: ref(null),
+        refresh: vi.fn(),
+      })
 
-      await handleWinningThrow()
+      const { submitTurn } = useGame()
 
+      await submitTurn({
+        throws: [{ segment: 'D20', scored: 40 }],
+        isBust: false,
+      })
+
+      expect(fetchMock).toHaveBeenCalledOnce()
       expect(fetchMock).toHaveBeenCalledWith(
-        `/api/games/${gameFull.id}/legs`,
+        `/api/games/${gameFull.id}/turns`,
         expect.objectContaining({
-          method: 'POST',
           body: expect.objectContaining({
-            setId: currentSetId,
+            legUpdate: expect.objectContaining({ winnerId: playerTwo.id }),
+            setUpdate: expect.objectContaining({
+              setId: 'setwin-set',
+              winnerId: playerTwo.id,
+            }),
+            newSet: expect.objectContaining({ number: 2 }),
+            gameUpdate: expect.objectContaining({
+              activePlayerId: playerOne.id,
+            }),
           }),
         }),
       )
     })
 
-    it('should not handle winning throw if game is not loaded', async () => {
+    it('should include gameUpdate with winnerId when player wins the match', async () => {
+      // setsToWin=1 and the player wins their first set → match over
+      const gameForMatchWin: GameFull = {
+        ...gameWithSetWin,
+        setsToWin: 1,
+      }
+      cachedGameValue.value = { ...gameForMatchWin }
+      useLazyAsyncDataMock.mockReturnValue({
+        data: ref(gameForMatchWin),
+        pending: ref(false),
+        error: ref(null),
+        refresh: vi.fn(),
+      })
+
+      const { submitTurn } = useGame()
+
+      await submitTurn({
+        throws: [{ segment: 'D20', scored: 40 }],
+        isBust: false,
+      })
+
+      expect(fetchMock).toHaveBeenCalledOnce()
+      expect(fetchMock).toHaveBeenCalledWith(
+        `/api/games/${gameFull.id}/turns`,
+        expect.objectContaining({
+          body: expect.objectContaining({
+            gameUpdate: expect.objectContaining({
+              winnerId: playerTwo.id,
+              endReason: 'COMPLETED',
+            }),
+          }),
+        }),
+      )
+    })
+
+    it('should not call the API when game is not loaded', async () => {
       useLazyAsyncDataMock.mockReturnValue({
         data: ref(null),
         pending: ref(false),
@@ -95,26 +259,9 @@ describe('useGame - game flow', () => {
         refresh: vi.fn(),
       })
 
-      const { handleWinningThrow } = useGame()
+      const { submitTurn } = useGame()
 
-      await handleWinningThrow()
-
-      expect(fetchMock).not.toHaveBeenCalled()
-    })
-
-    it('should not handle winning throw if current set is not available', async () => {
-      const gameWithoutSets = { ...gameFull, sets: [] }
-
-      useLazyAsyncDataMock.mockReturnValue({
-        data: ref(gameWithoutSets),
-        pending: ref(false),
-        error: ref(null),
-        refresh: vi.fn(),
-      })
-
-      const { handleWinningThrow } = useGame()
-
-      await handleWinningThrow()
+      await submitTurn({ throws: [], isBust: false })
 
       expect(fetchMock).not.toHaveBeenCalled()
     })

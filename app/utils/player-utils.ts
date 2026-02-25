@@ -53,12 +53,15 @@ export function getPlayerWithLeastThrows(
   }).playerId
 }
 
-export function getNextPlayerId(game: GameFull): string | undefined {
-  const currentPlayerId = game.activePlayerId
+export function getNextPlayerId(
+  game: GameFull,
+  activePlayerId?: string,
+): string | undefined {
+  const currentPlayerId = activePlayerId ?? game.activePlayerId
   const playerIds = game.players.map((p) => p.playerId)
   const currentIndex = playerIds.indexOf(currentPlayerId)
 
-  if (currentIndex === -1) return undefined
+  if (currentIndex === -1) return currentPlayerId
 
   const nextIndex = (currentIndex + 1) % playerIds.length
   return playerIds[nextIndex]

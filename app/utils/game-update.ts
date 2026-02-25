@@ -1,4 +1,93 @@
-export function withTurnAdded(
+export function withTurnActionApplied(
+  game: GameFull,
+  action: TurnActionState,
+  optimisticTurn: GameTurn,
+): GameFull {
+  let updated = withTurnAdded(game, action.legId, optimisticTurn)
+
+  if (action.legUpdate) {
+    updated = withLegUpdated(updated, action.legUpdate.legId, {
+      winnerId: action.legUpdate.winnerId,
+      winner: findPlayer(game, action.legUpdate.winnerId),
+      endedAt: new Date(action.legUpdate.endedAt),
+    })
+  }
+
+  if (action.setUpdate) {
+    updated = withSetUpdated(updated, action.setUpdate.setId, {
+      winnerId: action.setUpdate.winnerId,
+      winner: findPlayer(game, action.setUpdate.winnerId),
+      endedAt: new Date(action.setUpdate.endedAt),
+    })
+  }
+
+  if (action.newLeg) {
+    const optimisticLeg: GameLeg = {
+      id: `temp-leg-${Date.now()}`,
+      setId: action.newLeg.setId,
+      number: action.newLeg.number,
+      createdAt: new Date(),
+      endedAt: null,
+      winnerId: null,
+      winner: null,
+      turns: [],
+    }
+    updated = withLegAdded(updated, action.newLeg.setId, optimisticLeg)
+  }
+
+  if (action.newSet) {
+    const tempSetId = `temp-set-${Date.now()}`
+    const optimisticSet: GameSet = {
+      id: tempSetId,
+      gameId: game.id,
+      number: action.newSet.number,
+      createdAt: new Date(),
+      endedAt: null,
+      winnerId: null,
+      winner: null,
+      legs: [
+        {
+          id: `temp-leg-${Date.now()}`,
+          setId: tempSetId,
+          number: 1,
+          createdAt: new Date(),
+          endedAt: null,
+          winnerId: null,
+          winner: null,
+          turns: [],
+        },
+      ],
+    }
+    updated = withSetAdded(updated, optimisticSet)
+  }
+
+  if (action.gameUpdate) {
+    const { activePlayerId, winnerId, completedAt, endReason } =
+      action.gameUpdate
+    const patch: Partial<GameFull> = {}
+
+    if (activePlayerId !== undefined) {
+      patch.activePlayerId = activePlayerId
+      patch.activePlayer = findPlayer(game, activePlayerId) ?? null
+    }
+    if (winnerId !== undefined) {
+      patch.winnerId = winnerId
+      patch.winner = winnerId ? findPlayer(game, winnerId) : null
+    }
+    if (completedAt !== undefined) {
+      patch.completedAt = new Date(completedAt)
+    }
+    if (endReason !== undefined) {
+      patch.endReason = endReason as GameFull['endReason']
+    }
+
+    updated = { ...updated, ...patch }
+  }
+
+  return updated
+}
+
+function withTurnAdded(
   game: GameFull,
   legId: string,
   turn: GameTurn,
@@ -14,11 +103,7 @@ export function withTurnAdded(
   } as GameFull
 }
 
-export function withLegAdded(
-  game: GameFull,
-  setId: string,
-  leg: GameLeg,
-): GameFull {
+function withLegAdded(game: GameFull, setId: string, leg: GameLeg): GameFull {
   return {
     ...game,
     sets: game.sets.map((set) =>
@@ -27,7 +112,7 @@ export function withLegAdded(
   } as GameFull
 }
 
-export function withLegUpdated(
+function withLegUpdated(
   game: GameFull,
   legId: string,
   updates: Partial<GameLeg>,
@@ -43,11 +128,11 @@ export function withLegUpdated(
   } as GameFull
 }
 
-export function withSetAdded(game: GameFull, set: GameSet): GameFull {
+function withSetAdded(game: GameFull, set: GameSet): GameFull {
   return { ...game, sets: [...game.sets, set] } as GameFull
 }
 
-export function withSetUpdated(
+function withSetUpdated(
   game: GameFull,
   setId: string,
   updates: Partial<GameSet>,

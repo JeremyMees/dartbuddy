@@ -4,13 +4,10 @@ const {
   players,
   activePlayerStats,
   isMatchOver,
-  currentSet,
   currentLeg,
   pending,
   error,
-  addTurn,
-  handleWinningThrow,
-  setNextPlayer,
+  submitTurn,
   refresh,
   undoLastTurn,
   resetGame,
@@ -47,61 +44,34 @@ const canSubmit = computed(() => {
 })
 
 async function submitThrows() {
-  if (
-    !game.value ||
-    !currentSet.value ||
-    !currentLeg.value ||
-    !activePlayerStats.value
-  ) {
-    return
-  }
+  if (!game.value || !activePlayerStats.value) return
 
   const startingScore = activePlayerStats.value.points
-
   const throwsData = thrownSegments.value.map((segment) => ({
     segment,
     scored: calculateSegmentScore(segment),
   }))
-
   const remaining = startingScore - totalThrowScore.value
   const lastSegment = thrownSegments.value.at(-1)
   const bust = isBust(game.value.outType, remaining, lastSegment)
 
-  await addTurn({
-    legId: currentLeg.value.id,
-    playerId: game.value.activePlayerId,
-    startingScore,
-    throws: throwsData,
-    isBust: bust,
-  })
-
-  if (remaining === 0 && !bust) {
-    await handleWinningThrow()
-  } else {
-    await setNextPlayer()
-  }
+  await submitTurn({ throws: throwsData, isBust: bust })
 
   resetThrownSegments()
-  await refresh()
 
   await nextTick()
   const element = document.getElementById(game.value.activePlayerId)
-  element?.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center',
-  })
+  element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 async function handleUndo() {
   await undoLastTurn()
   resetThrownSegments()
-  await refresh()
 }
 
 async function handleReset() {
   await resetGame()
   resetThrownSegments()
-  await refresh()
 }
 
 async function handleEndGame() {

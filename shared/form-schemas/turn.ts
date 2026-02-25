@@ -20,3 +20,39 @@ export const turnCreateSchema = z.object({
   isBust: z.boolean().optional().default(false),
   winnerId: z.string().optional(),
 })
+
+export const turnActionSchema = turnCreateSchema.extend({
+  legUpdate: z
+    .object({
+      legId: z.string(),
+      winnerId: z.string(),
+      endedAt: z.string(),
+    })
+    .optional(),
+  setUpdate: z
+    .object({
+      setId: z.string(),
+      winnerId: z.string(),
+      endedAt: z.string(),
+    })
+    .optional(),
+  newLeg: z
+    .object({
+      setId: z.string(),
+      number: z.number(),
+    })
+    .optional(),
+  newSet: z
+    .object({
+      number: z.number(),
+    })
+    .optional(),
+  gameUpdate: z
+    .object({
+      activePlayerId: z.string().optional(),
+      winnerId: z.string().nullable().optional(),
+      completedAt: z.string().optional(),
+      endReason: z.string().optional(),
+    })
+    .optional(),
+})

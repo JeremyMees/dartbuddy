@@ -38,13 +38,13 @@ describe('getNextPlayerId', () => {
     expect(getNextPlayerId(game as GameFull)).toBe('player-one')
   })
 
-  it('should return undefined when active player is not in players array', () => {
+  it('should return current active player when active player is not in players array', () => {
     const game = createMockGame(
       ['player-one', 'player-two'],
       'non-existent-player',
     )
 
-    expect(getNextPlayerId(game as GameFull)).toBeUndefined()
+    expect(getNextPlayerId(game as GameFull)).toBe('non-existent-player')
   })
 
   it('should wrap to itself when there is only one player', () => {
