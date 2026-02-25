@@ -13,7 +13,7 @@ exports[`PlayerCard > should render correctly with default props 1`] = `
   </div>
   <div data-orientation="horizontal" role="none" data-slot="separator" class="shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px bg-border transition-colors duration-300" data-test-separator=""></div>
   <div class="px-4 flex gap-2 items-center justify-between"><span class="text-xs">Best throws:</span>
-    <div class="flex gap-2 items-center">
+    <div class="flex gap-2 items-center min-h-8">
       <div data-test-best-throw="" class="p-1 w-14 rounded-lg text-center font-bold bg-accent">T20</div>
       <div data-test-best-throw="" class="p-1 w-14 rounded-lg text-center font-bold bg-accent">T20</div>
       <div data-test-best-throw="" class="p-1 w-14 rounded-lg text-center font-bold bg-accent">T20</div>

@@ -74,7 +74,16 @@ describe('PlayerCard', () => {
     expect(points.text()).toBe('400 Score')
   })
 
-  it('should show three T20s when checkout is not possible', async () => {
+  it('should show no throws when points are less than 2', async () => {
+    const component = await mountSuspended(PlayerCard, {
+      props: { ...props, points: 1 },
+    })
+    const points = component.findAll('[data-test-best-throw]')
+
+    expect(points.length).toBe(0)
+  })
+
+  it('should show three T20s when checkout is above 170', async () => {
     const component = await mountSuspended(PlayerCard, { props })
     const points = component.findAll('[data-test-best-throw]')
 

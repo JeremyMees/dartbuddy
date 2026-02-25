@@ -11,6 +11,7 @@ const props = defineProps<
 const shownPoints = computed(() => props.livePoints ?? props.points)
 
 const nextThrows = computed<Segment[]>(() => {
+  if (shownPoints.value < 2) return []
   if (!isCheckoutPossible(shownPoints.value)) return ['T20', 'T20', 'T20']
 
   const result = findCheckoutPath(shownPoints.value)
@@ -54,7 +55,7 @@ const nextThrows = computed<Segment[]>(() => {
 
     <div class="px-4 flex gap-2 items-center justify-between">
       <span class="text-xs">Best throws:</span>
-      <div class="flex gap-2 items-center">
+      <div class="flex gap-2 items-center min-h-8">
         <div
           v-for="(bestThrow, index) in nextThrows"
           :key="`${index}-${bestThrow}`"
