@@ -8,14 +8,14 @@ defineProps<PlayerStats>()
   <div
     class="border rounded-lg w-full py-2 flex flex-col gap-2 transition-colors duration-300"
   >
-    <span class="text-lg px-4">
+    <span data-test-name class="text-lg px-4">
       {{ firstName }}
       <span class="font-bold">"{{ nickName }}"</span>
       {{ lastName }}
     </span>
 
     <div class="px-4 pt-1 flex gap-4 items-center justify-between">
-      <PlayerScore :points="points" />
+      <PlayerScore data-test-points :points="points" />
       <div class="flex gap-4">
         <IconStat icon="hugeicons:medal-02" name="Sets" :value="sets" />
         <IconStat icon="hugeicons:stack-star" name="Legs" :value="legs" />
