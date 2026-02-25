@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { findCheckoutPath } from '~/utils/darts-path-finder'
+import { findCheckoutPath } from '~/utils/darts-utils'
 
 describe('findCheckoutPath', () => {
   it('handles scores that can be finished with three darts (T20, T20, D20)', () => {
