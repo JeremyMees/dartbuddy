@@ -16,6 +16,11 @@ const navigation = [
     icon: 'hugeicons:user-group',
     href: '/users',
   },
+  {
+    name: 'Checkout Table',
+    icon: 'hugeicons:table',
+    href: '/checkout',
+  },
 ]
 </script>
 

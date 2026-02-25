@@ -13,7 +13,7 @@ describe('AppNavigation', () => {
     const component = await mountSuspended(AppNavigation)
     const links = component.findAll('[data-test-nav-link]')
 
-    expect(links.length).toBe(2)
+    expect(links.length).toBe(3)
   })
 
   it('should accept custom classes', async () => {
