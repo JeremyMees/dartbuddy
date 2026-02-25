@@ -7,7 +7,7 @@ defineProps<{
 
 <template>
   <div class="flex flex-col gap-0.5">
-    <span class="text-xs text-muted-foreground">{{ name }}</span>
-    <span class="font-bold">{{ value }}</span>
+    <span data-test-name class="text-xs text-muted-foreground">{{ name }}</span>
+    <span data-test-value class="font-bold">{{ value }}</span>
   </div>
 </template>
