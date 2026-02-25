@@ -32,8 +32,8 @@ export default defineEventHandler(async (event) => {
   const totalScored = throws.reduce((sum, t) => sum + t.scored, 0)
   const remainingScore = isBust ? startingScore : startingScore - totalScored
 
-  const game = await prisma.$transaction(async (tx) => {
-    await tx.turn.create({
+  const diff = await prisma.$transaction(async (tx) => {
+    const createdTurn = await tx.turn.create({
       data: {
         legId,
         playerId,
@@ -50,6 +50,7 @@ export default defineEventHandler(async (event) => {
           })),
         },
       },
+      select: { id: true },
     })
 
     if (legUpdate) {
@@ -76,28 +77,30 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    if (newLeg) {
-      await tx.leg.create({
-        data: {
-          setId: newLeg.setId,
-          number: newLeg.number,
-        },
-      })
-    }
+    const createdLeg = newLeg
+      ? await tx.leg.create({
+          data: {
+            setId: newLeg.setId,
+            number: newLeg.number,
+          },
+          select: { id: true },
+        })
+      : null
 
-    if (newSet) {
-      await tx.set.create({
-        data: {
-          gameId,
-          number: newSet.number,
-          legs: {
-            create: {
-              number: 1,
+    const createdSet = newSet
+      ? await tx.set.create({
+          data: {
+            gameId,
+            number: newSet.number,
+            legs: {
+              create: {
+                number: 1,
+              },
             },
           },
-        },
-      })
-    }
+          include: { legs: { select: { id: true } } },
+        })
+      : null
 
     if (gameUpdate) {
       const patch: Record<string, unknown> = {
@@ -125,13 +128,15 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    return tx.game.findUniqueOrThrow({
-      where: {
-        id: gameId,
-      },
-      include: gameActiveInclude,
-    })
+    return {
+      turnId: createdTurn.id,
+      ...(createdLeg && { newLegId: createdLeg.id }),
+      ...(createdSet && {
+        newSetId: createdSet.id,
+        newSetLegId: createdSet.legs[0]!.id,
+      }),
+    }
   })
 
-  return game
+  return diff
 })

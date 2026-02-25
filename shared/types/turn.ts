@@ -11,3 +11,10 @@ export interface TurnActionState {
     endReason?: string
   }
 }
+
+export interface TurnDiff {
+  turnId: string
+  newLegId?: string
+  newSetId?: string
+  newSetLegId?: string
+}

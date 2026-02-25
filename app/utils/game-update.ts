@@ -82,7 +82,59 @@ export function withTurnActionApplied(
   return updated
 }
 
-function withTurnAdded(
+export function mergeTurnDiff(game: GameFull, diff: TurnDiff): GameFull {
+  let updated: GameFull = {
+    ...game,
+    sets: game.sets.map((set) => ({
+      ...set,
+      legs: set.legs.map((leg) => ({
+        ...leg,
+        turns: leg.turns.map((turn) =>
+          turn.id.startsWith('temp-') ? { ...turn, id: diff.turnId } : turn,
+        ),
+      })),
+    })),
+  } as GameFull
+
+  if (diff.newLegId) {
+    updated = {
+      ...updated,
+      sets: updated.sets.map((set) => ({
+        ...set,
+        legs: set.legs.map((leg) =>
+          leg.id.startsWith('temp-leg-') ? { ...leg, id: diff.newLegId! } : leg,
+        ),
+      })),
+    } as GameFull
+  }
+
+  if (diff.newSetId) {
+    updated = {
+      ...updated,
+      sets: updated.sets.map((set) =>
+        set.id.startsWith('temp-set-')
+          ? {
+              ...set,
+              id: diff.newSetId!,
+              legs: set.legs.map((leg) =>
+                leg.id.startsWith('temp-leg-')
+                  ? {
+                      ...leg,
+                      id: diff.newSetLegId ?? leg.id,
+                      setId: diff.newSetId!,
+                    }
+                  : leg,
+              ),
+            }
+          : set,
+      ),
+    } as GameFull
+  }
+
+  return updated
+}
+
+export function withTurnAdded(
   game: GameFull,
   legId: string,
   turn: GameTurn,
@@ -98,7 +150,11 @@ function withTurnAdded(
   } as GameFull
 }
 
-function withLegAdded(game: GameFull, setId: string, leg: GameLeg): GameFull {
+export function withLegAdded(
+  game: GameFull,
+  setId: string,
+  leg: GameLeg,
+): GameFull {
   return {
     ...game,
     sets: game.sets.map((set) =>
@@ -107,7 +163,7 @@ function withLegAdded(game: GameFull, setId: string, leg: GameLeg): GameFull {
   } as GameFull
 }
 
-function withLegUpdated(
+export function withLegUpdated(
   game: GameFull,
   legId: string,
   updates: Partial<GameLeg>,
@@ -123,11 +179,11 @@ function withLegUpdated(
   } as GameFull
 }
 
-function withSetAdded(game: GameFull, set: GameSet): GameFull {
+export function withSetAdded(game: GameFull, set: GameSet): GameFull {
   return { ...game, sets: [...game.sets, set] } as GameFull
 }
 
-function withSetUpdated(
+export function withSetUpdated(
   game: GameFull,
   setId: string,
   updates: Partial<GameSet>,

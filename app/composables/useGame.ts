@@ -221,30 +221,27 @@ export function useGame() {
       isWin,
     )
 
-    const updatedGame = await $fetch<GameFull>(
-      `/api/games/${gameId.value}/turns`,
-      {
-        method: 'POST',
-        body: {
-          legId: legSnapshot.id,
-          playerId: activePlayerId,
-          startingScore,
-          throws: data.throws,
-          isBust: data.isBust,
-          ...mutations,
-        },
-        ...optimistic((current) =>
-          withTurnActionApplied(
-            current,
-            { legId: legSnapshot.id, ...mutations },
-            optimisticTurn,
-          ),
-        ),
+    const diff = await $fetch<TurnDiff>(`/api/games/${gameId.value}/turns`, {
+      method: 'POST',
+      body: {
+        legId: legSnapshot.id,
+        playerId: activePlayerId,
+        startingScore,
+        throws: data.throws,
+        isBust: data.isBust,
+        ...mutations,
       },
-    )
+      ...optimistic((current) =>
+        withTurnActionApplied(
+          current,
+          { legId: legSnapshot.id, ...mutations },
+          optimisticTurn,
+        ),
+      ),
+    })
 
-    if (updatedGame && 'id' in updatedGame) {
-      cachedGame.value = updatedGame
+    if (diff?.turnId && cachedGame.value) {
+      cachedGame.value = mergeTurnDiff(cachedGame.value, diff)
       refreshStats()
     }
   }
