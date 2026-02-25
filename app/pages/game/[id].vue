@@ -55,9 +55,9 @@ async function submitThrows() {
   const lastSegment = thrownSegments.value.at(-1)
   const bust = isBust(game.value.outType, remaining, lastSegment)
 
-  await submitTurn({ throws: throwsData, isBust: bust })
-
   resetThrownSegments()
+
+  await submitTurn({ throws: throwsData, isBust: bust })
 
   await nextTick()
   const element = document.getElementById(game.value.activePlayerId)
@@ -65,18 +65,18 @@ async function submitThrows() {
 }
 
 async function handleUndo() {
-  await undoLastTurn()
   resetThrownSegments()
+  await undoLastTurn()
 }
 
 async function handleReset() {
-  await resetGame()
   resetThrownSegments()
+  await resetGame()
 }
 
 async function handleEndGame() {
-  await endGameEarly()
   resetThrownSegments()
+  await endGameEarly()
   await refresh()
 }
 </script>
