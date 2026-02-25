@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PlayerScore > should render correctly with default props 1`] = `"<div class="text-4xl font-black">429 <span class="text-xs font-normal">Score</span></div>"`;
