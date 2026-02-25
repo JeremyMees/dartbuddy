@@ -23,6 +23,7 @@ function toggleSelectedAmount(amount: number) {
     <div class="grid grid-cols-7 gap-2">
       <template v-for="i in 20" :key="i">
         <Button
+          data-test-segment-button
           :variant="selectedAmount === i ? 'default' : 'outline'"
           :disabled="
             disabled || (selectedAmount !== null && selectedAmount !== i)
@@ -34,6 +35,7 @@ function toggleSelectedAmount(amount: number) {
         </Button>
       </template>
       <Button
+        data-test-segment-button
         :variant="selectedAmount === 25 ? 'default' : 'outline'"
         :disabled="
           disabled || (selectedAmount !== null && selectedAmount !== 25)
@@ -47,6 +49,7 @@ function toggleSelectedAmount(amount: number) {
 
     <div class="grid grid-cols-4 gap-2">
       <Button
+        data-test-missed
         variant="outline"
         :disabled="disabled || selectedAmount !== null"
         class="w-full"
@@ -60,6 +63,7 @@ function toggleSelectedAmount(amount: number) {
         Missed
       </Button>
       <Button
+        data-test-single
         variant="outline"
         :disabled="disabled || selectedAmount === null"
         class="w-full"
@@ -73,6 +77,7 @@ function toggleSelectedAmount(amount: number) {
         Single
       </Button>
       <Button
+        data-test-double
         variant="outline"
         :disabled="disabled || selectedAmount === null"
         class="w-full"
@@ -86,6 +91,7 @@ function toggleSelectedAmount(amount: number) {
         Double
       </Button>
       <Button
+        data-test-triple
         variant="outline"
         :disabled="disabled || selectedAmount === null || selectedAmount === 25"
         class="w-full"
