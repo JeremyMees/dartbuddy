@@ -50,6 +50,7 @@ export const turnActionSchema = turnCreateSchema.extend({
   gameUpdate: z
     .object({
       activePlayerId: z.string().optional(),
+      startPlayerId: z.string().optional(),
       winnerId: z.string().nullable().optional(),
       completedAt: z.string().optional(),
       endReason: z.string().optional(),

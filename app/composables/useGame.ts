@@ -91,6 +91,11 @@ export function useGame() {
         : {}
     }
 
+    const nextStartPlayerId = getNextPlayerId(
+      gameSnapshot,
+      gameSnapshot.startPlayerId ?? undefined,
+    )
+
     const now = new Date().toISOString()
 
     const legUpdate = {
@@ -110,7 +115,8 @@ export function useGame() {
           number: setSnapshot.legs.length + 1,
         },
         gameUpdate: {
-          activePlayerId: getNextPlayerId(gameSnapshot, activePlayerId),
+          activePlayerId: nextStartPlayerId,
+          startPlayerId: nextStartPlayerId,
         },
       }
     }
@@ -141,7 +147,8 @@ export function useGame() {
       setUpdate,
       newSet: { number: gameSnapshot.sets.length + 1 },
       gameUpdate: {
-        activePlayerId: getNextPlayerId(gameSnapshot, activePlayerId),
+        activePlayerId: nextStartPlayerId,
+        startPlayerId: nextStartPlayerId,
       },
     }
   }

@@ -6,6 +6,7 @@ export interface TurnActionState {
   newSet?: { number: number }
   gameUpdate?: {
     activePlayerId?: string
+    startPlayerId?: string
     winnerId?: string | null
     completedAt?: string
     endReason?: string

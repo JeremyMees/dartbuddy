@@ -57,12 +57,15 @@ export function withTurnActionApplied(
   }
 
   if (action.gameUpdate) {
-    const { activePlayerId, winnerId, completedAt, endReason } =
+    const { activePlayerId, startPlayerId, winnerId, completedAt, endReason } =
       action.gameUpdate
     const patch: Partial<GameFull> = {}
 
     if (activePlayerId !== undefined) {
       patch.activePlayerId = activePlayerId
+    }
+    if (startPlayerId !== undefined) {
+      patch.startPlayerId = startPlayerId
     }
     if (winnerId !== undefined) {
       patch.winnerId = winnerId

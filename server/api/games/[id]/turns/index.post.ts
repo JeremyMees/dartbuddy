@@ -107,6 +107,9 @@ export default defineEventHandler(async (event) => {
         ...(gameUpdate.activePlayerId !== undefined && {
           activePlayerId: gameUpdate.activePlayerId,
         }),
+        ...(gameUpdate.startPlayerId !== undefined && {
+          startPlayerId: gameUpdate.startPlayerId,
+        }),
         ...(gameUpdate.winnerId !== undefined && {
           winnerId: gameUpdate.winnerId,
         }),
