@@ -46,5 +46,4 @@ export const gameActiveInclude = {
     },
   },
   winner: true,
-  activePlayer: true,
 } as const

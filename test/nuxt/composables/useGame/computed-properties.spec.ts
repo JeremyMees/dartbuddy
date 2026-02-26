@@ -78,6 +78,20 @@ describe('useGame - computed properties', () => {
     expect(activePlayerStats.value).toBeUndefined()
   })
 
+  it('should return undefined for activePlayerStats when activePlayerId is null', () => {
+    const gameWithoutActivePlayer = {
+      ...gameFull,
+      activePlayerId: null,
+      activePlayer: null,
+    }
+
+    mockGame(gameWithoutActivePlayer)
+
+    const { activePlayerStats } = useGame()
+
+    expect(activePlayerStats.value).toBeUndefined()
+  })
+
   it('should compute isMatchOver as false when no winner', () => {
     const { isMatchOver } = useGame()
 

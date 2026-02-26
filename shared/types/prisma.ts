@@ -83,7 +83,6 @@ export type GameFull = Prisma.GameGetPayload<{
       }
     }
     winner: true
-    activePlayer: true
   }
 }>
 

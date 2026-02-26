@@ -63,7 +63,6 @@ export function withTurnActionApplied(
 
     if (activePlayerId !== undefined) {
       patch.activePlayerId = activePlayerId
-      patch.activePlayer = findPlayer(game, activePlayerId) ?? null
     }
     if (winnerId !== undefined) {
       patch.winnerId = winnerId

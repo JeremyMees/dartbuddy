@@ -11,6 +11,7 @@ const gameOverview: GameOverview = {
   endReason: null,
   winnerId: null,
   activePlayerId: playerTwo.id,
+  startPlayerId: null,
   players: [
     {
       id: 'ec450770-f7cc-4639-a94d-0bb1169fca61',

@@ -12,6 +12,7 @@ const {
   undoLastTurn,
   resetGame,
   endGameEarly,
+  setStartingPlayer,
 } = useGame()
 
 const {
@@ -58,6 +59,11 @@ async function submitThrows() {
   resetThrownSegments()
 
   await submitTurn({ throws: throwsData, isBust: bust })
+  await scrollToActivePlayer()
+}
+
+async function scrollToActivePlayer() {
+  if (!game.value?.activePlayerId) return
 
   await nextTick()
   const element = document.getElementById(game.value.activePlayerId)
@@ -67,6 +73,7 @@ async function submitThrows() {
 async function handleUndo() {
   resetThrownSegments()
   await undoLastTurn()
+  await scrollToActivePlayer()
 }
 
 async function handleReset() {
@@ -98,7 +105,13 @@ async function handleEndGame() {
     </template>
 
     <div class="flex flex-col gap-2 w-full overflow-auto pb-12">
-      <template v-if="isMatchOver">
+      <PlayerSlotMachine
+        v-if="game && !game.activePlayerId"
+        :players="game.players"
+        @select="setStartingPlayer"
+      />
+
+      <template v-else-if="isMatchOver">
         <IconCard icon="hugeicons:award-01">
           {{ game?.winner?.firstName }}
           <span class="font-bold">"{{ game?.winner?.nickName }}"</span>
@@ -112,6 +125,7 @@ async function handleEndGame() {
           :out-type="game?.outType ?? 'DOUBLE'"
         />
       </template>
+
       <template v-else>
         <PlayerCard
           v-for="stat in players"
@@ -127,7 +141,7 @@ async function handleEndGame() {
       </template>
     </div>
 
-    <template v-if="!isMatchOver" #bottom>
+    <template v-if="!isMatchOver && game?.activePlayerId" #bottom>
       <div
         :class="thrownSegments.length && 'mb-2'"
         class="pt-2 grid grid-cols-4 gap-2 items-center border-t"

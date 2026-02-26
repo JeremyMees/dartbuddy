@@ -7,13 +7,20 @@ export default defineEventHandler(async (event) => {
 
   if (!success) throw error.issues
 
+  const soloGame = data.playerIds.length === 1
+
   const game = await prisma.game.create({
     data: {
       startScore: data.startScore,
       outType: data.outType,
       legsToWin: data.legsToWin,
       setsToWin: data.setsToWin,
-      activePlayerId: data.playerIds[0],
+      ...(soloGame
+        ? {
+            activePlayerId: data.playerIds[0],
+            startPlayerId: data.playerIds[0],
+          }
+        : {}),
       players: {
         create: data.playerIds.map((playerId, index) => ({
           playerId,

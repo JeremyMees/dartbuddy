@@ -150,7 +150,11 @@ export function useGame() {
     updates: Partial<
       Pick<
         GameFull,
-        'activePlayerId' | 'winnerId' | 'completedAt' | 'endReason'
+        | 'activePlayerId'
+        | 'startPlayerId'
+        | 'winnerId'
+        | 'completedAt'
+        | 'endReason'
       >
     >,
   ) {
@@ -161,10 +165,6 @@ export function useGame() {
       body: updates,
       ...optimistic((current) => {
         const merged = { ...current, ...updates }
-
-        if (updates.activePlayerId) {
-          merged.activePlayer = findPlayer(current, updates.activePlayerId)
-        }
 
         if (updates.winnerId) {
           merged.winner = findPlayer(current, updates.winnerId)
@@ -194,8 +194,10 @@ export function useGame() {
     const setSnapshot = currentSet.value
     const legSnapshot = currentLeg.value
     const activePlayerId = gameSnapshot.activePlayerId
-    const startingScore = activePlayerStats.value.points
 
+    if (!activePlayerId) return
+
+    const startingScore = activePlayerStats.value.points
     const totalScored = data.throws.reduce((sum, t) => sum + t.scored, 0)
     const remaining = data.isBust ? startingScore : startingScore - totalScored
     const isWin = remaining === 0 && !data.isBust
@@ -244,6 +246,10 @@ export function useGame() {
       cachedGame.value = mergeTurnDiff(cachedGame.value, diff)
       refreshStats()
     }
+  }
+
+  async function setStartingPlayer(playerId: string) {
+    await updateGame({ activePlayerId: playerId, startPlayerId: playerId })
   }
 
   async function undoLastTurn() {
@@ -334,6 +340,7 @@ export function useGame() {
     error,
     refresh,
     updateGame,
+    setStartingPlayer,
     submitTurn,
     undoLastTurn,
     resetGame,

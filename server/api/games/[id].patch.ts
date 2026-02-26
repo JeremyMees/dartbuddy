@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 const querySchema = z.object({
   activePlayerId: z.string().optional(),
+  startPlayerId: z.string().optional(),
   winnerId: z.string().optional(),
   completedAt: z.string().optional(),
   endReason: z.string().optional(),

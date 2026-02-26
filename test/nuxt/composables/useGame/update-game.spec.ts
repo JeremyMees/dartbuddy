@@ -132,6 +132,41 @@ describe('useGame - updateGame', () => {
 
     expect(cachedGameValue.value).not.toBeNull()
     expect(cachedGameValue.value?.activePlayerId).toBe(playerOne.id)
-    expect(cachedGameValue.value?.activePlayer).toEqual(playerOne)
+  })
+
+  it('should update startPlayerId', async () => {
+    const { updateGame } = useGame()
+
+    await updateGame({ startPlayerId: playerOne.id })
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `/api/games/${gameFull.id}`,
+      expect.objectContaining({
+        method: 'PATCH',
+        body: { startPlayerId: playerOne.id },
+      }),
+    )
+  })
+
+  it('setStartingPlayer should set both activePlayerId and startPlayerId', async () => {
+    const { setStartingPlayer } = useGame()
+
+    await setStartingPlayer(playerOne.id)
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `/api/games/${gameFull.id}`,
+      expect.objectContaining({
+        method: 'PATCH',
+        body: { activePlayerId: playerOne.id, startPlayerId: playerOne.id },
+      }),
+    )
+  })
+
+  it('setStartingPlayer should optimistically update cached game', async () => {
+    const { setStartingPlayer } = useGame()
+
+    await setStartingPlayer(playerOne.id)
+
+    expect(cachedGameValue.value?.activePlayerId).toBe(playerOne.id)
   })
 })

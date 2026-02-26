@@ -137,7 +137,6 @@ describe('withTurnActionApplied', () => {
     )
 
     expect(result.activePlayerId).toBe(playerOne.id)
-    expect(result.activePlayer).toBe(playerOne)
   })
 
   it('should apply winnerId from gameUpdate and resolve the winner object', () => {

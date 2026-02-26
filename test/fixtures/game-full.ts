@@ -32,7 +32,7 @@ const gameFull: GameFull = {
   ],
   sets: [unfinishedSet, winningSet],
   winner: null,
-  activePlayer: playerTwo,
+  startPlayerId: null,
 }
 
 export default gameFull

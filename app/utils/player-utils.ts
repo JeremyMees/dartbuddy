@@ -67,6 +67,9 @@ export function getNextPlayerId(
   activePlayerId?: string,
 ): string | undefined {
   const currentPlayerId = activePlayerId ?? game.activePlayerId
+
+  if (!currentPlayerId) return undefined
+
   const playerIds = game.players.map((p) => p.playerId)
   const currentIndex = playerIds.indexOf(currentPlayerId)
 

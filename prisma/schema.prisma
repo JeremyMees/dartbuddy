@@ -31,6 +31,7 @@ model User {
   throws       Throw[]
   wonGames     Game[]       @relation("GameWinner")
   activeGames  Game[]       @relation("ActivePlayer")
+  startGames   Game[]       @relation("StartPlayer")
   wonSets      Set[]        @relation("SetWinner")
   wonLegs      Leg[]        @relation("LegWinner")
 }
@@ -45,9 +46,11 @@ model Game {
   setsToWin      Int            @default(1)
   endReason      GameEndReason?
   winnerId       String?
-  activePlayerId String
+  activePlayerId String?
+  startPlayerId  String?
   winner         User?          @relation("GameWinner", fields: [winnerId], references: [id])
   activePlayer   User?          @relation("ActivePlayer", fields: [activePlayerId], references: [id])
+  startPlayer    User?          @relation("StartPlayer", fields: [startPlayerId], references: [id])
   players        GamePlayer[]
   sets           Set[]
 }
