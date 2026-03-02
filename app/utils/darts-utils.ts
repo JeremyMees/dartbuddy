@@ -4,6 +4,14 @@ export function isCheckoutPossible(score: number): boolean {
   return score >= 2 && score <= 170
 }
 
+export function isValidCheckout(type: OutType, segment: Segment): boolean {
+  if (!type || !segment || segment === 'MISS') return false
+  else if (type === 'DOUBLE') return segment.startsWith('D')
+  else if (type === 'MASTER')
+    return segment.startsWith('D') || segment.startsWith('T')
+  else return true
+}
+
 export function findCheckoutPath(startingScore: number): CheckoutResult | null {
   if (!isCheckoutPossible(startingScore)) {
     throw new RangeError(
