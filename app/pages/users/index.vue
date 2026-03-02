@@ -16,7 +16,7 @@ const { data, pending, error, refresh } = await useLazyAsyncData(
   },
 )
 
-const dialogOpen = ref(false)
+const drawerOpen = ref(false)
 const selectedUser = ref<User>()
 
 async function deleteUser(id: User['id']) {
@@ -37,7 +37,7 @@ async function deleteUser(id: User['id']) {
     <div class="flex w-full justify-between items-center gap-2 flex-wrap">
       <h2>Users</h2>
 
-      <Button :disabled="pending || error" @click="dialogOpen = true">
+      <Button :disabled="pending || error" @click="drawerOpen = true">
         <Icon name="hugeicons:add-01" />
         Create user
       </Button>
@@ -101,7 +101,7 @@ async function deleteUser(id: User['id']) {
                   @click="
                     () => {
                       selectedUser = user
-                      dialogOpen = true
+                      drawerOpen = true
                     }
                   "
                 >
@@ -148,26 +148,28 @@ async function deleteUser(id: User['id']) {
       />
     </div>
 
-    <Dialog
-      v-model:open="dialogOpen"
+    <Drawer
+      v-model:open="drawerOpen"
       @update:open="
         (open) => {
           if (!open) selectedUser = undefined
         }
       "
     >
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{{
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>{{
             selectedUser ? 'Edit User' : 'Create User'
-          }}</DialogTitle>
-        </DialogHeader>
-        <FormUser
-          :user="selectedUser"
-          @saved="dialogOpen = false"
-          @refresh="refresh"
-        />
-      </DialogContent>
-    </Dialog>
+          }}</DrawerTitle>
+        </DrawerHeader>
+        <DrawerFooter>
+          <FormUser
+            :user="selectedUser"
+            @saved="drawerOpen = false"
+            @refresh="refresh"
+          />
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   </NuxtLayout>
 </template>

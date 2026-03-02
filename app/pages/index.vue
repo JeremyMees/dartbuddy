@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { page, setPage } = usePageQuery()
-const dialogOpen = ref(false)
+const drawerOpen = ref(false)
 
 const { data, pending, error, refresh } = await useLazyAsyncData(
   () => `games-${page.value}`,
@@ -38,20 +38,22 @@ async function deleteGame(id: Game['id']) {
     <div class="flex w-full justify-between items-center gap-2 flex-wrap">
       <h2>Games</h2>
 
-      <Dialog v-model:open="dialogOpen">
-        <DialogTrigger as-child>
+      <Drawer v-model:open="drawerOpen">
+        <DrawerTrigger as-child>
           <Button :disabled="pending || error">
             <Icon name="hugeicons:add-01" />
             Create game
           </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle> Create Game </DialogTitle>
-          </DialogHeader>
-          <FormGame @refresh="refresh" />
-        </DialogContent>
-      </Dialog>
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle> Create Game </DrawerTitle>
+          </DrawerHeader>
+          <DrawerFooter>
+            <FormGame @refresh="refresh" />
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
 
     <Spinner v-if="pending" class="mx-auto my-8 size-10!" />
