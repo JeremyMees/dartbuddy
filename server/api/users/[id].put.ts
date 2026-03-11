@@ -10,11 +10,9 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { success, data, error } = await readValidatedBody(event, (body) =>
-    userUpdateSchema.safeParse(body),
+  const data = await readValidatedBody(event, (body) =>
+    userUpdateSchema.parse(body),
   )
-
-  if (!success) throw error.issues
 
   const user = await prisma.user.update({
     where: {

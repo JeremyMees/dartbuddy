@@ -15,11 +15,9 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { success, data, error } = await getValidatedQuery(event, (queries) =>
-    querySchema.safeParse(queries),
+  const data = await getValidatedQuery(event, (queries) =>
+    querySchema.parse(queries),
   )
-
-  if (!success) throw error.issues
 
   let dateFilter: Date | undefined
   if (data.days) {

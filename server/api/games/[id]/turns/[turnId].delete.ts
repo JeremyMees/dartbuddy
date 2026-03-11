@@ -15,11 +15,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { success, data, error } = await readValidatedBody(event, (body) =>
-    bodySchema.safeParse(body),
-  )
-
-  if (!success) throw error.issues
+  const data = await readValidatedBody(event, (body) => bodySchema.parse(body))
 
   const turn = await prisma.turn.findFirst({
     where: {

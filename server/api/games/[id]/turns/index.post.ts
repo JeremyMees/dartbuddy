@@ -1,11 +1,9 @@
 import { turnActionSchema } from '#shared/form-schemas/turn'
 
 export default defineEventHandler(async (event) => {
-  const { success, data, error } = await readValidatedBody(event, (body) =>
-    turnActionSchema.safeParse(body),
+  const data = await readValidatedBody(event, (body) =>
+    turnActionSchema.parse(body),
   )
-
-  if (!success) throw error.issues
 
   const gameId = getRouterParam(event, 'id')
 

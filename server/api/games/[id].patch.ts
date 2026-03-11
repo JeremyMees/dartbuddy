@@ -9,11 +9,9 @@ const querySchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const { success, data, error } = await readValidatedBody(event, (queries) =>
-    querySchema.safeParse(queries),
+  const data = await readValidatedBody(event, (queries) =>
+    querySchema.parse(queries),
   )
-
-  if (!success) throw error.issues
 
   const id = getRouterParam(event, 'id')
 

@@ -1,11 +1,9 @@
 import { gameCreateSchema } from '#shared/form-schemas/game'
 
 export default defineEventHandler(async (event) => {
-  const { success, data, error } = await readValidatedBody(event, (body) =>
-    gameCreateSchema.safeParse(body),
+  const data = await readValidatedBody(event, (body) =>
+    gameCreateSchema.parse(body),
   )
-
-  if (!success) throw error.issues
 
   const soloGame = data.playerIds.length === 1
 
