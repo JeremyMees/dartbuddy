@@ -1,53 +1,43 @@
 # DartBuddy
 
-DartBuddy is a darts scoring and game management application. It lets you create players, set up games, and track every throw across a full match — from individual darts to sets and legs.
+DartBuddy is a darts statistics app built around imported data from DartCounter. Instead of scoring matches live, the app is meant to collect your finished session results and turn them into clear, useful statistics over time.
+The current focus is on analytics and training insights, not match management. You play and score elsewhere, then use DartBuddy to track performance.
 
-## Features
+## Project Direction
 
-### Player Management
+DartBuddy is being reshaped into a personal stats companion for darts players.
 
-Create and manage players with a first name, last name, and nickname. Player profiles persist across games and accumulate statistics over time.
+The idea is simple:
 
-### Game Setup
+- play your games or training sessions in DartCounter
+- bring those scores into DartBuddy
+- review your performance through statistics and trends
 
-Configure games before they start:
+## Planned Focus
 
-- **Start score** — typically 501, but freely adjustable
-- **Out type** — Double out, Master out, or Straight out
-- **Legs to win** — number of legs required to win a set
-- **Sets to win** — number of sets required to win the match
+The application is intended to help with:
 
-### Game Structure
+- storing imported darts results
+- tracking performance across training sessions
+- showing statistics over time
+- comparing consistency and scoring levels between sessions
+- giving a clearer overview of progress
 
-Matches follow the standard darts format:
+## Supported Data Types
 
-```
-Game → Sets → Legs → Turns → Throws
-```
+At the moment, the data model is focused on training and analytics entries such as:
 
-Each turn records the player's starting score, total scored, remaining score, and whether the turn was a bust. Individual throws store the exact board segment hit (e.g. `D20`, `T19`, `25`) and the points scored.
+- around the clock results
+- singles training results
+- doubles training results
+- scoring training results
 
-### Live Scoring
-
-During a game the app tracks:
-
-- Current score per player
-- Active player indicator
-- Bust detection based on the configured out type (e.g. finishing on a single when double out is required counts as a bust)
-- Three-dart average per player
-- Sets and legs won per player
-
-### Checkout Suggestions
-
-A path finder utility suggests possible checkout routes for the remaining score, helping players plan their finish.
-
-## Game History
-
-Completed games are stored with a completion timestamp, end reason (completed, manual, or timed out), and the winner. Full turn and throw history is retained for review and statistics.
+These entries are used to calculate and display performance metrics instead of managing full live matches inside the app.
 
 ## Tech Stack
 
-- **Nuxt 4** — full-stack Vue framework
-- **Nitro** — server engine for API routes and backend logic
-- **Prisma** — database ORM with PostgreSQL
-- **Tailwind CSS + shadcn/ui** — styling and UI components
+- **Nuxt 4** for the application framework
+- **Nitro** for server-side functionality
+- **Prisma** for database access
+- **PostgreSQL** as the database
+- **Tailwind CSS + shadcn/ui** for the interface
