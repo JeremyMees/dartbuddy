@@ -17,7 +17,6 @@
       <div v-if="$slots.bottom" class="px-4 pb-4 sm:px-10">
         <slot name="bottom" />
       </div>
-      <AppNavigation />
     </div>
   </div>
 </template>

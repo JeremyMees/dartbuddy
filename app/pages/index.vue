@@ -20,8 +20,6 @@
 
 <template>
   <NuxtLayout>
-    <div class="flex w-full justify-between items-center gap-2 flex-wrap">
-      hello world
-    </div>
+    <div>hello world</div>
   </NuxtLayout>
 </template>
