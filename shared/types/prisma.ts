@@ -1,11 +1,11 @@
-import type { Prisma } from '~~/server/generated/prisma/client'
+import type { Prisma } from '#server/generated/prisma/client'
 
 export type {
   AroundTheClockGame,
   SinglesTrainingGame,
   DoublesTrainingGame,
   ScoreTrainingGame,
-} from '~~/server/generated/prisma/client'
+} from '#server/generated/prisma/client'
 
 export type CreateAroundTheClockGame = Prisma.AroundTheClockGameCreateInput
 export type UpdateAroundTheClockGame = Prisma.AroundTheClockGameUpdateInput
