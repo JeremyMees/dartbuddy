@@ -11,3 +11,41 @@ export function generateAveragePercent<T>(items: T[], key: keyof T): number {
 
   return total / items.length
 }
+
+export type TrendDirection = 'up' | 'down' | 'normal'
+
+export interface TrendResult {
+  direction: TrendDirection
+  change: number
+}
+
+export function calculateTrendDirection<T extends { createdAt: string | Date }>(
+  items: T[],
+  key: keyof T,
+): TrendResult {
+  if (items.length < 2) return { direction: 'normal', change: 0 }
+
+  const sorted = [...items].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+  )
+
+  const mid = Math.floor(sorted.length / 2)
+  const olderHalf = sorted.slice(0, mid)
+  const newerHalf = sorted.slice(mid)
+  const olderAvg = generateAveragePercent(olderHalf, key)
+  const newerAvg = generateAveragePercent(newerHalf, key)
+
+  const change =
+    olderAvg === 0
+      ? newerAvg === 0
+        ? 0
+        : 100
+      : ((newerAvg - olderAvg) / Math.abs(olderAvg)) * 100
+
+  const rounded = Math.round(change * 10) / 10
+
+  const direction: TrendDirection =
+    rounded > 0 ? 'up' : rounded < 0 ? 'down' : 'normal'
+
+  return { direction, change: rounded }
+}
