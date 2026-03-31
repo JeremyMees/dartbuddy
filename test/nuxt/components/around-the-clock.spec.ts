@@ -19,12 +19,12 @@ const props: GameData<Serialized<AroundTheClockGame>> = {
   type: 'aroundTheClock',
   range: 'allTime',
   games: [
-    createGame('1', '2026-03-01T10:00:00.000Z', 40, 90),
-    createGame('2', '2026-03-02T10:00:00.000Z', 50, 80),
-    createGame('3', '2026-03-03T10:00:00.000Z', 60, 70),
-    createGame('4', '2026-03-04T10:00:00.000Z', 70, 60),
-    createGame('5', '2026-03-05T10:00:00.000Z', 80, 50),
-    createGame('6', '2026-03-06T10:00:00.000Z', 90, 40),
+    createGame('1', '2026-03-01T10:00:00', 40, 90),
+    createGame('2', '2026-03-02T10:00:00', 50, 80),
+    createGame('3', '2026-03-03T10:00:00', 60, 70),
+    createGame('4', '2026-03-04T10:00:00', 70, 60),
+    createGame('5', '2026-03-05T10:00:00', 80, 50),
+    createGame('6', '2026-03-06T10:00:00', 90, 40),
   ],
 }
 

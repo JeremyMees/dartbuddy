@@ -13,12 +13,12 @@ exports[`AroundTheClockDashboard > should render correctly with default props 1`
     <div data-slot="card" class="relative overflow-hidden bg-card flex flex-col gap-2 rounded-xl border py-4 shadow-sm items-center">
       <div data-slot="card-header" class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4 w-full text-center"><span data-test-label="" class="text-sm text-muted-foreground">Best Game</span></div>
       <div data-slot="card-content" class="px-4 pt-0 flex-1" data-test-stat=""><span class="text-3xl font-bold">90%</span></div>
-      <div data-slot="card-footer" class="flex items-center px-4 [.border-t]:pt-4" data-test-footer=""><span class="text-xs text-muted-foreground">06 Mar, 11:00</span></div>
+      <div data-slot="card-footer" class="flex items-center px-4 [.border-t]:pt-4" data-test-footer=""><span class="text-xs text-muted-foreground">06 Mar, 10:00</span></div>
     </div>
     <div data-slot="card" class="relative overflow-hidden bg-card flex flex-col gap-2 rounded-xl border py-4 shadow-sm items-center">
       <div data-slot="card-header" class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4 w-full text-center"><span data-test-label="" class="text-sm text-muted-foreground">Last Game</span></div>
       <div data-slot="card-content" class="px-4 pt-0 flex-1" data-test-stat=""><span class="text-3xl font-bold">90%</span></div>
-      <div data-slot="card-footer" class="flex items-center px-4 [.border-t]:pt-4" data-test-footer=""><span class="text-xs text-muted-foreground">06 Mar, 11:00</span></div>
+      <div data-slot="card-footer" class="flex items-center px-4 [.border-t]:pt-4" data-test-footer=""><span class="text-xs text-muted-foreground">06 Mar, 10:00</span></div>
     </div>
     <div data-slot="card" class="relative overflow-hidden bg-card flex flex-col gap-2 rounded-xl border py-4 shadow-sm items-center">
       <div data-slot="card-header" class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4 w-full text-center"><span data-test-label="" class="text-sm text-muted-foreground">Total Darts</span></div>
@@ -32,35 +32,35 @@ exports[`AroundTheClockDashboard > should render correctly with default props 1`
     </div>
     <div data-slot="card-content" class="px-4">
       <ul class="divide-y">
-        <li class="flex items-center gap-6 py-2"><span class="text-sm text-muted-foreground">06 Mar, 11:00</span>
+        <li class="flex items-center gap-6 py-2"><span class="text-sm text-muted-foreground">06 Mar, 10:00</span>
           <div class="grow flex items-center gap-2">
             <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" aria-label="90%" role="progressbar" data-state="loading" data-value="90" data-max="100" data-slot="progress" class="bg-primary/20 relative h-2 w-full overflow-hidden rounded-full">
               <div data-state="loading" data-value="90" data-max="100" data-slot="progress-indicator" class="bg-primary h-full w-full flex-1 transition-all" style="transform: translateX(-10%);"></div>
             </div><span class="text-sm text-muted-foreground">90% </span>
           </div><span class="text-sm text-muted-foreground">40 darts </span>
         </li>
-        <li class="flex items-center gap-6 py-2"><span class="text-sm text-muted-foreground">05 Mar, 11:00</span>
+        <li class="flex items-center gap-6 py-2"><span class="text-sm text-muted-foreground">05 Mar, 10:00</span>
           <div class="grow flex items-center gap-2">
             <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="80" aria-label="80%" role="progressbar" data-state="loading" data-value="80" data-max="100" data-slot="progress" class="bg-primary/20 relative h-2 w-full overflow-hidden rounded-full">
               <div data-state="loading" data-value="80" data-max="100" data-slot="progress-indicator" class="bg-primary h-full w-full flex-1 transition-all" style="transform: translateX(-20%);"></div>
             </div><span class="text-sm text-muted-foreground">80% </span>
           </div><span class="text-sm text-muted-foreground">50 darts </span>
         </li>
-        <li class="flex items-center gap-6 py-2"><span class="text-sm text-muted-foreground">04 Mar, 11:00</span>
+        <li class="flex items-center gap-6 py-2"><span class="text-sm text-muted-foreground">04 Mar, 10:00</span>
           <div class="grow flex items-center gap-2">
             <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="70" aria-label="70%" role="progressbar" data-state="loading" data-value="70" data-max="100" data-slot="progress" class="bg-primary/20 relative h-2 w-full overflow-hidden rounded-full">
               <div data-state="loading" data-value="70" data-max="100" data-slot="progress-indicator" class="bg-primary h-full w-full flex-1 transition-all" style="transform: translateX(-30%);"></div>
             </div><span class="text-sm text-muted-foreground">70% </span>
           </div><span class="text-sm text-muted-foreground">60 darts </span>
         </li>
-        <li class="flex items-center gap-6 py-2"><span class="text-sm text-muted-foreground">03 Mar, 11:00</span>
+        <li class="flex items-center gap-6 py-2"><span class="text-sm text-muted-foreground">03 Mar, 10:00</span>
           <div class="grow flex items-center gap-2">
             <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="60" aria-label="60%" role="progressbar" data-state="loading" data-value="60" data-max="100" data-slot="progress" class="bg-primary/20 relative h-2 w-full overflow-hidden rounded-full">
               <div data-state="loading" data-value="60" data-max="100" data-slot="progress-indicator" class="bg-primary h-full w-full flex-1 transition-all" style="transform: translateX(-40%);"></div>
             </div><span class="text-sm text-muted-foreground">60% </span>
           </div><span class="text-sm text-muted-foreground">70 darts </span>
         </li>
-        <li class="flex items-center gap-6 py-2"><span class="text-sm text-muted-foreground">02 Mar, 11:00</span>
+        <li class="flex items-center gap-6 py-2"><span class="text-sm text-muted-foreground">02 Mar, 10:00</span>
           <div class="grow flex items-center gap-2">
             <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" aria-label="50%" role="progressbar" data-state="loading" data-value="50" data-max="100" data-slot="progress" class="bg-primary/20 relative h-2 w-full overflow-hidden rounded-full">
               <div data-state="loading" data-value="50" data-max="100" data-slot="progress-indicator" class="bg-primary h-full w-full flex-1 transition-all" style="transform: translateX(-50%);"></div>
