@@ -4,7 +4,7 @@ import type { GameData, Serialized, AroundTheClockGame } from '#shared/types'
 const props = defineProps<GameData<Serialized<AroundTheClockGame>>>()
 
 const averageHitPercent = computed(() => ({
-  percent: generateAveragePercent(props.games, 'hitPercent'),
+  percent: generateAverage(props.games, 'hitPercent'),
   trend: calculateTrendDirection(props.games, 'hitPercent'),
 }))
 

@@ -113,11 +113,11 @@ describe('Stat utils', () => {
     })
   })
 
-  describe('generateAveragePercent', () => {
+  describe('generateAverage', () => {
     it('should return the correct average', async () => {
       const items = [{ value: 10 }, { value: 20 }, { value: 30 }]
 
-      const average = generateAveragePercent(items, 'value')
+      const average = generateAverage(items, 'value')
 
       expect(average).toBe(20)
     })
@@ -125,7 +125,7 @@ describe('Stat utils', () => {
     it('should return zero for an empty array', async () => {
       const items: { value: number }[] = []
 
-      const average = generateAveragePercent(items, 'value')
+      const average = generateAverage(items, 'value')
 
       expect(average).toBe(0)
     })
@@ -137,7 +137,7 @@ describe('Stat utils', () => {
         { value: 'c' },
       ]
 
-      const average = generateAveragePercent(items, 'value')
+      const average = generateAverage(items, 'value')
 
       expect(average).toBe(0)
     })
