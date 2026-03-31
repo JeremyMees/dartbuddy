@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const selectedGameType = ref<GameType>('aroundTheClock')
-const selectedRange = ref<GameRange>('allTime')
+const selectedRange = ref<GameRange>('lastWeek')
 
 const { data, pending, error } = useLazyFetch('/api/games', {
   params: {
@@ -38,5 +38,12 @@ const { data, pending, error } = useLazyFetch('/api/games', {
     <pre v-else-if="data.games.length">
       data: {{ data }}
     </pre>
+
+    <template #bottom>
+      <GameFilters
+        v-model:type="selectedGameType"
+        v-model:range="selectedRange"
+      />
+    </template>
   </NuxtLayout>
 </template>
