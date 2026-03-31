@@ -12,13 +12,6 @@ export function generateAveragePercent<T>(items: T[], key: keyof T): number {
   return total / items.length
 }
 
-export type TrendDirection = 'up' | 'down' | 'normal'
-
-export interface TrendResult {
-  direction: TrendDirection
-  change: number
-}
-
 export function calculateTrendDirection<T extends { createdAt: string | Date }>(
   items: T[],
   key: keyof T,
