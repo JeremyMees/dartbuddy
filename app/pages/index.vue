@@ -44,9 +44,12 @@ const { data, pending, error, refresh } = useLazyFetch('/api/games', {
       </EmptyHeader>
     </Empty>
 
-    <pre v-else-if="data.games.length">
-      data: {{ data }}
-    </pre>
+    <template v-else-if="data.games.length">
+      <AroundTheClockDashboard
+        v-if="data.type === 'aroundTheClock'"
+        v-bind="data"
+      />
+    </template>
 
     <template #bottom>
       <Drawer v-model:open="isDrawerOpen">
