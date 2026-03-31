@@ -9,7 +9,7 @@ export function generateAveragePercent<T>(items: T[], key: keyof T): number {
     0,
   )
 
-  return total / items.length
+  return Math.round(total / items.length)
 }
 
 export function calculateTrendDirection<T extends { createdAt: string | Date }>(
@@ -35,7 +35,7 @@ export function calculateTrendDirection<T extends { createdAt: string | Date }>(
         : 100
       : ((newerAvg - olderAvg) / Math.abs(olderAvg)) * 100
 
-  const rounded = Math.round(change * 10) / 10
+  const rounded = Math.round(change)
 
   const direction: TrendDirection =
     rounded > 0 ? 'up' : rounded < 0 ? 'down' : 'normal'
