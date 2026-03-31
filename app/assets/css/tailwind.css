@@ -161,3 +161,15 @@
     cursor: pointer;
   }
 }
+
+@layer components {
+  [data-slot='card'] {
+    &::before {
+      @apply content-[''] absolute -top-10 -left-10 size-20 bg-radial rounded-full blur from-foreground/10 to-transparent pointer-events-none z-0;
+    }
+
+    & > * {
+      @apply relative z-1;
+    }
+  }
+}
