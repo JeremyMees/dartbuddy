@@ -1,8 +1,10 @@
 <script setup lang="ts">
 const selectedGameType = ref<GameType>('aroundTheClock')
 const selectedRange = ref<GameRange>('lastWeek')
+const formTitle = ref<string>()
+const isDrawerOpen = ref<boolean>(false)
 
-const { data, pending, error } = useLazyFetch('/api/games', {
+const { data, pending, error, refresh } = useLazyFetch('/api/games', {
   params: {
     type: selectedGameType,
     range: selectedRange,
@@ -13,6 +15,13 @@ const { data, pending, error } = useLazyFetch('/api/games', {
 
 <template>
   <NuxtLayout>
+    <template #top>
+      <GameFilters
+        v-model:type="selectedGameType"
+        v-model:range="selectedRange"
+      />
+    </template>
+
     <ErrorMessage v-if="error" :message="error.message" />
 
     <div
@@ -40,10 +49,34 @@ const { data, pending, error } = useLazyFetch('/api/games', {
     </pre>
 
     <template #bottom>
-      <GameFilters
-        v-model:type="selectedGameType"
-        v-model:range="selectedRange"
-      />
+      <Drawer v-model:open="isDrawerOpen">
+        <DrawerTrigger as-child>
+          <Button class="w-full">
+            <Icon name="hugeicons:dart" />
+            Add game data
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <div class="mx-auto w-full max-w-sm">
+            <DrawerHeader>
+              <DrawerTitle>{{ formTitle || 'Add Game Data' }}</DrawerTitle>
+              <DrawerDescription>
+                Add your game data to track your progress and analyze your
+                performance over time.
+              </DrawerDescription>
+            </DrawerHeader>
+            <FormGame
+              v-model="formTitle"
+              @created="
+                () => {
+                  refresh()
+                  isDrawerOpen = false
+                }
+              "
+            />
+          </div>
+        </DrawerContent>
+      </Drawer>
     </template>
   </NuxtLayout>
 </template>
