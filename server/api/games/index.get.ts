@@ -1,11 +1,11 @@
 import { z } from 'zod'
 import { gameTypes, gameRanges } from '#shared/constants/game'
-import { prisma } from '#server/utils/prisma'
 import type {
   GameFindManyOptions,
+  GameResponse,
   GameResultsByType,
   GameType,
-} from '#shared/types/game'
+} from '#shared/types'
 
 const gameQueries = {
   aroundTheClock: (options: GameFindManyOptions) =>
@@ -59,5 +59,5 @@ export default defineEventHandler(async (event) => {
     type: data.type,
     range: data.range,
     games,
-  }
+  } as GameResponse
 })

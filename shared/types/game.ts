@@ -28,3 +28,13 @@ export type GameResultsByType = {
     ReturnType<Prisma.ScoreTrainingGameDelegate['findMany']>
   >
 }
+
+export type GameResponse = {
+  [K in GameType]: { type: K; range: GameRange; games: GameResultsByType[K] }
+}[GameType]
+
+export interface GameData<T> {
+  type: GameType
+  range: GameRange
+  games: T[]
+}
