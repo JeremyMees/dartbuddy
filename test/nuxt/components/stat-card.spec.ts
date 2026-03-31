@@ -37,4 +37,30 @@ describe('StatCard', () => {
 
     expect(stat.text()).toBe(String(props.stat))
   })
+
+  it('should not show the card footer if no footer slot is provided', async () => {
+    const component = await mountSuspended(StatCard, { props })
+    const footer = component.find('[data-test-footer]')
+
+    expect(footer.exists()).toBeFalsy()
+  })
+
+  it('should show the content from footer slot', async () => {
+    const component = await mountSuspended(StatCard, {
+      props,
+      slots: { default: () => props.stat, footer: () => 'Footer Content' },
+    })
+    const footer = component.find('[data-test-footer]')
+
+    expect(footer.text()).toBe('Footer Content')
+  })
+
+  it('should be possible to provide custom classes', async () => {
+    const component = await mountSuspended(StatCard, {
+      props: { ...props, class: 'custom-class' },
+    })
+    const card = component.find('.custom-class')
+
+    expect(card.exists()).toBeTruthy()
+  })
 })
