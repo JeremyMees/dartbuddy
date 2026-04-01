@@ -12,7 +12,7 @@ const dartsThrown = computed(() =>
   props.games.reduce((total, game) => total + game.dartsThrown, 0),
 )
 
-const recentGames = computed(() => props.games.slice(-5).reverse())
+const recentGames = computed(() => getRecentGames(props.games))
 
 const bestGame = computed(() => getBestGame(props.games, 'hitPercent'))
 

@@ -164,4 +164,79 @@ describe('Stat utils', () => {
       expect(bestGame).toBeNull()
     })
   })
+
+  describe('getScoreDistribution', () => {
+    it('should return the correct score distribution', () => {
+      const games = [
+        { score: 10 },
+        { score: 20 },
+        { score: 10 },
+        { score: 30 },
+        { score: 20 },
+      ]
+
+      const distribution = getScoreDistribution(games, 'score')
+
+      expect(distribution).toEqual({
+        '10': 2,
+        '20': 2,
+        '30': 1,
+      })
+    })
+
+    it('should return an empty object for an empty array', () => {
+      const games: { score: number }[] = []
+
+      const distribution = getScoreDistribution(games, 'score')
+
+      expect(distribution).toEqual({})
+    })
+  })
+
+  describe('getRecentGames', () => {
+    it('should return the 5 most recent games', () => {
+      const games = [
+        { id: '1', createdAt: '2026-01-01' },
+        { id: '2', createdAt: '2026-01-02' },
+        { id: '3', createdAt: '2026-01-03' },
+        { id: '4', createdAt: '2026-01-04' },
+        { id: '5', createdAt: '2026-01-05' },
+        { id: '6', createdAt: '2026-01-06' },
+      ]
+
+      const recentGames = getRecentGames(games)
+
+      expect(recentGames).toEqual([
+        { id: '6', createdAt: '2026-01-06' },
+        { id: '5', createdAt: '2026-01-05' },
+        { id: '4', createdAt: '2026-01-04' },
+        { id: '3', createdAt: '2026-01-03' },
+        { id: '2', createdAt: '2026-01-02' },
+      ])
+    })
+
+    it('should return all games if there are fewer than 5', () => {
+      const games = [
+        { id: '1', createdAt: '2026-01-01' },
+        { id: '2', createdAt: '2026-01-02' },
+        { id: '3', createdAt: '2026-01-03' },
+      ]
+
+      const recentGames = getRecentGames(games)
+
+      expect(recentGames).toEqual([
+        { id: '3', createdAt: '2026-01-03' },
+        { id: '2', createdAt: '2026-01-02' },
+        { id: '1', createdAt: '2026-01-01' },
+      ])
+    })
+
+    it('should return an empty array if there are no games', () => {
+      const games: { id: string; createdAt: string }[] = []
+
+      const recentGames = getRecentGames(games)
+
+      expect(recentGames).toEqual([])
+    })
+  })
 })

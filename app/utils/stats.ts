@@ -52,3 +52,21 @@ export function getBestGame<T>(games: T[], key: keyof T): T | null {
       : best,
   )
 }
+
+export function getScoreDistribution<T>(
+  games: T[],
+  key: keyof T,
+): Record<string, number> {
+  return games.reduce<Record<string, number>>((distribution, game) => {
+    distribution[game[key] as unknown as string] =
+      (distribution[game[key] as unknown as string] ?? 0) + 1
+    return distribution
+  }, {})
+}
+
+export function getRecentGames<T extends { createdAt: string | Date }>(
+  games: T[],
+  count = 5,
+): T[] {
+  return games.slice(-count).reverse()
+}

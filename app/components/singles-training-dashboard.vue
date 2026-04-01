@@ -10,15 +10,12 @@ const averageScore = computed(() => ({
   trend: getTrendDirection(props.games, 'score'),
 }))
 
-const recentGames = computed(() => props.games.slice(-5).reverse())
+const recentGames = computed(() => getRecentGames(props.games))
 
 const bestGame = computed(() => getBestGame(props.games, 'score'))
 
 const scoreDistribution = computed(() =>
-  props.games.reduce<Record<string, number>>((distribution, game) => {
-    distribution[game.score] = (distribution[game.score] ?? 0) + 1
-    return distribution
-  }, {}),
+  getScoreDistribution(props.games, 'score'),
 )
 </script>
 
