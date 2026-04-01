@@ -51,7 +51,7 @@ describe('AroundTheClockDashboard', () => {
   it('should show computed stats', async () => {
     const component = await mountSuspended(AroundTheClockDashboard, { props })
 
-    expect(component.text()).toContain('Avg hit %')
+    expect(component.text()).toContain('Avg Hit %')
     expect(component.text()).toContain('65%')
     expect(component.text()).toContain('Best Game')
     expect(component.text()).toContain('90%')

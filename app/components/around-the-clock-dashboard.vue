@@ -30,7 +30,7 @@ const lastGame = computed(() => {
 <template>
   <div class="w-full flex flex-col gap-2">
     <div class="grid grid-cols-2 gap-2">
-      <StatCard label="Avg hit %" :stat="averageHitPercent.percent + '%'">
+      <StatCard label="Avg Hit %" :stat="averageHitPercent.percent + '%'">
         <template #footer>
           <TrendIndicator v-bind="averageHitPercent.trend" />
         </template>
