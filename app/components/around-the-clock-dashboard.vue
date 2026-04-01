@@ -4,8 +4,8 @@ import type { GameData, Serialized, AroundTheClockGame } from '#shared/types'
 const props = defineProps<GameData<Serialized<AroundTheClockGame>>>()
 
 const averageHitPercent = computed(() => ({
-  percent: generateAverage(props.games, 'hitPercent'),
-  trend: calculateTrendDirection(props.games, 'hitPercent'),
+  percent: getAverage(props.games, 'hitPercent'),
+  trend: getTrendDirection(props.games, 'hitPercent'),
 }))
 
 const dartsThrown = computed(() =>
@@ -14,12 +14,7 @@ const dartsThrown = computed(() =>
 
 const recentGames = computed(() => props.games.slice(-5).reverse())
 
-const bestGame = computed(() => {
-  if (!props.games.length) return null
-  return props.games.reduce((best, game) =>
-    game.hitPercent > best.hitPercent ? game : best,
-  )
-})
+const bestGame = computed(() => getBestGame(props.games, 'hitPercent'))
 
 const lastGame = computed(() => {
   if (!props.games.length) return null

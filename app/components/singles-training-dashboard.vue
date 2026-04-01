@@ -6,18 +6,13 @@ const props = defineProps<GameData<Serialized<SinglesTrainingGame>>>()
 const maxScore = 21 * 9
 
 const averageScore = computed(() => ({
-  percent: generateAverage(props.games, 'score'),
-  trend: calculateTrendDirection(props.games, 'score'),
+  percent: getAverage(props.games, 'score'),
+  trend: getTrendDirection(props.games, 'score'),
 }))
 
 const recentGames = computed(() => props.games.slice(-5).reverse())
 
-const bestGame = computed(() => {
-  if (!props.games.length) return null
-  return props.games.reduce((best, game) =>
-    game.score > best.score ? game : best,
-  )
-})
+const bestGame = computed(() => getBestGame(props.games, 'score'))
 
 const scoreDistribution = computed(() =>
   props.games.reduce<Record<string, number>>((distribution, game) => {

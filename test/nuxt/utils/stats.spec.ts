@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
 describe('Stat utils', () => {
-  describe('calculateTrendDirection', () => {
+  describe('getTrendDirection', () => {
     it('should return normal with zero change for fewer than 2 items', () => {
       const items = [{ value: 10, createdAt: '2026-01-01' }]
 
-      const result = calculateTrendDirection(items, 'value')
+      const result = getTrendDirection(items, 'value')
 
       expect(result).toEqual({ direction: 'normal', change: 0 })
     })
@@ -13,7 +13,7 @@ describe('Stat utils', () => {
     it('should return normal with zero change for an empty array', () => {
       const items: { value: number; createdAt: string }[] = []
 
-      const result = calculateTrendDirection(items, 'value')
+      const result = getTrendDirection(items, 'value')
 
       expect(result).toEqual({ direction: 'normal', change: 0 })
     })
@@ -26,7 +26,7 @@ describe('Stat utils', () => {
         { value: 40, createdAt: '2026-01-04' },
       ]
 
-      const result = calculateTrendDirection(items, 'value')
+      const result = getTrendDirection(items, 'value')
 
       expect(result.direction).toBe('up')
       expect(result.change).toBeGreaterThan(0)
@@ -40,7 +40,7 @@ describe('Stat utils', () => {
         { value: 10, createdAt: '2026-01-04' },
       ]
 
-      const result = calculateTrendDirection(items, 'value')
+      const result = getTrendDirection(items, 'value')
 
       expect(result.direction).toBe('down')
       expect(result.change).toBeLessThan(0)
@@ -54,7 +54,7 @@ describe('Stat utils', () => {
         { value: 10, createdAt: '2026-01-04' },
       ]
 
-      const result = calculateTrendDirection(items, 'value')
+      const result = getTrendDirection(items, 'value')
 
       expect(result).toEqual({ direction: 'normal', change: 0 })
     })
@@ -67,7 +67,7 @@ describe('Stat utils', () => {
         { value: 20, createdAt: '2026-01-02' },
       ]
 
-      const result = calculateTrendDirection(items, 'value')
+      const result = getTrendDirection(items, 'value')
 
       expect(result.direction).toBe('up')
       expect(result.change).toBeGreaterThan(0)
@@ -81,7 +81,7 @@ describe('Stat utils', () => {
         { value: 20, createdAt: '2026-01-04' },
       ]
 
-      const result = calculateTrendDirection(items, 'value')
+      const result = getTrendDirection(items, 'value')
 
       expect(result).toEqual({ direction: 'up', change: 100 })
     })
@@ -94,7 +94,7 @@ describe('Stat utils', () => {
         { value: 0, createdAt: '2026-01-04' },
       ]
 
-      const result = calculateTrendDirection(items, 'value')
+      const result = getTrendDirection(items, 'value')
 
       expect(result).toEqual({ direction: 'normal', change: 0 })
     })
@@ -107,17 +107,17 @@ describe('Stat utils', () => {
         { value: 75, createdAt: '2026-01-04' },
       ]
 
-      const result = calculateTrendDirection(items, 'value')
+      const result = getTrendDirection(items, 'value')
 
       expect(result).toEqual({ direction: 'up', change: 50 })
     })
   })
 
-  describe('generateAverage', () => {
+  describe('getAverage', () => {
     it('should return the correct average', async () => {
       const items = [{ value: 10 }, { value: 20 }, { value: 30 }]
 
-      const average = generateAverage(items, 'value')
+      const average = getAverage(items, 'value')
 
       expect(average).toBe(20)
     })
@@ -125,7 +125,7 @@ describe('Stat utils', () => {
     it('should return zero for an empty array', async () => {
       const items: { value: number }[] = []
 
-      const average = generateAverage(items, 'value')
+      const average = getAverage(items, 'value')
 
       expect(average).toBe(0)
     })
@@ -137,7 +137,7 @@ describe('Stat utils', () => {
         { value: 'c' },
       ]
 
-      const average = generateAverage(items, 'value')
+      const average = getAverage(items, 'value')
 
       expect(average).toBe(0)
     })

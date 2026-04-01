@@ -1,4 +1,4 @@
-export function generateAverage<T>(items: T[], key: keyof T): number {
+export function getAverage<T>(items: T[], key: keyof T): number {
   if (items.length === 0) return 0
 
   const total = items.reduce(
@@ -12,7 +12,7 @@ export function generateAverage<T>(items: T[], key: keyof T): number {
   return Math.round(total / items.length)
 }
 
-export function calculateTrendDirection<T extends { createdAt: string | Date }>(
+export function getTrendDirection<T extends { createdAt: string | Date }>(
   items: T[],
   key: keyof T,
 ): TrendResult {
@@ -25,8 +25,8 @@ export function calculateTrendDirection<T extends { createdAt: string | Date }>(
   const mid = Math.floor(sorted.length / 2)
   const olderHalf = sorted.slice(0, mid)
   const newerHalf = sorted.slice(mid)
-  const olderAvg = generateAverage(olderHalf, key)
-  const newerAvg = generateAverage(newerHalf, key)
+  const olderAvg = getAverage(olderHalf, key)
+  const newerAvg = getAverage(newerHalf, key)
 
   const change =
     olderAvg === 0
