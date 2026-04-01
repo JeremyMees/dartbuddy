@@ -142,4 +142,26 @@ describe('Stat utils', () => {
       expect(average).toBe(0)
     })
   })
+
+  describe('getBestGame', () => {
+    it('should return the game with the highest score', () => {
+      const games = [
+        { score: 10, id: '1' },
+        { score: 20, id: '2' },
+        { score: 15, id: '3' },
+      ]
+
+      const bestGame = getBestGame(games, 'score')
+
+      expect(bestGame).toEqual({ score: 20, id: '2' })
+    })
+
+    it('should return null for an empty array', () => {
+      const games: { score: number; id: string }[] = []
+
+      const bestGame = getBestGame(games, 'score')
+
+      expect(bestGame).toBeNull()
+    })
+  })
 })

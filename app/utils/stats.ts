@@ -42,3 +42,13 @@ export function getTrendDirection<T extends { createdAt: string | Date }>(
 
   return { direction, change: rounded }
 }
+
+export function getBestGame<T>(games: T[], key: keyof T): T | null {
+  if (!games.length) return null
+
+  return games.reduce((best, game) =>
+    (game[key] as unknown as number) > (best[key] as unknown as number)
+      ? game
+      : best,
+  )
+}
