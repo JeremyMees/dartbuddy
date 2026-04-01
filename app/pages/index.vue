@@ -49,6 +49,10 @@ const { data, pending, error, refresh } = useLazyFetch('/api/games', {
         v-if="data.type === 'aroundTheClock'"
         v-bind="data"
       />
+      <SinglesTrainingDashboard
+        v-else-if="data.type === 'singlesTraining'"
+        v-bind="data"
+      />
     </template>
 
     <template #bottom>
