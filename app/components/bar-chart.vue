@@ -15,6 +15,9 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const props = defineProps<{
   data: Record<string, number>
+  xLabel: string
+  yLabel: string
+  datasetLabel?: string
 }>()
 
 const chartData = computed(() => {
@@ -25,7 +28,7 @@ const chartData = computed(() => {
     labels,
     datasets: [
       {
-        label: 'Count',
+        label: props.datasetLabel ?? '',
         data: values,
         backgroundColor: '#D97757',
         borderColor: '#D97757',
@@ -47,7 +50,17 @@ const chartOptions: ChartOptions<'bar'> = {
     x: {
       title: {
         display: true,
-        text: 'Score Range',
+        text: props.xLabel,
+      },
+    },
+    y: {
+      beginAtZero: true,
+      ticks: {
+        precision: 0,
+      },
+      title: {
+        display: true,
+        text: props.yLabel,
       },
     },
   },
