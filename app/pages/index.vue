@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const selectedGameType = useRouteQuery<GameType>('type', 'aroundTheClock')
+const selectedGameType = useRouteQuery<GameType>('type', 'scoreTraining')
 const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
 const formTitle = ref<string>()
 const isDrawerOpen = ref<boolean>(false)

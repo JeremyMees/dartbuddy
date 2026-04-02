@@ -9,21 +9,27 @@ const props = defineProps<{
 </script>
 
 <template>
-  <Card :class="cn('items-center', props.class)">
-    <CardHeader class="w-full text-center">
-      <span data-test-label class="text-sm text-muted-foreground">
-        {{ label }}
-      </span>
-    </CardHeader>
-    <CardContent data-test-stat class="pt-0 flex-1">
+  <div
+    data-slot="card"
+    :class="
+      cn(
+        'flex flex-col items-center relative overflow-hidden py-4 gap-1.5 border-b',
+        props.class,
+      )
+    "
+  >
+    <div data-test-label class="text-sm text-muted-foreground">
+      {{ label }}
+    </div>
+    <div data-test-stat class="pt-0 flex-1">
       <slot>
         <span class="text-3xl font-bold">
           {{ stat }}
         </span>
       </slot>
-    </CardContent>
-    <CardFooter v-if="$slots.footer" data-test-footer>
+    </div>
+    <div v-if="$slots.footer" data-test-footer>
       <slot name="footer" />
-    </CardFooter>
-  </Card>
+    </div>
+  </div>
 </template>

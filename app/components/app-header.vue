@@ -10,7 +10,10 @@ const props = defineProps<{
   <NuxtLink
     to="/"
     :class="
-      cn('w-full flex items-center px-4 sm:px-10 py-2 gap-2', props.class)
+      cn(
+        'w-full flex items-center justify-center px-4 sm:px-10 py-2 gap-2',
+        props.class,
+      )
     "
   >
     <NuxtImg

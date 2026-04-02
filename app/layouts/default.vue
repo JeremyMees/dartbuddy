@@ -7,14 +7,12 @@
       </div>
     </div>
 
-    <main
-      class="flex-1 overflow-y-auto py-4 px-4 sm:px-10 flex flex-col gap-4 items-start"
-    >
+    <main class="flex-1 overflow-y-auto flex flex-col">
       <slot />
     </main>
 
     <div class="shrink-0">
-      <div v-if="$slots.bottom" class="px-4 pb-4 sm:px-10">
+      <div v-if="$slots.bottom" class="px-4 py-4 sm:px-10 border-t">
         <slot name="bottom" />
       </div>
     </div>
