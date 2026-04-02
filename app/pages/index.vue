@@ -65,7 +65,7 @@ const { data, pending, error, refresh } = useLazyFetch('/api/games', {
           />
           <ButtonGroup>
             <DrawerTrigger as-child>
-              <Button size="icon">
+              <Button size="icon-lg">
                 <Icon name="hugeicons:add-01" />
               </Button>
             </DrawerTrigger>

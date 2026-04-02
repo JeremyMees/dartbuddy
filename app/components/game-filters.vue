@@ -8,7 +8,7 @@ const range = defineModel<GameRange>('range')
 <template>
   <ButtonGroup class="w-full">
     <Select v-model="type">
-      <SelectTrigger class="w-full">
+      <SelectTrigger class="w-full data-[size=default]:h-10">
         <Icon name="hugeicons:dart" />
         {{ gameTypeOptions.find((option) => option.value === type)?.label }}
       </SelectTrigger>
@@ -24,7 +24,7 @@ const range = defineModel<GameRange>('range')
     </Select>
 
     <Select v-model="range">
-      <SelectTrigger class="w-full">
+      <SelectTrigger class="w-full data-[size=default]:h-10">
         <Icon name="hugeicons:calendar-01" />
         {{ gameRangeOptions.find((option) => option.value === range)?.label }}
       </SelectTrigger>
