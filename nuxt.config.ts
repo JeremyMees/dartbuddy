@@ -66,7 +66,20 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      include: ['clsx', 'tailwind-merge'],
+      include: [
+        'clsx',
+        'tailwind-merge',
+        'class-variance-authority',
+        '@vee-validate/zod',
+        'vee-validate',
+        'vue-chartjs',
+        'chart.js',
+        'dayjs', // CJS
+        'dayjs/plugin/relativeTime', // CJS
+        'reka-ui',
+        'vaul-vue',
+        'zod',
+      ],
     },
     plugins: [tailwindcss()],
   },
