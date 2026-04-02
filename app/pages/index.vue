@@ -15,13 +15,6 @@ const { data, pending, error, refresh } = useLazyFetch('/api/games', {
 
 <template>
   <NuxtLayout>
-    <template #top>
-      <GameFilters
-        v-model:type="selectedGameType"
-        v-model:range="selectedRange"
-      />
-    </template>
-
     <ErrorMessage v-if="error" :message="error.message" />
 
     <div
@@ -61,12 +54,20 @@ const { data, pending, error, refresh } = useLazyFetch('/api/games', {
 
     <template #bottom>
       <Drawer v-model:open="isDrawerOpen">
-        <DrawerTrigger as-child>
-          <Button class="w-full">
-            <Icon name="hugeicons:dart" />
-            Add game data
-          </Button>
-        </DrawerTrigger>
+        <ButtonGroup class="w-full">
+          <GameFilters
+            v-model:type="selectedGameType"
+            v-model:range="selectedRange"
+          />
+          <ButtonGroup>
+            <DrawerTrigger as-child>
+              <Button size="icon">
+                <Icon name="hugeicons:add-01" />
+              </Button>
+            </DrawerTrigger>
+          </ButtonGroup>
+        </ButtonGroup>
+
         <DrawerContent>
           <div class="mx-auto w-full max-w-sm">
             <DrawerHeader>
