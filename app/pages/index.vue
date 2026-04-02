@@ -50,6 +50,10 @@ const { data, pending, error, refresh } = useLazyFetch('/api/games', {
         v-else-if="data.type === 'doublesTraining'"
         v-bind="data"
       />
+      <ScoreTrainingDashboard
+        v-else-if="data.type === 'scoreTraining'"
+        v-bind="data"
+      />
     </template>
 
     <template #bottom>
