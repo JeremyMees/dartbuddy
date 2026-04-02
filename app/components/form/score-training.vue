@@ -32,7 +32,7 @@ const onSubmit = handleSubmit(async (data) => {
 <template>
   <form id="score-training" @submit="onSubmit">
     <div class="p-4 pb-0 flex flex-col gap-2">
-      <VeeField v-slot="{ field, errors }" name="total-score">
+      <VeeField v-slot="{ field, errors }" name="totalScore">
         <Field :data-invalid="!!errors.length">
           <FieldLabel for="score-training--total-score">
             Total Score
@@ -49,7 +49,7 @@ const onSubmit = handleSubmit(async (data) => {
           <FieldError v-if="errors.length" :errors="errors" />
         </Field>
       </VeeField>
-      <VeeField v-slot="{ field, errors }" name="highest-score">
+      <VeeField v-slot="{ field, errors }" name="highestScore">
         <Field :data-invalid="!!errors.length">
           <FieldLabel for="score-training--highest-score">
             Highest Score
@@ -66,7 +66,7 @@ const onSubmit = handleSubmit(async (data) => {
           <FieldError v-if="errors.length" :errors="errors" />
         </Field>
       </VeeField>
-      <VeeField v-slot="{ field, errors }" name="one-eighty-count">
+      <VeeField v-slot="{ field, errors }" name="oneEightyCount">
         <Field :data-invalid="!!errors.length">
           <FieldLabel for="score-training--one-eighty-count">
             180 Count
@@ -83,7 +83,7 @@ const onSubmit = handleSubmit(async (data) => {
           <FieldError v-if="errors.length" :errors="errors" />
         </Field>
       </VeeField>
-      <VeeField v-slot="{ field, errors }" name="three-dart-average">
+      <VeeField v-slot="{ field, errors }" name="threeDartAverage">
         <Field :data-invalid="!!errors.length">
           <FieldLabel for="score-training--three-dart-average">
             Three Dart Average
@@ -100,7 +100,7 @@ const onSubmit = handleSubmit(async (data) => {
           <FieldError v-if="errors.length" :errors="errors" />
         </Field>
       </VeeField>
-      <VeeField v-slot="{ field, errors }" name="one-dart-average">
+      <VeeField v-slot="{ field, errors }" name="oneDartAverage">
         <Field :data-invalid="!!errors.length">
           <FieldLabel for="score-training--one-dart-average">
             One Dart Average
