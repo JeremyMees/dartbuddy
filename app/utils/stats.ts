@@ -70,3 +70,28 @@ export function getRecentGames<T extends { createdAt: string | Date }>(
 ): T[] {
   return games.slice(-count).reverse()
 }
+
+export function getScoreAverageByDate<T extends { createdAt: string | Date }>(
+  games: T[],
+  key: keyof T,
+): Record<string, number> {
+  const grouped = games.reduce<Record<string, number[]>>((acc, game) => {
+    const date = formatDate(new Date(game.createdAt))
+    const score = game[key] as unknown as number
+
+    if (!isNaN(score)) {
+      acc[date] ??= []
+      acc[date].push(score)
+    }
+
+    return acc
+  }, {})
+
+  return Object.entries(grouped).reduce<Record<string, number>>(
+    (acc, [date, scores]) => {
+      acc[date] = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+      return acc
+    },
+    {},
+  )
+}

@@ -239,4 +239,124 @@ describe('Stat utils', () => {
       expect(recentGames).toEqual([])
     })
   })
+
+  describe('getScoreAverageByDate', () => {
+    it('should return correct averages for a single date with multiple scores', () => {
+      const games = [
+        { score: 10, createdAt: '2026-01-01' },
+        { score: 20, createdAt: '2026-01-01' },
+        { score: 30, createdAt: '2026-01-01' },
+      ]
+
+      const averages = getScoreAverageByDate(games, 'score')
+
+      expect(averages).toEqual({ '01/01/26': 20 })
+    })
+
+    it('should return correct averages for multiple dates', () => {
+      const games = [
+        { score: 10, createdAt: '2026-01-01' },
+        { score: 20, createdAt: '2026-01-01' },
+        { score: 30, createdAt: '2026-01-02' },
+        { score: 40, createdAt: '2026-01-02' },
+      ]
+
+      const averages = getScoreAverageByDate(games, 'score')
+
+      expect(averages).toEqual({ '01/01/26': 15, '02/01/26': 35 })
+    })
+
+    it('should return an empty object for an empty array', () => {
+      const games: { score: number; createdAt: string }[] = []
+
+      const averages = getScoreAverageByDate(games, 'score')
+
+      expect(averages).toEqual({})
+    })
+
+    it('should handle Date objects in addition to string dates', () => {
+      const games = [
+        { score: 10, createdAt: new Date('2026-01-01') },
+        { score: 20, createdAt: '2026-01-01' },
+        { score: 30, createdAt: '2026-01-02' },
+      ]
+
+      const averages = getScoreAverageByDate(games, 'score')
+
+      expect(averages).toEqual({ '01/01/26': 15, '02/01/26': 30 })
+    })
+
+    it('should skip NaN values when calculating averages', () => {
+      const games = [
+        { score: 10, createdAt: '2026-01-01' },
+        { score: NaN, createdAt: '2026-01-01' },
+        { score: 20, createdAt: '2026-01-01' },
+      ]
+
+      const averages = getScoreAverageByDate(games, 'score')
+
+      expect(averages).toEqual({ '01/01/26': 15 })
+    })
+
+    it('should round averages to nearest integer', () => {
+      const games = [
+        { score: 10, createdAt: '2026-01-01' },
+        { score: 11, createdAt: '2026-01-01' },
+      ]
+
+      const averages = getScoreAverageByDate(games, 'score')
+
+      expect(averages).toEqual({ '01/01/26': 11 })
+    })
+
+    it('should handle a single game per date', () => {
+      const games = [
+        { score: 25, createdAt: '2026-01-01' },
+        { score: 35, createdAt: '2026-01-02' },
+      ]
+
+      const averages = getScoreAverageByDate(games, 'score')
+
+      expect(averages).toEqual({ '01/01/26': 25, '02/01/26': 35 })
+    })
+
+    it('should group games by formatted date correctly', () => {
+      const games = [
+        { score: 100, createdAt: '2026-01-01T10:00:00Z' },
+        { score: 200, createdAt: '2026-01-01T15:30:00Z' },
+        { score: 300, createdAt: '2026-01-01T20:45:00Z' },
+      ]
+
+      const averages = getScoreAverageByDate(games, 'score')
+
+      expect(averages).toEqual({ '01/01/26': 200 })
+    })
+
+    it('should work with different field names', () => {
+      const games = [
+        { points: 50, createdAt: '2026-01-01' },
+        { points: 100, createdAt: '2026-01-01' },
+        { points: 75, createdAt: '2026-01-02' },
+      ]
+
+      const averages = getScoreAverageByDate(games, 'points')
+
+      expect(averages).toEqual({ '01/01/26': 75, '02/01/26': 75 })
+    })
+
+    it('should maintain date order based on input', () => {
+      const games = [
+        { score: 10, createdAt: '2026-01-05' },
+        { score: 20, createdAt: '2026-01-01' },
+        { score: 30, createdAt: '2026-01-03' },
+      ]
+
+      const averages = getScoreAverageByDate(games, 'score')
+
+      expect(Object.keys(averages)).toHaveLength(3)
+      expect(averages).toHaveProperty('01/01/26')
+      expect(averages).toHaveProperty('03/01/26')
+      expect(averages).toHaveProperty('05/01/26')
+    })
+  })
 })
