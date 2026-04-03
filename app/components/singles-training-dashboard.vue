@@ -50,6 +50,7 @@ const scoreDistribution = computed(() =>
         x-label="Score"
         y-label="Times Thrown"
         dataset-label="Score Distribution"
+        :sort="sortEntriesByNumericValue"
       />
     </CardContent>
   </Card>

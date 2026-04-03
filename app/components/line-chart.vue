@@ -27,11 +27,18 @@ const props = defineProps<{
   xLabel: string
   yLabel: string
   datasetLabel?: string
+  sort?: (a: [string, number], b: [string, number]) => number
 }>()
 
 const chartData = computed(() => {
-  const labels = Object.keys(props.data)
-  const values = Object.values(props.data)
+  let entries = Object.entries(props.data)
+
+  if (props.sort) {
+    entries = entries.sort(props.sort)
+  }
+
+  const labels = entries.map(([label]) => label)
+  const values = entries.map(([, value]) => value)
 
   return {
     labels,

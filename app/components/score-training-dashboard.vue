@@ -86,6 +86,7 @@ const scoreDistribution = computed(() =>
         x-label="Date"
         y-label="Score"
         dataset-label="Score Trend"
+        :sort="sortEntriesByDate"
       />
     </CardContent>
   </Card>
