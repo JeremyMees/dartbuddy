@@ -17,6 +17,14 @@ exports[`DoublesTrainingDashboard > should render correctly with default props 1
 </div>
 <div data-slot="card" class="relative overflow-hidden bg-card flex flex-col gap-2 border-b py-6 shadow-sm">
   <div data-slot="card-header" class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4">
+    <h3 data-slot="card-title" class="leading-none font-semibold">Score Trend</h3>
+  </div>
+  <div data-slot="card-content" class="px-4"><canvas role="img" data-test-line-chart="">
+      <p></p>
+    </canvas></div>
+</div>
+<div data-slot="card" class="relative overflow-hidden bg-card flex flex-col gap-2 border-b py-6 shadow-sm">
+  <div data-slot="card-header" class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4">
     <h3 data-slot="card-title" class="leading-none font-semibold">Score Distribution</h3>
   </div>
   <div data-slot="card-content" class="px-4"><canvas role="img" data-test-bar-chart="">

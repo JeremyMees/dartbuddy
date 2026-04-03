@@ -48,6 +48,20 @@ describe('AroundTheClockDashboard', () => {
     expect(component.text()).toContain('N/A')
   })
 
+  it('should show the line chart', async () => {
+    const component = await mountSuspended(AroundTheClockDashboard, { props })
+    const lineChart = component.find('[data-test-line-chart]')
+
+    expect(lineChart.exists()).toBeTruthy()
+  })
+
+  it('should show the bar chart', async () => {
+    const component = await mountSuspended(AroundTheClockDashboard, { props })
+    const barChart = component.find('[data-test-bar-chart]')
+
+    expect(barChart.exists()).toBeTruthy()
+  })
+
   it('should show computed stats', async () => {
     const component = await mountSuspended(AroundTheClockDashboard, { props })
 

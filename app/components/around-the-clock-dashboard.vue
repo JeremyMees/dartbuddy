@@ -20,6 +20,14 @@ const lastGame = computed(() => {
   if (!props.games.length) return null
   return props.games[props.games.length - 1]
 })
+
+const scoreDistribution = computed(() =>
+  getScoreDistribution(props.games, 'hitPercent'),
+)
+
+const scoreTrend = computed(() =>
+  getScoreAverageByDate(props.games, 'hitPercent'),
+)
 </script>
 
 <template>
@@ -58,6 +66,38 @@ const lastGame = computed(() => {
       </template>
     </StatCard>
   </div>
+
+  <Card>
+    <CardHeader>
+      <CardTitle>Score Trend</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <LineChart
+        data-test-line-chart
+        :data="scoreTrend"
+        x-label="Date"
+        y-label="Score"
+        dataset-label="Score Trend"
+        :sort="sortEntriesByDate"
+      />
+    </CardContent>
+  </Card>
+
+  <Card>
+    <CardHeader>
+      <CardTitle>Score Distribution</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <BarChart
+        data-test-bar-chart
+        :data="scoreDistribution"
+        x-label="Score"
+        y-label="Times Thrown"
+        dataset-label="Score Distribution"
+        :sort="sortEntriesByNumericValue"
+      />
+    </CardContent>
+  </Card>
 
   <Card>
     <CardHeader>

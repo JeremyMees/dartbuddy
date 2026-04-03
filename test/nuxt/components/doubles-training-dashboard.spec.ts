@@ -55,6 +55,13 @@ describe('DoublesTrainingDashboard', () => {
     expect(component.text()).toContain('90%')
   })
 
+  it('should show the line chart', async () => {
+    const component = await mountSuspended(DoublesTrainingDashboard, { props })
+    const lineChart = component.find('[data-test-line-chart]')
+
+    expect(lineChart.exists()).toBeTruthy()
+  })
+
   it('should show the bar chart', async () => {
     const component = await mountSuspended(DoublesTrainingDashboard, { props })
     const barChart = component.find('[data-test-bar-chart]')

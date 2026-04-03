@@ -95,6 +95,13 @@ describe('ScoreTrainingDashboard', () => {
     expect(lineChart.exists()).toBeTruthy()
   })
 
+  it('should show the bar chart', async () => {
+    const component = await mountSuspended(ScoreTrainingDashboard, { props })
+    const barChart = component.find('[data-test-bar-chart]')
+
+    expect(barChart.exists()).toBeTruthy()
+  })
+
   it('should show only the five most recent games', async () => {
     const component = await mountSuspended(ScoreTrainingDashboard, { props })
     const gameRows = component.findAll('tbody tr')
