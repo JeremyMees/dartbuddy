@@ -40,6 +40,7 @@ const onSubmit = handleSubmit(async (data) => {
           <Input
             id="around-the-clock--hitPercent"
             type="number"
+            step=".01"
             :name="field.name"
             :model-value="field.value"
             :aria-invalid="!!errors.length"

@@ -91,6 +91,7 @@ const onSubmit = handleSubmit(async (data) => {
           <Input
             id="score-training--three-dart-average"
             type="number"
+            step=".01"
             :name="field.name"
             :model-value="field.value"
             :aria-invalid="!!errors.length"
@@ -108,6 +109,7 @@ const onSubmit = handleSubmit(async (data) => {
           <Input
             id="score-training--one-dart-average"
             type="number"
+            step=".01"
             :name="field.name"
             :model-value="field.value"
             :aria-invalid="!!errors.length"
