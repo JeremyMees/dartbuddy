@@ -68,6 +68,9 @@ describe('SinglesTrainingDashboard', () => {
 
     expect(recentGames).toHaveLength(5)
     expect(recentGames[0]?.text()).toContain('90')
+    expect(recentGames[1]?.text()).toContain('80')
+    expect(recentGames[2]?.text()).toContain('70')
+    expect(recentGames[3]?.text()).toContain('60')
     expect(recentGames[4]?.text()).toContain('50')
   })
 })

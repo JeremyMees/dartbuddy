@@ -68,7 +68,12 @@ export function getRecentGames<T extends { createdAt: string | Date }>(
   games: T[],
   count = 5,
 ): T[] {
-  return games.slice(-count).reverse()
+  return [...games]
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
+    .slice(0, count)
 }
 
 export function getScoreAverageByDate<T extends { createdAt: string | Date }>(
