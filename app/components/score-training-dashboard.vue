@@ -26,10 +26,6 @@ const averageHighestThrow = computed(() =>
   getAverage(props.games, 'highestScore'),
 )
 
-const scoreDistribution = computed(() =>
-  getScoreDistribution(props.games, 'totalScore'),
-)
-
 const scoreTrend = computed(() =>
   getScoreAverageByDate(props.games, 'totalScore'),
 )
@@ -91,25 +87,6 @@ const scoreTrend = computed(() =>
         y-label="Score"
         dataset-label="Score Trend"
         :sort="sortEntriesByDate"
-      />
-    </CardContent>
-  </Card>
-
-  <Card>
-    <CardHeader>
-      <div class="flex items-center justify-between">
-        <CardTitle>Score Distribution</CardTitle>
-        <span class="text-muted-foreground text-sm">Max: 1800</span>
-      </div>
-    </CardHeader>
-    <CardContent>
-      <BarChart
-        data-test-bar-chart
-        :data="scoreDistribution"
-        x-label="Score"
-        y-label="Times Thrown"
-        dataset-label="Score Distribution"
-        :sort="sortEntriesByNumericValue"
       />
     </CardContent>
   </Card>
