@@ -3,7 +3,7 @@ export const useAroundTheClockStore = defineStore('aroundTheClock', () => {
   const { selectedRange } = storeToRefs(rootStore)
 
   const { data, error, isPending } = useQuery({
-    key: ['aroundTheClock', selectedRange.value],
+    key: () => ['aroundTheClock', selectedRange.value],
     query: () =>
       $fetch(`/api/games/around-the-clock?range=${selectedRange.value}`),
   })

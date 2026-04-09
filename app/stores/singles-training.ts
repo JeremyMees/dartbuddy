@@ -3,7 +3,7 @@ export const useSinglesTrainingStore = defineStore('singlesTraining', () => {
   const { selectedRange } = storeToRefs(rootStore)
 
   const { data, error, isPending } = useQuery({
-    key: ['singlesTraining', selectedRange.value],
+    key: () => ['singlesTraining', selectedRange.value],
     query: () =>
       $fetch(`/api/games/singles-training?range=${selectedRange.value}`),
   })

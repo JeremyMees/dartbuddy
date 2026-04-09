@@ -3,7 +3,7 @@ export const useScoreTrainingStore = defineStore('scoreTraining', () => {
   const { selectedRange } = storeToRefs(rootStore)
 
   const { data, error, isPending } = useQuery({
-    key: ['scoreTraining', selectedRange.value],
+    key: () => ['scoreTraining', selectedRange.value],
     query: () =>
       $fetch(`/api/games/score-training?range=${selectedRange.value}`),
   })

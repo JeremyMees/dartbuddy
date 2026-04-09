@@ -3,7 +3,7 @@ export const useDoublesTrainingStore = defineStore('doublesTraining', () => {
   const { selectedRange } = storeToRefs(rootStore)
 
   const { data, error, isPending } = useQuery({
-    key: ['doublesTraining', selectedRange.value],
+    key: () => ['doublesTraining', selectedRange.value],
     query: () =>
       $fetch(`/api/games/doubles-training?range=${selectedRange.value}`),
   })
