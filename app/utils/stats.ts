@@ -12,6 +12,18 @@ export function getAverage<T>(items: T[], key: keyof T): number {
   return Math.round(total / items.length)
 }
 
+export function getHighest<T>(items: T[], key: keyof T): number {
+  if (items.length === 0) return 0
+
+  return items.reduce(
+    (highest, item) =>
+      (item[key] as unknown as number) > highest
+        ? (item[key] as unknown as number)
+        : highest,
+    0,
+  )
+}
+
 export function getTrendDirection<T extends { createdAt: string | Date }>(
   items: T[],
   key: keyof T,

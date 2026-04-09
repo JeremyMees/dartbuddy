@@ -143,6 +143,36 @@ describe('Stat utils', () => {
     })
   })
 
+  describe('getHighest', () => {
+    it('should return the highest value', async () => {
+      const items = [{ value: 10 }, { value: 20 }, { value: 30 }]
+
+      const highest = getHighest(items, 'value')
+
+      expect(highest).toBe(30)
+    })
+
+    it('should return zero for an empty array', async () => {
+      const items: { value: number }[] = []
+
+      const highest = getHighest(items, 'value')
+
+      expect(highest).toBe(0)
+    })
+
+    it('should return zero when the key value is not a number', async () => {
+      const items: { value: string }[] = [
+        { value: 'a' },
+        { value: 'b' },
+        { value: 'c' },
+      ]
+
+      const highest = getHighest(items, 'value')
+
+      expect(highest).toBe(0)
+    })
+  })
+
   describe('getBestGame', () => {
     it('should return the game with the highest score', () => {
       const games = [
