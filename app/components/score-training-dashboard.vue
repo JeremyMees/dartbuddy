@@ -22,6 +22,8 @@ const thrownOneEighties = computed(() =>
   props.games.reduce((count, game) => count + game.oneEightyCount, 0),
 )
 
+const highestThrow = computed(() => getHighest(props.games, 'highestScore'))
+
 const averageHighestThrow = computed(() =>
   getAverage(props.games, 'highestScore'),
 )
@@ -68,10 +70,15 @@ const scoreTrend = computed(() =>
     />
 
     <StatCard
+      data-test-highest-throw
+      label="Highest Throw"
+      :stat="highestThrow"
+    />
+
+    <StatCard
       data-test-avg-highest-throw
       label="Avg Highest throw"
       :stat="averageHighestThrow"
-      class="col-span-2"
     />
   </div>
 

@@ -25,7 +25,7 @@ const props: GameData<Serialized<ScoreTrainingGame>> = {
     createGame('2', '2026-03-02T10:00:00', 50),
     createGame('3', '2026-03-03T10:00:00', 60),
     createGame('4', '2026-03-04T10:00:00', 70),
-    createGame('5', '2026-03-05T10:00:00', 200),
+    createGame('5', '2026-03-05T10:00:00', 140),
     createGame('6', '2026-03-06T10:00:00', 180),
   ],
 }
@@ -53,7 +53,7 @@ describe('ScoreTrainingDashboard', () => {
     const avgScoreCard = component.find('[data-test-avg-score]')
 
     expect(avgScoreCard.text()).toContain('Avg Score')
-    expect(avgScoreCard.text()).toContain('100')
+    expect(avgScoreCard.text()).toContain('90')
   })
 
   it('should show best game stat', async () => {
@@ -61,7 +61,7 @@ describe('ScoreTrainingDashboard', () => {
     const bestGameCard = component.find('[data-test-total-score]')
 
     expect(bestGameCard.text()).toContain('Best Game')
-    expect(bestGameCard.text()).toContain('200')
+    expect(bestGameCard.text()).toContain('180')
   })
 
   it('should show best three dart average stat', async () => {
@@ -69,7 +69,7 @@ describe('ScoreTrainingDashboard', () => {
     const bestThreeDartCard = component.find('[data-test-best-three-dart-avg]')
 
     expect(bestThreeDartCard.text()).toContain('Best 3-Dart Avg')
-    expect(bestThreeDartCard.text()).toContain('66.666')
+    expect(bestThreeDartCard.text()).toContain('60')
   })
 
   it('should show total 180s stat', async () => {
@@ -77,7 +77,15 @@ describe('ScoreTrainingDashboard', () => {
     const total180sCard = component.find('[data-test-total-180s]')
 
     expect(total180sCard.text()).toContain('Total 180S')
-    expect(total180sCard.text()).toContain('2')
+    expect(total180sCard.text()).toContain('1')
+  })
+
+  it('should show highest throw stat', async () => {
+    const component = await mountSuspended(ScoreTrainingDashboard, { props })
+    const highestThrowCard = component.find('[data-test-highest-throw]')
+
+    expect(highestThrowCard.text()).toContain('Highest Throw')
+    expect(highestThrowCard.text()).toContain('180')
   })
 
   it('should show average highest throw stat', async () => {
@@ -85,7 +93,7 @@ describe('ScoreTrainingDashboard', () => {
     const avgHighestThrowCard = component.find('[data-test-avg-highest-throw]')
 
     expect(avgHighestThrowCard.text()).toContain('Avg Highest throw')
-    expect(avgHighestThrowCard.text()).toContain('100')
+    expect(avgHighestThrowCard.text()).toContain('90')
   })
 
   it('should show the line chart', async () => {
