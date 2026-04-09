@@ -45,7 +45,7 @@ describe('ScoreTrainingDashboard', () => {
     expect(component.text()).toContain(
       'No games played yet. Start a game to see your stats here!',
     )
-    expect(component.find('[data-test-total-score]').text()).toContain('N/A')
+    expect(component.find('[data-test-total-score]').text()).toContain('0')
   })
 
   it('should show avg score stat', async () => {

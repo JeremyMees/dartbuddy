@@ -3,7 +3,10 @@
 exports[`StatCard > should render correctly with default props 1`] = `
 "<div data-slot="card" class="flex flex-col items-center relative overflow-hidden py-4 gap-1.5 border-b">
   <div data-test-label="" class="text-sm text-muted-foreground">Example Stat</div>
-  <div data-test-stat="" class="pt-0 flex-1"><span class="text-3xl font-bold">42</span></div>
+  <div data-test-stat="" class="pt-0 flex-1">
+    <div data-test-number-ticker="" class="text-3xl font-bold">42</div>
+    <!--v-if-->
+  </div>
   <!--v-if-->
 </div>"
 `;

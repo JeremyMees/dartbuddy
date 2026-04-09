@@ -48,7 +48,7 @@ const scoreTrend = computed(() =>
     <StatCard
       data-test-total-score
       label="Best Game"
-      :stat="bestGame ? bestGame.totalScore : 'N/A'"
+      :stat="bestGame ? bestGame.totalScore : 0"
     >
       <template v-if="bestGame" #footer>
         <span class="text-xs text-muted-foreground">

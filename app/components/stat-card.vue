@@ -3,7 +3,8 @@ import type { HTMLAttributes } from 'vue'
 
 const props = defineProps<{
   label: string
-  stat?: string | number
+  stat?: number
+  percentage?: boolean
   class?: HTMLAttributes['class']
 }>()
 </script>
@@ -23,9 +24,8 @@ const props = defineProps<{
     </div>
     <div data-test-stat class="pt-0 flex-1">
       <slot>
-        <span class="text-3xl font-bold">
-          {{ stat }}
-        </span>
+        <NumberTicker :value="stat" class="text-3xl font-bold" />
+        <span v-if="percentage" class="text-3xl font-bold">%</span>
       </slot>
     </div>
     <div v-if="$slots.footer" data-test-footer>

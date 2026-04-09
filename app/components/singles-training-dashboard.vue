@@ -29,7 +29,7 @@ const scoreTrend = computed(() => getScoreAverageByDate(props.games, 'score'))
       </template>
     </StatCard>
 
-    <StatCard label="Best Game" :stat="bestGame ? bestGame.score : 'N/A'">
+    <StatCard label="Best Game" :stat="bestGame ? bestGame.score : 0">
       <template v-if="bestGame" #footer>
         <span class="text-xs text-muted-foreground">
           {{ formatReadDate(bestGame.createdAt) }}

@@ -45,7 +45,7 @@ describe('AroundTheClockDashboard', () => {
     )
     expect(component.text()).toContain('Best Game')
     expect(component.text()).toContain('Last Game')
-    expect(component.text()).toContain('N/A')
+    expect(component.text()).toContain('0%')
   })
 
   it('should show the line chart', async () => {

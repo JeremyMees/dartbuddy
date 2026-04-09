@@ -32,7 +32,7 @@ const scoreTrend = computed(() =>
 
 <template>
   <div class="grid grid-cols-2 divide-x">
-    <StatCard label="Avg Hit %" :stat="averageHitPercent.percent + '%'">
+    <StatCard label="Avg Hit %" :stat="averageHitPercent.percent" percentage>
       <template #footer>
         <TrendIndicator v-bind="averageHitPercent.trend" />
       </template>
@@ -40,7 +40,8 @@ const scoreTrend = computed(() =>
 
     <StatCard
       label="Best Game"
-      :stat="bestGame ? bestGame.hitPercent + '%' : 'N/A'"
+      :stat="bestGame ? bestGame.hitPercent : 0"
+      percentage
     >
       <template v-if="bestGame" #footer>
         <span class="text-xs text-muted-foreground">
@@ -51,7 +52,8 @@ const scoreTrend = computed(() =>
 
     <StatCard
       label="Last Game"
-      :stat="lastGame ? lastGame.hitPercent + '%' : 'N/A'"
+      :stat="lastGame ? lastGame.hitPercent : 0"
+      percentage
     >
       <template v-if="lastGame" #footer>
         <span class="text-xs text-muted-foreground">

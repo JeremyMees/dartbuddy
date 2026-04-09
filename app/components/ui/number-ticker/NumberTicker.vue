@@ -23,7 +23,7 @@ const props = withDefaults(
     direction: 'up',
     delay: 0,
     duration: 1000,
-    decimalPlaces: 2,
+    decimalPlaces: 1,
     transition: 'easeOutCubic',
     class: '',
   },

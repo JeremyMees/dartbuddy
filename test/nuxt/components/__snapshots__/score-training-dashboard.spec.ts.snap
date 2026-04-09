@@ -4,34 +4,52 @@ exports[`ScoreTrainingDashboard > should render correctly with default props 1`]
 "<div class="grid grid-cols-2 divide-x">
   <div data-slot="card" class="flex flex-col items-center relative overflow-hidden py-4 gap-1.5 border-b" data-test-avg-score="">
     <div data-test-label="" class="text-sm text-muted-foreground">Avg Score</div>
-    <div data-test-stat="" class="pt-0 flex-1"><span class="text-3xl font-bold">90</span></div>
+    <div data-test-stat="" class="pt-0 flex-1">
+      <div data-test-number-ticker="" class="text-3xl font-bold">90</div>
+      <!--v-if-->
+    </div>
     <div data-test-footer="">
       <div data-slot="badge" class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&amp;>svg]:size-3 gap-1 [&amp;>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent bg-secondary/20 text-secondary [a&amp;]:hover:bg-secondary/10 focus-visible:ring-secondary/10" variant="secondary"><span class="iconify i-hugeicons:arrow-up-right-01" aria-hidden="true" data-test-icon=""></span> 160% </div>
     </div>
   </div>
   <div data-slot="card" class="flex flex-col items-center relative overflow-hidden py-4 gap-1.5 border-b" data-test-total-score="">
     <div data-test-label="" class="text-sm text-muted-foreground">Best Game</div>
-    <div data-test-stat="" class="pt-0 flex-1"><span class="text-3xl font-bold">180</span></div>
+    <div data-test-stat="" class="pt-0 flex-1">
+      <div data-test-number-ticker="" class="text-3xl font-bold">180</div>
+      <!--v-if-->
+    </div>
     <div data-test-footer=""><span class="text-xs text-muted-foreground">06 Mar, 10:00</span></div>
   </div>
   <div data-slot="card" class="flex flex-col items-center relative overflow-hidden py-4 gap-1.5 border-b" data-test-best-three-dart-avg="">
     <div data-test-label="" class="text-sm text-muted-foreground">Best 3-Dart Avg</div>
-    <div data-test-stat="" class="pt-0 flex-1"><span class="text-3xl font-bold">60</span></div>
+    <div data-test-stat="" class="pt-0 flex-1">
+      <div data-test-number-ticker="" class="text-3xl font-bold">60</div>
+      <!--v-if-->
+    </div>
     <!--v-if-->
   </div>
   <div data-slot="card" class="flex flex-col items-center relative overflow-hidden py-4 gap-1.5 border-b" data-test-total-180s="">
     <div data-test-label="" class="text-sm text-muted-foreground">Total 180S</div>
-    <div data-test-stat="" class="pt-0 flex-1"><span class="text-3xl font-bold">1</span></div>
+    <div data-test-stat="" class="pt-0 flex-1">
+      <div data-test-number-ticker="" class="text-3xl font-bold">1</div>
+      <!--v-if-->
+    </div>
     <!--v-if-->
   </div>
   <div data-slot="card" class="flex flex-col items-center relative overflow-hidden py-4 gap-1.5 border-b" data-test-highest-throw="">
     <div data-test-label="" class="text-sm text-muted-foreground">Highest Throw</div>
-    <div data-test-stat="" class="pt-0 flex-1"><span class="text-3xl font-bold">180</span></div>
+    <div data-test-stat="" class="pt-0 flex-1">
+      <div data-test-number-ticker="" class="text-3xl font-bold">180</div>
+      <!--v-if-->
+    </div>
     <!--v-if-->
   </div>
   <div data-slot="card" class="flex flex-col items-center relative overflow-hidden py-4 gap-1.5 border-b" data-test-avg-highest-throw="">
     <div data-test-label="" class="text-sm text-muted-foreground">Avg Highest throw</div>
-    <div data-test-stat="" class="pt-0 flex-1"><span class="text-3xl font-bold">90</span></div>
+    <div data-test-stat="" class="pt-0 flex-1">
+      <div data-test-number-ticker="" class="text-3xl font-bold">90</div>
+      <!--v-if-->
+    </div>
     <!--v-if-->
   </div>
 </div>

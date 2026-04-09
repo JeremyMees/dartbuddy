@@ -43,7 +43,7 @@ describe('SinglesTrainingDashboard', () => {
     )
     expect(component.text()).toContain('Best Game')
     expect(component.text()).toContain('Avg Score')
-    expect(component.text()).toContain('N/A')
+    expect(component.text()).toContain('0')
   })
 
   it('should show computed stats', async () => {
