@@ -9,6 +9,8 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@vite-pwa/nuxt',
     '@nuxt/test-utils/module',
+    '@pinia/nuxt',
+    '@pinia/colada-nuxt',
   ],
 
   devtools: { enabled: true },
