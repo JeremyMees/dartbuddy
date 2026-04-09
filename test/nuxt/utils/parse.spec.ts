@@ -70,4 +70,36 @@ describe('Parse utils', () => {
       expect(result).toBe(0)
     })
   })
+
+  describe('camelToKebab', () => {
+    it('should convert camelCase to kebab-case', () => {
+      const result = camelToKebab('scoreTraining')
+
+      expect(result).toBe('score-training')
+    })
+
+    it('should return the same string if there are no uppercase letters', () => {
+      const result = camelToKebab('scoring')
+
+      expect(result).toBe('scoring')
+    })
+
+    it('should handle consecutive uppercase letters', () => {
+      const result = camelToKebab('parseHTTPResponse')
+
+      expect(result).toBe('parse-http-response')
+    })
+
+    it('should handle an empty string', () => {
+      const result = camelToKebab('')
+
+      expect(result).toBe('')
+    })
+
+    it('should handle a string with only uppercase letters', () => {
+      const result = camelToKebab('HTTP')
+
+      expect(result).toBe('http')
+    })
+  })
 })
