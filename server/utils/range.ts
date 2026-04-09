@@ -13,3 +13,7 @@ export function getRangeStartDate(range: GameRange): Date | undefined {
       return undefined
   }
 }
+
+export function generateRangeWhereClause(date: Date) {
+  return { createdAt: { gte: date } }
+}
