@@ -20,15 +20,10 @@ export default defineEventHandler(async (event) => {
 
   const rangeStartDate = getRangeStartDate(data.range)
 
-  const games = await prisma.singlesTrainingGame.findMany({
+  return await prisma.singlesTrainingGame.findMany({
     orderBy: { createdAt: 'desc' },
     ...(rangeStartDate
       ? { where: generateRangeWhereClause(rangeStartDate) }
       : {}),
   })
-
-  return {
-    range: data.range,
-    games,
-  }
 })

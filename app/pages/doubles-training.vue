@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const store = useScoreTrainingStore()
+const store = useDoublesTrainingStore()
 </script>
 
 <template>
@@ -13,7 +13,7 @@ const store = useScoreTrainingStore()
       <Spinner class="size-10!" />
     </div>
 
-    <Empty v-else-if="!store.games?.length" class="w-full">
+    <Empty v-else-if="!store.games.length" class="w-full">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Icon name="hugeicons:dart" />
@@ -28,7 +28,11 @@ const store = useScoreTrainingStore()
 
     <template v-else-if="store.games.length">
       <div class="grid grid-cols-2 divide-x">
-        <StatCard label="Avg Score" :stat="store.averageScore.percent">
+        <StatCard
+          label="Avg Hit %"
+          :stat="store.averageScore.percent"
+          percentage
+        >
           <template #footer>
             <TrendIndicator v-bind="store.averageScore.trend" />
           </template>
@@ -36,7 +40,8 @@ const store = useScoreTrainingStore()
 
         <StatCard
           label="Best Game"
-          :stat="store.bestGame ? store.bestGame.totalScore : 0"
+          :stat="store.bestGame ? store.bestGame.hitPercent : 0"
+          percentage
         >
           <template v-if="store.bestGame" #footer>
             <span class="text-xs text-muted-foreground">
@@ -44,14 +49,6 @@ const store = useScoreTrainingStore()
             </span>
           </template>
         </StatCard>
-
-        <StatCard label="Best 3-Dart Avg" :stat="store.bestThreeDarts" />
-
-        <StatCard label="Total 180S" :stat="store.thrownOneEighties" />
-
-        <StatCard label="Highest Throw" :stat="store.highestThrow" />
-
-        <StatCard label="Avg Highest throw" :stat="store.averageHighestThrow" />
       </div>
 
       <Card>
@@ -71,6 +68,21 @@ const store = useScoreTrainingStore()
 
       <Card>
         <CardHeader>
+          <CardTitle>Score Distribution</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <BarChart
+            :data="store.scoreDistribution"
+            x-label="Score"
+            y-label="Times Thrown"
+            dataset-label="Score Distribution"
+            :sort="sortEntriesByNumericValue"
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>Recent Games</CardTitle>
         </CardHeader>
         <CardContent>
@@ -80,30 +92,23 @@ const store = useScoreTrainingStore()
           >
             No games played yet. Start a game to see your stats here!
           </div>
-          <Table v-else>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Highest</TableHead>
-                <TableHead>3-Dart Avg</TableHead>
-                <TableHead>180S</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow
-                v-for="game in store.recentGames"
-                :key="game.id"
-                class="text-sm text-muted-foreground"
-              >
-                <TableCell>{{ formatReadDate(game.createdAt) }}</TableCell>
-                <TableCell>{{ game.totalScore }}</TableCell>
-                <TableCell>{{ game.highestScore }}</TableCell>
-                <TableCell>{{ game.threeDartAverage }}</TableCell>
-                <TableCell>{{ game.oneEightyCount }}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <ul v-else class="divide-y">
+            <li
+              v-for="game in store.recentGames"
+              :key="game.id"
+              class="flex items-center gap-6 py-2"
+            >
+              <span class="text-sm text-muted-foreground">
+                {{ formatReadDate(game.createdAt) }}
+              </span>
+              <div class="grow flex items-center gap-2">
+                <Progress v-model="game.hitPercent" />
+                <span class="text-sm text-muted-foreground">
+                  {{ game.hitPercent }}%
+                </span>
+              </div>
+            </li>
+          </ul>
         </CardContent>
       </Card>
     </template>
