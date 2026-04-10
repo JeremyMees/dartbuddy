@@ -1,12 +1,40 @@
 <script setup lang="ts">
-const store = useSinglesTrainingStore()
+const store = useRootStore()
+const { selectedRange } = storeToRefs(store)
+
+const { data, error, isPending } = useQuery({
+  key: () => ['singlesTraining', selectedRange.value],
+  query: () =>
+    $fetch(`/api/games/singles-training?range=${selectedRange.value}`),
+})
+
+const maxScore = 21 * 9
+
+const isEmpty = computed(() => !isPending.value && !games.value.length)
+
+const games = computed(() => data.value ?? [])
+
+const averageScore = computed(() => ({
+  percent: getAverage(games.value, 'score'),
+  trend: getTrendDirection(games.value, 'score'),
+}))
+
+const recentGames = computed(() => getRecentGames(games.value))
+
+const bestGame = computed(() => getBestGame(games.value, 'score'))
+
+const scoreDistribution = computed(() =>
+  getScoreDistribution(games.value, 'score'),
+)
+
+const scoreTrend = computed(() => getScoreAverageByDate(games.value, 'score'))
 </script>
 
 <template>
   <NuxtLayout>
-    <ErrorMessage v-if="store.error" :message="store.error.message" />
+    <ErrorMessage v-if="error" :message="error.message" />
 
-    <Empty v-else-if="store.isEmpty" class="w-full">
+    <Empty v-else-if="isEmpty" class="w-full">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Icon name="hugeicons:dart" />
@@ -21,25 +49,22 @@ const store = useSinglesTrainingStore()
 
     <template v-else>
       <div class="grid grid-cols-2 divide-x">
-        <template v-if="store.isPending">
+        <template v-if="isPending">
           <SkeletonStatCard has-badge />
           <SkeletonStatCard has-label />
         </template>
 
         <template v-else>
-          <StatCard label="Avg Score" :stat="store.averageScore.percent">
+          <StatCard label="Avg Score" :stat="averageScore.percent">
             <template #footer>
-              <TrendIndicator v-bind="store.averageScore.trend" />
+              <TrendIndicator v-bind="averageScore.trend" />
             </template>
           </StatCard>
 
-          <StatCard
-            label="Best Game"
-            :stat="store.bestGame ? store.bestGame.score : 0"
-          >
-            <template v-if="store.bestGame" #footer>
+          <StatCard label="Best Game" :stat="bestGame ? bestGame.score : 0">
+            <template v-if="bestGame" #footer>
               <span class="text-xs text-muted-foreground">
-                {{ formatReadDate(store.bestGame.createdAt) }}
+                {{ formatReadDate(bestGame.createdAt) }}
               </span>
             </template>
           </StatCard>
@@ -51,10 +76,10 @@ const store = useSinglesTrainingStore()
           <CardTitle>Score Trend</CardTitle>
         </CardHeader>
         <CardContent>
-          <Skeleton v-if="store.isPending" class="w-full aspect-2/1" />
+          <Skeleton v-if="isPending" class="w-full aspect-2/1" />
           <LineChart
             v-else
-            :data="store.scoreTrend"
+            :data="scoreTrend"
             x-label="Date"
             y-label="Score"
             dataset-label="Score Trend"
@@ -68,15 +93,15 @@ const store = useSinglesTrainingStore()
           <div class="flex items-center justify-between">
             <CardTitle>Score Distribution</CardTitle>
             <span class="text-muted-foreground text-sm"
-              >Max: {{ store.maxScore }}</span
+              >Max: {{ maxScore }}</span
             >
           </div>
         </CardHeader>
         <CardContent>
-          <Skeleton v-if="store.isPending" class="w-full aspect-2/1" />
+          <Skeleton v-if="isPending" class="w-full aspect-2/1" />
           <BarChart
             v-else
-            :data="store.scoreDistribution"
+            :data="scoreDistribution"
             x-label="Score"
             y-label="Times Thrown"
             dataset-label="Score Distribution"
@@ -91,12 +116,12 @@ const store = useSinglesTrainingStore()
         </CardHeader>
         <CardContent>
           <ul class="divide-y">
-            <template v-if="store.isPending">
+            <template v-if="isPending">
               <SkeletonSinglesTrainingRow v-for="i in 5" :key="i" />
             </template>
-            <template v-else-if="store.recentGames.length">
+            <template v-else-if="recentGames.length">
               <li
-                v-for="game in store.recentGames"
+                v-for="game in recentGames"
                 :key="game.id"
                 class="flex items-center gap-6 py-2"
               >
@@ -104,9 +129,9 @@ const store = useSinglesTrainingStore()
                   {{ formatReadDate(game.createdAt) }}
                 </span>
                 <div class="grow flex items-center gap-2">
-                  <Progress v-model="game.score" :max="store.maxScore" />
+                  <Progress v-model="game.score" :max="maxScore" />
                   <span class="text-sm text-muted-foreground">
-                    {{ game.score }}/{{ store.maxScore }}
+                    {{ game.score }}/{{ maxScore }}
                   </span>
                 </div>
               </li>

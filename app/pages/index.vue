@@ -1,12 +1,51 @@
 <script setup lang="ts">
-const store = useScoreTrainingStore()
+const store = useRootStore()
+const { selectedRange } = storeToRefs(store)
+
+const { data, error, isPending } = useQuery({
+  key: () => ['scoreTraining', selectedRange.value],
+  query: () => $fetch(`/api/games/score-training?range=${selectedRange.value}`),
+})
+
+const isEmpty = computed(() => !isPending.value && !games.value.length)
+
+const games = computed(() => data.value ?? [])
+
+const averageScore = computed(() => ({
+  percent: getAverage(games.value, 'totalScore'),
+  trend: getTrendDirection(games.value, 'totalScore'),
+}))
+
+const recentGames = computed(() => getRecentGames(games.value))
+
+const bestGame = computed(() => getBestGame(games.value, 'totalScore'))
+
+const bestThreeDarts = computed(() =>
+  games.value.reduce((best, { threeDartAverage }) => {
+    return threeDartAverage > best ? threeDartAverage : best
+  }, 0),
+)
+
+const thrownOneEighties = computed(() =>
+  games.value.reduce((count, game) => count + game.oneEightyCount, 0),
+)
+
+const highestThrow = computed(() => getHighest(games.value, 'highestScore'))
+
+const averageHighestThrow = computed(() =>
+  getAverage(games.value, 'highestScore'),
+)
+
+const scoreTrend = computed(() =>
+  getScoreAverageByDate(games.value, 'totalScore'),
+)
 </script>
 
 <template>
   <NuxtLayout>
-    <ErrorMessage v-if="store.error" :message="store.error.message" />
+    <ErrorMessage v-if="error" :message="error.message" />
 
-    <Empty v-else-if="store.isEmpty" class="w-full">
+    <Empty v-else-if="isEmpty" class="w-full">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Icon name="hugeicons:dart" />
@@ -21,7 +60,7 @@ const store = useScoreTrainingStore()
 
     <template v-else>
       <div class="grid grid-cols-2 divide-x">
-        <template v-if="store.isPending">
+        <template v-if="isPending">
           <SkeletonStatCard has-badge />
           <SkeletonStatCard has-label />
           <SkeletonStatCard />
@@ -31,28 +70,25 @@ const store = useScoreTrainingStore()
         </template>
 
         <template v-else>
-          <StatCard label="Avg Score" :stat="store.averageScore.percent">
+          <StatCard label="Avg Score" :stat="averageScore.percent">
             <template #footer>
-              <TrendIndicator v-bind="store.averageScore.trend" />
+              <TrendIndicator v-bind="averageScore.trend" />
             </template>
           </StatCard>
           <StatCard
             label="Best Game"
-            :stat="store.bestGame ? store.bestGame.totalScore : 0"
+            :stat="bestGame ? bestGame.totalScore : 0"
           >
-            <template v-if="store.bestGame" #footer>
+            <template v-if="bestGame" #footer>
               <span class="text-xs text-muted-foreground">
-                {{ formatReadDate(store.bestGame.createdAt) }}
+                {{ formatReadDate(bestGame.createdAt) }}
               </span>
             </template>
           </StatCard>
-          <StatCard label="Best 3-Dart Avg" :stat="store.bestThreeDarts" />
-          <StatCard label="Total 180S" :stat="store.thrownOneEighties" />
-          <StatCard label="Highest Throw" :stat="store.highestThrow" />
-          <StatCard
-            label="Avg Highest throw"
-            :stat="store.averageHighestThrow"
-          />
+          <StatCard label="Best 3-Dart Avg" :stat="bestThreeDarts" />
+          <StatCard label="Total 180S" :stat="thrownOneEighties" />
+          <StatCard label="Highest Throw" :stat="highestThrow" />
+          <StatCard label="Avg Highest throw" :stat="averageHighestThrow" />
         </template>
       </div>
 
@@ -61,10 +97,10 @@ const store = useScoreTrainingStore()
           <CardTitle>Score Trend</CardTitle>
         </CardHeader>
         <CardContent>
-          <Skeleton v-if="store.isPending" class="w-full aspect-2/1" />
+          <Skeleton v-if="isPending" class="w-full aspect-2/1" />
           <LineChart
             v-else
-            :data="store.scoreTrend"
+            :data="scoreTrend"
             x-label="Date"
             y-label="Score"
             dataset-label="Score Trend"
@@ -89,12 +125,12 @@ const store = useScoreTrainingStore()
               </TableRow>
             </TableHeader>
             <TableBody>
-              <template v-if="store.isPending">
+              <template v-if="isPending">
                 <SkeletonScoreTrainingRow v-for="i in 5" :key="i" />
               </template>
-              <template v-else-if="store.recentGames.length">
+              <template v-else-if="recentGames.length">
                 <TableRow
-                  v-for="game in store.recentGames"
+                  v-for="game in recentGames"
                   :key="game.id"
                   class="text-sm text-muted-foreground"
                 >
