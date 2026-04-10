@@ -8,6 +8,8 @@ export const useScoreTrainingStore = defineStore('scoreTraining', () => {
       $fetch(`/api/games/score-training?range=${selectedRange.value}`),
   })
 
+  const isEmpty = computed(() => !isPending.value && !games.value.length)
+
   const games = computed(() => data.value ?? [])
 
   const averageScore = computed(() => ({
@@ -43,6 +45,7 @@ export const useScoreTrainingStore = defineStore('scoreTraining', () => {
     games,
     error,
     isPending,
+    isEmpty,
     averageScore,
     recentGames,
     bestGame,

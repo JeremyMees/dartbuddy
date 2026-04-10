@@ -6,14 +6,7 @@ const store = useAroundTheClockStore()
   <NuxtLayout>
     <ErrorMessage v-if="store.error" :message="store.error.message" />
 
-    <div
-      v-else-if="store.isPending"
-      class="flex flex-1 w-full items-center justify-center p-6 md:p-12"
-    >
-      <Spinner class="size-10!" />
-    </div>
-
-    <Empty v-else-if="!store.games.length" class="w-full">
+    <Empty v-else-if="store.isEmpty" class="w-full">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Icon name="hugeicons:dart" />
@@ -26,47 +19,58 @@ const store = useAroundTheClockStore()
       </EmptyHeader>
     </Empty>
 
-    <template v-else-if="store.games.length">
+    <template v-else>
       <div class="grid grid-cols-2 divide-x">
-        <StatCard
-          label="Avg Hit %"
-          :stat="store.averageHitPercent.percent"
-          percentage
-        >
-          <template #footer>
-            <TrendIndicator v-bind="store.averageHitPercent.trend" />
-          </template>
-        </StatCard>
+        <template v-if="store.isPending">
+          <SkeletonStatCard has-badge />
+          <SkeletonStatCard has-label />
+          <SkeletonStatCard has-label />
+          <SkeletonStatCard has-label />
+        </template>
 
-        <StatCard
-          label="Best Game"
-          :stat="store.bestGame ? store.bestGame.hitPercent : 0"
-          percentage
-        >
-          <template v-if="store.bestGame" #footer>
-            <span class="text-xs text-muted-foreground">
-              {{ formatReadDate(store.bestGame.createdAt) }}
-            </span>
-          </template>
-        </StatCard>
+        <template v-else>
+          <StatCard
+            label="Avg Hit %"
+            :stat="store.averageHitPercent.percent"
+            percentage
+          >
+            <template #footer>
+              <TrendIndicator v-bind="store.averageHitPercent.trend" />
+            </template>
+          </StatCard>
 
-        <StatCard
-          label="Last Game"
-          :stat="store.lastGame ? store.lastGame.hitPercent : 0"
-          percentage
-        >
-          <template v-if="store.lastGame" #footer>
-            <span class="text-xs text-muted-foreground">
-              {{ formatReadDate(store.lastGame.createdAt) }}
-            </span>
-          </template>
-        </StatCard>
+          <StatCard
+            label="Best Game"
+            :stat="store.bestGame ? store.bestGame.hitPercent : 0"
+            percentage
+          >
+            <template v-if="store.bestGame" #footer>
+              <span class="text-xs text-muted-foreground">
+                {{ formatReadDate(store.bestGame.createdAt) }}
+              </span>
+            </template>
+          </StatCard>
 
-        <StatCard label="Total Darts" :stat="store.dartsThrown">
-          <template #footer>
-            <span class="text-xs text-muted-foreground"> thrown overall </span>
-          </template>
-        </StatCard>
+          <StatCard
+            label="Last Game"
+            :stat="store.lastGame ? store.lastGame.hitPercent : 0"
+            percentage
+          >
+            <template v-if="store.lastGame" #footer>
+              <span class="text-xs text-muted-foreground">
+                {{ formatReadDate(store.lastGame.createdAt) }}
+              </span>
+            </template>
+          </StatCard>
+
+          <StatCard label="Total Darts" :stat="store.dartsThrown">
+            <template #footer>
+              <span class="text-xs text-muted-foreground">
+                thrown overall
+              </span>
+            </template>
+          </StatCard>
+        </template>
       </div>
 
       <Card>
@@ -74,7 +78,9 @@ const store = useAroundTheClockStore()
           <CardTitle>Score Trend</CardTitle>
         </CardHeader>
         <CardContent>
+          <Skeleton v-if="store.isPending" class="w-full aspect-2/1" />
           <LineChart
+            v-else
             :data="store.scoreTrend"
             x-label="Date"
             y-label="Score"
@@ -89,7 +95,9 @@ const store = useAroundTheClockStore()
           <CardTitle>Score Distribution</CardTitle>
         </CardHeader>
         <CardContent>
+          <Skeleton v-if="store.isPending" class="w-full aspect-2/1" />
           <BarChart
+            v-else
             :data="store.scoreDistribution"
             x-label="Score"
             y-label="Times Thrown"
@@ -104,31 +112,30 @@ const store = useAroundTheClockStore()
           <CardTitle>Recent Games</CardTitle>
         </CardHeader>
         <CardContent>
-          <div
-            v-if="!store.recentGames.length"
-            class="text-sm text-muted-foreground"
-          >
-            No games played yet. Start a game to see your stats here!
-          </div>
-          <ul v-else class="divide-y">
-            <li
-              v-for="game in store.recentGames"
-              :key="game.id"
-              class="flex items-center gap-6 py-2"
-            >
-              <span class="text-sm text-muted-foreground">
-                {{ formatReadDate(game.createdAt) }}
-              </span>
-              <div class="grow flex items-center gap-2">
-                <Progress v-model="game.hitPercent" />
+          <ul class="divide-y">
+            <template v-if="store.isPending">
+              <SkeletonAroundTheClockRow v-for="i in 5" :key="i" />
+            </template>
+            <template v-else-if="store.recentGames.length">
+              <li
+                v-for="game in store.recentGames"
+                :key="game.id"
+                class="flex items-center gap-6 py-2"
+              >
                 <span class="text-sm text-muted-foreground">
-                  {{ game.hitPercent }}%
+                  {{ formatReadDate(game.createdAt) }}
                 </span>
-              </div>
-              <span class="text-sm text-muted-foreground">
-                {{ game.dartsThrown }} darts
-              </span>
-            </li>
+                <div class="grow flex items-center gap-2">
+                  <Progress v-model="game.hitPercent" />
+                  <span class="text-sm text-muted-foreground">
+                    {{ game.hitPercent }}%
+                  </span>
+                </div>
+                <span class="text-sm text-muted-foreground">
+                  {{ game.dartsThrown }} darts
+                </span>
+              </li>
+            </template>
           </ul>
         </CardContent>
       </Card>

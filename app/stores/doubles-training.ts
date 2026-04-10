@@ -8,6 +8,8 @@ export const useDoublesTrainingStore = defineStore('doublesTraining', () => {
       $fetch(`/api/games/doubles-training?range=${selectedRange.value}`),
   })
 
+  const isEmpty = computed(() => !isPending.value && !games.value.length)
+
   const games = computed(() => data.value ?? [])
 
   const averageScore = computed(() => ({
@@ -31,6 +33,7 @@ export const useDoublesTrainingStore = defineStore('doublesTraining', () => {
     games,
     error,
     isPending,
+    isEmpty,
     averageScore,
     recentGames,
     bestGame,

@@ -10,6 +10,8 @@ export const useSinglesTrainingStore = defineStore('singlesTraining', () => {
 
   const maxScore = 21 * 9
 
+  const isEmpty = computed(() => !isPending.value && !games.value.length)
+
   const games = computed(() => data.value ?? [])
 
   const averageScore = computed(() => ({
@@ -31,6 +33,7 @@ export const useSinglesTrainingStore = defineStore('singlesTraining', () => {
     games,
     error,
     isPending,
+    isEmpty,
     averageScore,
     recentGames,
     bestGame,

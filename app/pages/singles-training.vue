@@ -6,14 +6,7 @@ const store = useSinglesTrainingStore()
   <NuxtLayout>
     <ErrorMessage v-if="store.error" :message="store.error.message" />
 
-    <div
-      v-else-if="store.isPending"
-      class="flex flex-1 w-full items-center justify-center p-6 md:p-12"
-    >
-      <Spinner class="size-10!" />
-    </div>
-
-    <Empty v-else-if="!store.games.length" class="w-full">
+    <Empty v-else-if="store.isEmpty" class="w-full">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Icon name="hugeicons:dart" />
@@ -26,24 +19,31 @@ const store = useSinglesTrainingStore()
       </EmptyHeader>
     </Empty>
 
-    <template v-else-if="store.games.length">
+    <template v-else>
       <div class="grid grid-cols-2 divide-x">
-        <StatCard label="Avg Score" :stat="store.averageScore.percent">
-          <template #footer>
-            <TrendIndicator v-bind="store.averageScore.trend" />
-          </template>
-        </StatCard>
+        <template v-if="store.isPending">
+          <SkeletonStatCard has-badge />
+          <SkeletonStatCard has-label />
+        </template>
 
-        <StatCard
-          label="Best Game"
-          :stat="store.bestGame ? store.bestGame.score : 0"
-        >
-          <template v-if="store.bestGame" #footer>
-            <span class="text-xs text-muted-foreground">
-              {{ formatReadDate(store.bestGame.createdAt) }}
-            </span>
-          </template>
-        </StatCard>
+        <template v-else>
+          <StatCard label="Avg Score" :stat="store.averageScore.percent">
+            <template #footer>
+              <TrendIndicator v-bind="store.averageScore.trend" />
+            </template>
+          </StatCard>
+
+          <StatCard
+            label="Best Game"
+            :stat="store.bestGame ? store.bestGame.score : 0"
+          >
+            <template v-if="store.bestGame" #footer>
+              <span class="text-xs text-muted-foreground">
+                {{ formatReadDate(store.bestGame.createdAt) }}
+              </span>
+            </template>
+          </StatCard>
+        </template>
       </div>
 
       <Card>
@@ -51,7 +51,9 @@ const store = useSinglesTrainingStore()
           <CardTitle>Score Trend</CardTitle>
         </CardHeader>
         <CardContent>
+          <Skeleton v-if="store.isPending" class="w-full aspect-2/1" />
           <LineChart
+            v-else
             :data="store.scoreTrend"
             x-label="Date"
             y-label="Score"
@@ -71,7 +73,9 @@ const store = useSinglesTrainingStore()
           </div>
         </CardHeader>
         <CardContent>
+          <Skeleton v-if="store.isPending" class="w-full aspect-2/1" />
           <BarChart
+            v-else
             :data="store.scoreDistribution"
             x-label="Score"
             y-label="Times Thrown"
@@ -86,28 +90,27 @@ const store = useSinglesTrainingStore()
           <CardTitle>Recent Games</CardTitle>
         </CardHeader>
         <CardContent>
-          <div
-            v-if="!store.recentGames.length"
-            class="text-sm text-muted-foreground"
-          >
-            No games played yet. Start a game to see your stats here!
-          </div>
-          <ul v-else class="divide-y">
-            <li
-              v-for="game in store.recentGames"
-              :key="game.id"
-              class="flex items-center gap-6 py-2"
-            >
-              <span class="text-sm text-muted-foreground">
-                {{ formatReadDate(game.createdAt) }}
-              </span>
-              <div class="grow flex items-center gap-2">
-                <Progress v-model="game.score" :max="store.maxScore" />
+          <ul class="divide-y">
+            <template v-if="store.isPending">
+              <SkeletonSinglesTrainingRow v-for="i in 5" :key="i" />
+            </template>
+            <template v-else-if="store.recentGames.length">
+              <li
+                v-for="game in store.recentGames"
+                :key="game.id"
+                class="flex items-center gap-6 py-2"
+              >
                 <span class="text-sm text-muted-foreground">
-                  {{ game.score }}/{{ store.maxScore }}
+                  {{ formatReadDate(game.createdAt) }}
                 </span>
-              </div>
-            </li>
+                <div class="grow flex items-center gap-2">
+                  <Progress v-model="game.score" :max="store.maxScore" />
+                  <span class="text-sm text-muted-foreground">
+                    {{ game.score }}/{{ store.maxScore }}
+                  </span>
+                </div>
+              </li>
+            </template>
           </ul>
         </CardContent>
       </Card>

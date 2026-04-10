@@ -8,6 +8,8 @@ export const useAroundTheClockStore = defineStore('aroundTheClock', () => {
       $fetch(`/api/games/around-the-clock?range=${selectedRange.value}`),
   })
 
+  const isEmpty = computed(() => !isPending.value && !games.value.length)
+
   const games = computed(() => data.value ?? [])
 
   const averageHitPercent = computed(() => ({
@@ -40,6 +42,7 @@ export const useAroundTheClockStore = defineStore('aroundTheClock', () => {
     games,
     error,
     isPending,
+    isEmpty,
     averageHitPercent,
     dartsThrown,
     recentGames,
