@@ -102,4 +102,48 @@ describe('Parse utils', () => {
       expect(result).toBe('http')
     })
   })
+
+  describe('kebabToCamel', () => {
+    it('should convert kebab-case to camelCase', () => {
+      const result = kebabToCamel('score-training')
+
+      expect(result).toBe('scoreTraining')
+    })
+
+    it('should return the same string if there are no hyphens', () => {
+      const result = kebabToCamel('scoring')
+
+      expect(result).toBe('scoring')
+    })
+
+    it('should handle multiple hyphens', () => {
+      const result = kebabToCamel('parse-http-response')
+
+      expect(result).toBe('parseHttpResponse')
+    })
+
+    it('should handle an empty string', () => {
+      const result = kebabToCamel('')
+
+      expect(result).toBe('')
+    })
+
+    it('should handle a string with only hyphens', () => {
+      const result = kebabToCamel('---')
+
+      expect(result).toBe('')
+    })
+
+    it('should handle a string with leading and trailing hyphens', () => {
+      const result = kebabToCamel('-score-training-')
+
+      expect(result).toBe('scoreTraining')
+    })
+
+    it('should handle a string with consecutive hyphens', () => {
+      const result = kebabToCamel('score--training')
+
+      expect(result).toBe('scoreTraining')
+    })
+  })
 })

@@ -39,3 +39,19 @@ export function camelToKebab(string: string) {
     .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
     .toLowerCase()
 }
+
+export function kebabToCamel(string: string) {
+  const parts = string.split('-').filter(Boolean)
+
+  if (parts.length === 0) {
+    return ''
+  }
+
+  return (
+    parts[0] +
+    parts
+      .slice(1)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join('')
+  )
+}
