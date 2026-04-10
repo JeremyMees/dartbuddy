@@ -24,8 +24,8 @@ importers:
         specifier: 0.3.2
         version: 0.3.2(@pinia/colada@1.1.0(pinia@3.0.4(typescript@5.9.3)(vue@3.5.32(typescript@5.9.3)))(vue@3.5.32(typescript@5.9.3)))(magicast@0.5.2)
       '@pinia/nuxt':
-        specifier: 0.11.0
-        version: 0.11.0(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.32(typescript@5.9.3)))
+        specifier: 0.11.3
+        version: 0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.32(typescript@5.9.3)))
       '@prisma/adapter-pg':
         specifier: ^7.7.0
         version: 7.7.0
@@ -2055,10 +2055,10 @@ packages:
       pinia: ^2.2.6 || ^3.0.0
       vue: ^3.5.17
 
-  '@pinia/nuxt@0.11.0':
-    resolution: {integrity: sha512-QGFlUAkeVAhPCTXacrtNP4ti24sGEleVzmxcTALY9IkS6U5OUox7vmNL1pkqBeW39oSNq/UC5m40ofDEPHB1fg==}
+  '@pinia/nuxt@0.11.3':
+    resolution: {integrity: sha512-7WVNHpWx4qAEzOlnyrRC88kYrwnlR/PrThWT0XI1dSNyUAXu/KBv9oR37uCgYkZroqP5jn8DfzbkNF3BtKvE9w==}
     peerDependencies:
-      pinia: ^3.0.2
+      pinia: ^3.0.4
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -8889,9 +8889,9 @@ snapshots:
       pinia: 3.0.4(typescript@5.9.3)(vue@3.5.32(typescript@5.9.3))
       vue: 3.5.32(typescript@5.9.3)
 
-  '@pinia/nuxt@0.11.0(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.32(typescript@5.9.3)))':
+  '@pinia/nuxt@0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.32(typescript@5.9.3)))':
     dependencies:
-      '@nuxt/kit': 3.21.1(magicast@0.5.2)
+      '@nuxt/kit': 4.4.2(magicast@0.5.2)
       pinia: 3.0.4(typescript@5.9.3)(vue@3.5.32(typescript@5.9.3))
     transitivePeerDependencies:
       - magicast
