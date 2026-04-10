@@ -5,7 +5,9 @@ const { selectedRange } = storeToRefs(store)
 const { data, error, isPending } = useQuery({
   key: () => ['doublesTraining', selectedRange.value],
   query: () =>
-    $fetch(`/api/games/doubles-training?range=${selectedRange.value}`),
+    $fetch<DoublesTrainingGame[]>('/api/games/doubles-training', {
+      query: { range: selectedRange.value },
+    }),
 })
 
 const isEmpty = computed(() => !isPending.value && !games.value.length)

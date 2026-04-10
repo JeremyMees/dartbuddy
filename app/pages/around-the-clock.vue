@@ -5,7 +5,9 @@ const { selectedRange } = storeToRefs(store)
 const { data, error, isPending } = useQuery({
   key: () => ['aroundTheClock', selectedRange.value],
   query: () =>
-    $fetch(`/api/games/around-the-clock?range=${selectedRange.value}`),
+    $fetch<AroundTheClockGame[]>('/api/games/around-the-clock', {
+      query: { range: selectedRange.value },
+    }),
 })
 
 const isEmpty = computed(() => !isPending.value && !games.value.length)

@@ -5,7 +5,9 @@ const { selectedRange } = storeToRefs(store)
 const { data, error, isPending } = useQuery({
   key: () => ['singlesTraining', selectedRange.value],
   query: () =>
-    $fetch(`/api/games/singles-training?range=${selectedRange.value}`),
+    $fetch<SinglesTrainingGame[]>('/api/games/singles-training', {
+      query: { range: selectedRange.value },
+    }),
 })
 
 const maxScore = 21 * 9
