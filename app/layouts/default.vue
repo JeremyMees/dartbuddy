@@ -1,9 +1,46 @@
 <script setup lang="ts">
-const queryCache = useQueryCache()
-const rootStore = useRootStore()
+import { useQueryClient } from '@tanstack/vue-query'
 
-const { selectedRange, selectedGameType, isDrawerOpen, formTitle } =
-  storeToRefs(rootStore)
+const queryClient = useQueryClient()
+const route = useRoute()
+const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
+
+const selectedGameType = ref<GameType>('scoreTraining')
+const formTitle = ref<string>()
+const isDrawerOpen = ref<boolean>(false)
+
+watch(isDrawerOpen, (open) => {
+  if (!open) {
+    formTitle.value = undefined
+  }
+})
+
+watch(
+  () => route.path,
+  (path) => {
+    const normalizedPath = path.replace(/\/+$/, '') || '/'
+    const gameType =
+      normalizedPath === '/'
+        ? 'scoreTraining'
+        : (kebabToCamel(normalizedPath.slice(1)) as GameType)
+
+    selectedGameType.value = gameType
+  },
+  { immediate: true },
+)
+
+watch(selectedGameType, (newGameType) => {
+  let path = `/${camelToKebab(newGameType)}`
+
+  if (path === '/score-training') {
+    path = '/'
+  }
+
+  navigateTo({
+    path,
+    query: { range: selectedRange.value },
+  })
+})
 </script>
 
 <template>
@@ -49,7 +86,9 @@ const { selectedRange, selectedGameType, isDrawerOpen, formTitle } =
                 v-model="formTitle"
                 @created="
                   () => {
-                    queryCache.invalidateQueries({ key: [selectedGameType] })
+                    queryClient.invalidateQueries({
+                      queryKey: [selectedGameType],
+                    })
                     isDrawerOpen = false
                   }
                 "

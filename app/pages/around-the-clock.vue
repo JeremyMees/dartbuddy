@@ -1,10 +1,11 @@
 <script setup lang="ts">
-const store = useRootStore()
-const { selectedRange } = storeToRefs(store)
+import { useQuery } from '@tanstack/vue-query'
+
+const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
 
 const { data, error, isPending } = useQuery({
-  key: () => ['aroundTheClock', selectedRange.value],
-  query: () =>
+  queryKey: ['aroundTheClock', selectedRange.value],
+  queryFn: () =>
     $fetch<AroundTheClockGame[]>('/api/games/around-the-clock', {
       query: { range: selectedRange.value },
     }),

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-const store = useRootStore()
-const { selectedRange } = storeToRefs(store)
+import { useQuery } from '@tanstack/vue-query'
 
-const { data, error, isPending } = useQuery({
-  key: () => ['scoreTraining', selectedRange.value],
-  query: () =>
+const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
+
+const { data, isPending, error } = useQuery({
+  queryKey: ['scoreTraining', selectedRange.value],
+  queryFn: () =>
     $fetch<ScoreTrainingGame[]>('/api/games/score-training', {
       query: { range: selectedRange.value },
     }),
