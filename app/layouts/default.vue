@@ -29,18 +29,24 @@ watch(
   { immediate: true },
 )
 
-watch(selectedGameType, (newGameType) => {
-  let path = `/${camelToKebab(newGameType)}`
+watch(
+  selectedGameType,
+  (newGameType) => {
+    let path = `/${camelToKebab(newGameType)}`
 
-  if (path === '/score-training') {
-    path = '/'
-  }
+    if (path === '/score-training') {
+      path = '/'
+    }
 
-  navigateTo({
-    path,
-    query: { range: selectedRange.value },
-  })
-})
+    if (route.path === path) return
+
+    navigateTo({
+      path,
+      query: { range: selectedRange.value },
+    })
+  },
+  { immediate: true },
+)
 </script>
 
 <template>

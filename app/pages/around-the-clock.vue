@@ -11,7 +11,9 @@ const { data, error, isPending } = useQuery({
     }),
 })
 
-const isEmpty = computed(() => !isPending.value && !games.value.length)
+const throttledIsPending = refThrottled(isPending, 1000)
+
+const isEmpty = computed(() => !throttledIsPending.value && !games.value.length)
 
 const games = computed(() => data.value ?? [])
 
@@ -61,7 +63,7 @@ const scoreTrend = computed(() =>
 
     <template v-else>
       <div class="grid grid-cols-2 divide-x">
-        <template v-if="isPending">
+        <template v-if="throttledIsPending">
           <SkeletonStatCard has-badge />
           <SkeletonStatCard has-label />
           <SkeletonStatCard has-label />
@@ -118,7 +120,7 @@ const scoreTrend = computed(() =>
           <CardTitle>Score Trend</CardTitle>
         </CardHeader>
         <CardContent>
-          <Skeleton v-if="isPending" class="w-full aspect-2/1" />
+          <Skeleton v-if="throttledIsPending" class="w-full aspect-2/1" />
           <LineChart
             v-else
             :data="scoreTrend"
@@ -135,7 +137,7 @@ const scoreTrend = computed(() =>
           <CardTitle>Score Distribution</CardTitle>
         </CardHeader>
         <CardContent>
-          <Skeleton v-if="isPending" class="w-full aspect-2/1" />
+          <Skeleton v-if="throttledIsPending" class="w-full aspect-2/1" />
           <BarChart
             v-else
             :data="scoreDistribution"
@@ -153,7 +155,7 @@ const scoreTrend = computed(() =>
         </CardHeader>
         <CardContent>
           <ul class="divide-y">
-            <template v-if="isPending">
+            <template v-if="throttledIsPending">
               <SkeletonAroundTheClockRow v-for="i in 5" :key="i" />
             </template>
             <template v-else-if="recentGames.length">
