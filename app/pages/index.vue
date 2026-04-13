@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query'
-
 const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
 
-const { data, isPending, error } = useQuery({
-  queryKey: ['scoreTraining', selectedRange.value],
+const { data, isLoading, error } = useSsrQuery({
+  queryKey: computed(() => ['scoreTraining', selectedRange.value]),
   queryFn: () =>
     $fetch<ScoreTrainingGame[]>('/api/games/score-training', {
       query: { range: selectedRange.value },
     }),
 })
 
-const isEmpty = computed(() => !isPending.value && !games.value.length)
+const isEmpty = computed(() => !isLoading.value && !games.value.length)
 
 const games = computed(() => data.value ?? [])
 
@@ -64,7 +62,7 @@ const scoreTrend = computed(() =>
 
     <template v-else>
       <div class="grid grid-cols-2 divide-x">
-        <template v-if="isPending">
+        <template v-if="isLoading">
           <SkeletonStatCard has-badge />
           <SkeletonStatCard has-label />
           <SkeletonStatCard />
@@ -101,7 +99,7 @@ const scoreTrend = computed(() =>
           <CardTitle>Score Trend</CardTitle>
         </CardHeader>
         <CardContent>
-          <Skeleton v-if="isPending" class="w-full aspect-2/1" />
+          <Skeleton v-if="isLoading" class="w-full aspect-2/1" />
           <LineChart
             v-else
             :data="scoreTrend"
@@ -129,7 +127,7 @@ const scoreTrend = computed(() =>
               </TableRow>
             </TableHeader>
             <TableBody>
-              <template v-if="isPending">
+              <template v-if="isLoading">
                 <SkeletonScoreTrainingRow v-for="i in 5" :key="i" />
               </template>
               <template v-else-if="recentGames.length">
