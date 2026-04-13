@@ -6,9 +6,16 @@ const emit = defineEmits<{ created: [] }>()
 const formTitle = defineModel<string>()
 const selectGameType = ref<GameType>()
 
-function setGameType(type: { value: GameType; label: string } | undefined) {
+async function setGameType(
+  type: { value: GameType; label: string } | undefined,
+) {
   selectGameType.value = type ? type.value : undefined
   formTitle.value = type ? type.label : undefined
+
+  if (type) {
+    await nextTick()
+    document.querySelector<HTMLInputElement>('form input')?.focus()
+  }
 }
 </script>
 
