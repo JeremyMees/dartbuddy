@@ -3,10 +3,13 @@ const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
 
 const { data, error, isPending } = useSsrQuery({
   queryKey: computed(() => ['singlesTraining', selectedRange.value]),
-  queryFn: () =>
-    $fetch<SinglesTrainingGame[]>('/api/games/singles-training', {
-      query: { range: selectedRange.value },
-    }),
+  queryFn: delayedFunction(
+    () =>
+      $fetch<SinglesTrainingGame[]>('/api/games/singles-training', {
+        query: { range: selectedRange.value },
+      }),
+    1000,
+  ),
 })
 
 const maxScore = 21 * 9

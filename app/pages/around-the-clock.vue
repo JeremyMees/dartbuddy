@@ -3,10 +3,13 @@ const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
 
 const { data, error, isPending } = useSsrQuery({
   queryKey: computed(() => ['aroundTheClock', selectedRange.value]),
-  queryFn: () =>
-    $fetch<AroundTheClockGame[]>('/api/games/around-the-clock', {
-      query: { range: selectedRange.value },
-    }),
+  queryFn: delayedFunction(
+    () =>
+      $fetch<AroundTheClockGame[]>('/api/games/around-the-clock', {
+        query: { range: selectedRange.value },
+      }),
+    1000,
+  ),
 })
 
 const isEmpty = computed(() => !isPending.value && !games.value.length)
