@@ -5,7 +5,7 @@ const queryClient = useQueryClient()
 const route = useRoute()
 const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
 
-const selectedGameType = ref<GameType>('scoreTraining')
+const selectedGameType = ref<GameType>('matchGame')
 const formTitle = ref<string>()
 const isDrawerOpen = ref<boolean>(false)
 
@@ -21,7 +21,7 @@ watch(
     const normalizedPath = path.replace(/\/+$/, '') || '/'
     const gameType =
       normalizedPath === '/'
-        ? 'scoreTraining'
+        ? 'matchGame'
         : (kebabToCamel(normalizedPath.slice(1)) as GameType)
 
     selectedGameType.value = gameType
@@ -34,7 +34,7 @@ watch(
   (newGameType) => {
     let path = `/${camelToKebab(newGameType)}`
 
-    if (path === '/score-training') {
+    if (path === '/match-game') {
       path = '/'
     }
 
