@@ -112,3 +112,18 @@ export function getScoreAverageByDate<T extends { createdAt: string | Date }>(
     {},
   )
 }
+
+export function getPercentage<T>(
+  items: T[],
+  dividendKey: keyof T,
+  divisorKey: keyof T,
+): number {
+  if (items.length === 0) return 0
+
+  const averageDividend = getAverage(items, dividendKey)
+  const averageDivisor = getAverage(items, divisorKey)
+
+  if (averageDivisor === 0) return 0
+
+  return Math.round((averageDividend / averageDivisor) * 100)
+}

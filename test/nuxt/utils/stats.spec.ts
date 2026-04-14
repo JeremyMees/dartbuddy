@@ -389,4 +389,48 @@ describe('Stat utils', () => {
       expect(averages).toHaveProperty('05/01/26')
     })
   })
+
+  describe('getPercentage', () => {
+    it('should return the correct percentage', () => {
+      const items = [
+        { hits: 5, thrown: 10 },
+        { hits: 3, thrown: 5 },
+        { hits: 0, thrown: 2 },
+      ]
+
+      const percentage = getPercentage(items, 'hits', 'thrown')
+
+      expect(percentage).toBe(50)
+    })
+
+    it('should return zero when there are no items', () => {
+      const items: { hits: number; thrown: number }[] = []
+
+      const percentage = getPercentage(items, 'hits', 'thrown')
+
+      expect(percentage).toBe(0)
+    })
+
+    it('should return zero when divisor sum is zero', () => {
+      const items = [
+        { hits: 5, thrown: 0 },
+        { hits: 3, thrown: 0 },
+      ]
+
+      const percentage = getPercentage(items, 'hits', 'thrown')
+
+      expect(percentage).toBe(0)
+    })
+
+    it('should round the percentage to the nearest integer', () => {
+      const items = [
+        { hits: 2, thrown: 4 },
+        { hits: 4, thrown: 8 },
+      ]
+
+      const percentage = getPercentage(items, 'hits', 'thrown')
+
+      expect(percentage).toBe(50)
+    })
+  })
 })
