@@ -22,47 +22,79 @@ ChartJS.register(
   Legend,
 )
 
-const props = defineProps<{
+type LineSeries = {
+  label: string
   data: Record<string, number>
+  borderColor?: string
+  pointBackgroundColor?: string
+  sort?: (a: [string, number], b: [string, number]) => number
+}
+
+const props = defineProps<{
+  data?: Record<string, number>
+  datasets?: LineSeries[]
   xLabel: string
   yLabel: string
   datasetLabel?: string
   sort?: (a: [string, number], b: [string, number]) => number
 }>()
 
+const colors = ['#D97757', '#9c87f5', '#1a1915', '#2f2b48', '#b4552d']
+
+const normalizedDatasets = computed<LineSeries[]>(() => {
+  if (props.datasets?.length) return props.datasets
+
+  return [
+    {
+      label: props.datasetLabel ?? '',
+      data: props.data ?? {},
+      borderColor: colors[0],
+      pointBackgroundColor: colors[0],
+      sort: props.sort,
+    },
+  ]
+})
+
 const chartData = computed(() => {
-  let entries = Object.entries(props.data)
+  const sortedEntriesBySeries = normalizedDatasets.value.map((series) => {
+    const entries = Object.entries(series.data)
+    if (series.sort) entries.sort(series.sort)
+    return entries
+  })
 
-  if (props.sort) {
-    entries = entries.sort(props.sort)
-  }
-
-  const labels = entries.map(([label]) => label)
-  const values = entries.map(([, value]) => value)
+  const labels = Array.from(
+    new Set(
+      sortedEntriesBySeries.flatMap((entries) =>
+        entries.map(([label]) => label),
+      ),
+    ),
+  )
 
   return {
     labels,
-    datasets: [
-      {
-        label: props.datasetLabel ?? '',
-        data: values,
-        borderColor: '#D97757',
-        pointBackgroundColor: '#D97757',
-        pointRadius: 4,
-        pointHoverRadius: 6,
-        borderWidth: 2,
-        tension: 0.35,
-      },
-    ],
+    datasets: normalizedDatasets.value.map((series, index) => ({
+      label: series.label,
+      data: labels.map((label) => series.data[label] ?? null),
+      borderColor: series.borderColor ?? colors[index % colors.length],
+      pointBackgroundColor:
+        series.pointBackgroundColor ??
+        series.borderColor ??
+        colors[index % colors.length],
+      pointRadius: 4,
+      pointHoverRadius: 6,
+      borderWidth: 2,
+      tension: 0.35,
+      spanGaps: true,
+    })),
   }
 })
 
-const chartOptions: ChartOptions<'line'> = {
+const chartOptions = computed<ChartOptions<'line'>>(() => ({
   responsive: true,
   maintainAspectRatio: true,
   plugins: {
     legend: {
-      display: false,
+      display: normalizedDatasets.value.length > 1,
     },
   },
   scales: {
@@ -83,7 +115,7 @@ const chartOptions: ChartOptions<'line'> = {
       },
     },
   },
-}
+}))
 </script>
 
 <template>
