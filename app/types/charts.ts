@@ -14,3 +14,10 @@ export interface BarDataSet {
   backgroundColor?: string
   sort?: SortFunction
 }
+
+export interface PieDataSet {
+  label: string
+  data: Record<string, number>
+  backgroundColor?: string | string[]
+  sort?: SortFunction
+}
