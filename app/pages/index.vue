@@ -1,49 +1,78 @@
 <script setup lang="ts">
 const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
 
-const { data, isLoading, error } = useSsrQuery({
-  queryKey: computed(() => ['scoreTraining', selectedRange.value]),
+const { data, isPending, error } = useSsrQuery({
+  queryKey: computed(() => ['matchGame', selectedRange.value]),
   queryFn: delayedFunction(
     () =>
-      $fetch<ScoreTrainingGame[]>('/api/games/score-training', {
+      $fetch<MatchGame[]>('/api/games/match-game', {
         query: { range: selectedRange.value },
       }),
     1000,
   ),
 })
 
-const isEmpty = computed(() => !isLoading.value && !games.value.length)
+const isEmpty = computed(() => !isPending.value && !games.value.length)
 
 const games = computed(() => data.value ?? [])
 
-const averageScore = computed(() => ({
-  percent: getAverage(games.value, 'totalScore'),
-  trend: getTrendDirection(games.value, 'totalScore'),
-}))
-
 const recentGames = computed(() => getRecentGames(games.value))
 
-const bestGame = computed(() => getBestGame(games.value, 'totalScore'))
+const winRate = computed(() => {
+  if (!games.value?.length) return 0
+  const wins = games.value.filter((g) => g.hasWon).length
+  return Math.round((wins / games.value.length) * 100)
+})
 
-const bestThreeDarts = computed(() =>
-  games.value.reduce((best, { threeDartAverage }) => {
-    return threeDartAverage > best ? threeDartAverage : best
-  }, 0),
+const checkoutStats = computed(() => ({
+  hits: games.value.reduce((a, g) => a + g.checkoutHits, 0),
+  thrown: games.value.reduce((a, g) => a + g.checkoutThrown, 0),
+  percent: getPercentage(games.value, 'checkoutHits', 'checkoutThrown'),
+}))
+
+const threeDartsAverage = computed(() =>
+  getAverage(games.value, 'threeDartAverage'),
 )
 
-const thrownOneEighties = computed(() =>
-  games.value.reduce((count, game) => count + game.oneEightyCount, 0),
+const firstNineDartAverage = computed(() =>
+  getAverage(games.value, 'firstNineDartAverage'),
 )
 
-const highestThrow = computed(() => getHighest(games.value, 'highestScore'))
+const highestFinish = computed(() => getAverage(games.value, 'highestFinish'))
 
-const averageHighestThrow = computed(() =>
-  getAverage(games.value, 'highestScore'),
-)
+const highestScore = computed(() => getAverage(games.value, 'highestScore'))
 
-const scoreTrend = computed(() =>
-  getScoreAverageByDate(games.value, 'totalScore'),
-)
+const scoreTrend = computed(() => [
+  {
+    label: '3-Dart Average',
+    data: Object.fromEntries(
+      games.value.map((g, i) => [`M${i + 1}`, g.threeDartAverage]),
+    ),
+  },
+  {
+    label: 'First 9-Dart Average',
+    data: Object.fromEntries(
+      games.value.map((g, i) => [`M${i + 1}`, g.firstNineDartAverage]),
+    ),
+  },
+])
+
+const winLossDistribution = computed(() => {
+  const distribution: Record<string, number> = {}
+
+  games.value.forEach(({ opponent, hasWon }) => {
+    const key = hasWon ? `Won vs ${opponent}` : `Lost vs ${opponent}`
+    distribution[key] ??= 0
+    distribution[key] += 1
+  })
+
+  return [
+    {
+      label: 'Win/Loss Distribution',
+      data: distribution,
+    },
+  ]
+})
 </script>
 
 <template>
@@ -65,9 +94,9 @@ const scoreTrend = computed(() =>
 
     <template v-else>
       <div class="grid grid-cols-2 divide-x">
-        <template v-if="isLoading">
-          <SkeletonStatCard has-badge />
-          <SkeletonStatCard has-label />
+        <template v-if="isPending">
+          <SkeletonStatCard />
+          <SkeletonStatCard />
           <SkeletonStatCard />
           <SkeletonStatCard />
           <SkeletonStatCard />
@@ -75,25 +104,16 @@ const scoreTrend = computed(() =>
         </template>
 
         <template v-else>
-          <StatCard label="Avg Score" :stat="averageScore.percent">
-            <template #footer>
-              <TrendIndicator v-bind="averageScore.trend" />
-            </template>
-          </StatCard>
+          <StatCard label="Win Rate" :stat="winRate" percentage />
           <StatCard
-            label="Best Game"
-            :stat="bestGame ? bestGame.totalScore : 0"
-          >
-            <template v-if="bestGame" #footer>
-              <span class="text-xs text-muted-foreground">
-                {{ formatReadDate(bestGame.createdAt) }}
-              </span>
-            </template>
-          </StatCard>
-          <StatCard label="Best 3-Dart Avg" :stat="bestThreeDarts" />
-          <StatCard label="Total 180S" :stat="thrownOneEighties" />
-          <StatCard label="Highest Throw" :stat="highestThrow" />
-          <StatCard label="Avg Highest throw" :stat="averageHighestThrow" />
+            label="Checkout %"
+            :stat="checkoutStats.percent"
+            percentage
+          />
+          <StatCard label="Highest Score" :stat="highestScore" />
+          <StatCard label="Highest Finish" :stat="highestFinish" />
+          <StatCard label="3-Dart Avg" :stat="threeDartsAverage" />
+          <StatCard label="First 9-Dart Avg" :stat="firstNineDartAverage" />
         </template>
       </div>
 
@@ -102,15 +122,23 @@ const scoreTrend = computed(() =>
           <CardTitle>Score Trend</CardTitle>
         </CardHeader>
         <CardContent>
-          <Skeleton v-if="isLoading" class="w-full aspect-2/1" />
+          <Skeleton v-if="isPending" class="w-full aspect-2/1" />
           <LineChart
             v-else
-            :data="scoreTrend"
-            x-label="Date"
+            :datasets="scoreTrend"
+            x-label="Match"
             y-label="Score"
-            dataset-label="Score Trend"
-            :sort="sortEntriesByDate"
           />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Win/Loss</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Skeleton v-if="isPending" class="w-full aspect-2/1" />
+          <PieChart v-else :datasets="winLossDistribution" />
         </CardContent>
       </Card>
 
@@ -123,14 +151,14 @@ const scoreTrend = computed(() =>
             <TableHeader>
               <TableRow>
                 <TableHead>Date</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Highest</TableHead>
+                <TableHead>Won</TableHead>
+                <TableHead>Opponent</TableHead>
                 <TableHead>3-Dart Avg</TableHead>
-                <TableHead>180S</TableHead>
+                <TableHead>Checkout %</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              <template v-if="isLoading">
+              <template v-if="isPending">
                 <SkeletonScoreTrainingRow v-for="i in 5" :key="i" />
               </template>
               <template v-else-if="recentGames.length">
@@ -140,10 +168,16 @@ const scoreTrend = computed(() =>
                   class="text-sm text-muted-foreground"
                 >
                   <TableCell>{{ formatReadDate(game.createdAt) }}</TableCell>
-                  <TableCell>{{ game.totalScore }}</TableCell>
-                  <TableCell>{{ game.highestScore }}</TableCell>
+                  <TableCell>{{ game.hasWon ? 'Yes' : 'No' }}</TableCell>
+                  <TableCell>{{ game.opponent }}</TableCell>
                   <TableCell>{{ game.threeDartAverage }}</TableCell>
-                  <TableCell>{{ game.oneEightyCount }}</TableCell>
+                  <TableCell
+                    >{{
+                      Math.round(
+                        (game.checkoutHits / game.checkoutThrown) * 100,
+                      )
+                    }}%</TableCell
+                  >
                 </TableRow>
               </template>
             </TableBody>

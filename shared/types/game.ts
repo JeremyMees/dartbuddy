@@ -5,6 +5,7 @@ export type GameType =
   | 'singlesTraining'
   | 'doublesTraining'
   | 'scoreTraining'
+  | 'matchGame'
 
 export interface GameData<T> {
   range: GameRange

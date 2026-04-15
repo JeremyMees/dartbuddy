@@ -3,6 +3,7 @@ export const gameTypes = [
   'singlesTraining',
   'doublesTraining',
   'scoreTraining',
+  'matchGame',
 ] as const
 
 export const gameTypeOptions: {
@@ -13,6 +14,7 @@ export const gameTypeOptions: {
   { value: 'singlesTraining', label: 'Singles Training' },
   { value: 'doublesTraining', label: 'Doubles Training' },
   { value: 'scoreTraining', label: 'Score Training' },
+  { value: 'matchGame', label: 'Match Game' },
 ]
 
 export const gameRanges = ['allTime', 'lastMonth', 'lastWeek', 'today'] as const

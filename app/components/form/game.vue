@@ -49,4 +49,9 @@ async function setGameType(
     @back="setGameType(undefined)"
     @created="emit('created')"
   />
+  <FormMatchGame
+    v-else-if="selectGameType === 'matchGame'"
+    @back="setGameType(undefined)"
+    @created="emit('created')"
+  />
 </template>

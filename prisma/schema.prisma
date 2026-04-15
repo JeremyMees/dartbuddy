@@ -39,3 +39,19 @@ model ScoreTrainingGame {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
+
+model MatchGame {
+  id                   String   @id @default(uuid())
+  hasWon               Boolean
+  opponent             String
+  threeDartAverage     Float
+  firstNineDartAverage Float
+  checkoutThrown       Int
+  checkoutHits         Int
+  highestFinish        Int
+  highestScore         Int
+  bestLeg              Int
+  worstLeg             Int
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
