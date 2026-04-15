@@ -91,7 +91,7 @@ export function getRecentGames<T extends { createdAt: string | Date }>(
 export function getScoreAverageByDate<T extends { createdAt: string | Date }>(
   games: T[],
   key: keyof T,
-): Record<string, number> {
+): { label: string; data: Record<string, number> }[] {
   const grouped = games.reduce<Record<string, number[]>>((acc, game) => {
     const date = formatDate(new Date(game.createdAt))
     const score = game[key] as unknown as number
@@ -104,13 +104,23 @@ export function getScoreAverageByDate<T extends { createdAt: string | Date }>(
     return acc
   }, {})
 
-  return Object.entries(grouped).reduce<Record<string, number>>(
-    (acc, [date, scores]) => {
-      acc[date] = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
-      return acc
+  const sortedAverages = Object.entries(grouped)
+    .map(([date, scores]): [string, number] => [
+      date,
+      Math.round(scores.reduce((a, b) => a + b, 0) / scores.length),
+    ])
+    .sort((a, b) => parseChartDate(a[0]) - parseChartDate(b[0]))
+
+  if (!sortedAverages.length) {
+    return []
+  }
+
+  return [
+    {
+      label: 'Score Trend',
+      data: Object.fromEntries(sortedAverages),
     },
-    {},
-  )
+  ]
 }
 
 export function getPercentage<T>(

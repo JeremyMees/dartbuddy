@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { chartColors } from '#shared/constants/charts'
+import type { LineDataSet } from '~/types/charts'
 import { Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -22,41 +24,14 @@ ChartJS.register(
   Legend,
 )
 
-type LineSeries = {
-  label: string
-  data: Record<string, number>
-  borderColor?: string
-  pointBackgroundColor?: string
-  sort?: (a: [string, number], b: [string, number]) => number
-}
-
 const props = defineProps<{
-  data?: Record<string, number>
-  datasets?: LineSeries[]
+  datasets: LineDataSet[]
   xLabel: string
   yLabel: string
-  datasetLabel?: string
-  sort?: (a: [string, number], b: [string, number]) => number
 }>()
 
-const colors = ['#D97757', '#9c87f5', '#1a1915', '#2f2b48', '#b4552d']
-
-const normalizedDatasets = computed<LineSeries[]>(() => {
-  if (props.datasets?.length) return props.datasets
-
-  return [
-    {
-      label: props.datasetLabel ?? '',
-      data: props.data ?? {},
-      borderColor: colors[0],
-      pointBackgroundColor: colors[0],
-      sort: props.sort,
-    },
-  ]
-})
-
 const chartData = computed(() => {
-  const sortedEntriesBySeries = normalizedDatasets.value.map((series) => {
+  const sortedEntriesBySeries = props.datasets.map((series) => {
     const entries = Object.entries(series.data)
     if (series.sort) entries.sort(series.sort)
     return entries
@@ -72,14 +47,15 @@ const chartData = computed(() => {
 
   return {
     labels,
-    datasets: normalizedDatasets.value.map((series, index) => ({
+    datasets: props.datasets.map((series, index) => ({
       label: series.label,
       data: labels.map((label) => series.data[label] ?? null),
-      borderColor: series.borderColor ?? colors[index % colors.length],
+      borderColor:
+        series.borderColor ?? chartColors[index % chartColors.length],
       pointBackgroundColor:
         series.pointBackgroundColor ??
         series.borderColor ??
-        colors[index % colors.length],
+        chartColors[index % chartColors.length],
       pointRadius: 4,
       pointHoverRadius: 6,
       borderWidth: 2,
@@ -94,7 +70,7 @@ const chartOptions = computed<ChartOptions<'line'>>(() => ({
   maintainAspectRatio: true,
   plugins: {
     legend: {
-      display: normalizedDatasets.value.length > 1,
+      display: props.datasets.length > 1,
     },
   },
   scales: {

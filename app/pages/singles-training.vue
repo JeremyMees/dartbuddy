@@ -83,11 +83,9 @@ const scoreTrend = computed(() => getScoreAverageByDate(games.value, 'score'))
           <Skeleton v-if="isPending" class="w-full aspect-2/1" />
           <LineChart
             v-else
-            :data="scoreTrend"
+            :datasets="scoreTrend"
             x-label="Date"
             y-label="Score"
-            dataset-label="Score Trend"
-            :sort="sortEntriesByDate"
           />
         </CardContent>
       </Card>

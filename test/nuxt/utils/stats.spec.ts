@@ -280,7 +280,9 @@ describe('Stat utils', () => {
 
       const averages = getScoreAverageByDate(games, 'score')
 
-      expect(averages).toEqual({ '01/01/26': 20 })
+      expect(averages).toEqual([
+        { label: 'Score Trend', data: { '01/01/26': 20 } },
+      ])
     })
 
     it('should return correct averages for multiple dates', () => {
@@ -293,7 +295,9 @@ describe('Stat utils', () => {
 
       const averages = getScoreAverageByDate(games, 'score')
 
-      expect(averages).toEqual({ '01/01/26': 15, '02/01/26': 35 })
+      expect(averages).toEqual([
+        { label: 'Score Trend', data: { '01/01/26': 15, '02/01/26': 35 } },
+      ])
     })
 
     it('should return an empty object for an empty array', () => {
@@ -301,7 +305,7 @@ describe('Stat utils', () => {
 
       const averages = getScoreAverageByDate(games, 'score')
 
-      expect(averages).toEqual({})
+      expect(averages).toEqual([])
     })
 
     it('should handle Date objects in addition to string dates', () => {
@@ -313,7 +317,9 @@ describe('Stat utils', () => {
 
       const averages = getScoreAverageByDate(games, 'score')
 
-      expect(averages).toEqual({ '01/01/26': 15, '02/01/26': 30 })
+      expect(averages).toEqual([
+        { label: 'Score Trend', data: { '01/01/26': 15, '02/01/26': 30 } },
+      ])
     })
 
     it('should skip NaN values when calculating averages', () => {
@@ -325,7 +331,9 @@ describe('Stat utils', () => {
 
       const averages = getScoreAverageByDate(games, 'score')
 
-      expect(averages).toEqual({ '01/01/26': 15 })
+      expect(averages).toEqual([
+        { label: 'Score Trend', data: { '01/01/26': 15 } },
+      ])
     })
 
     it('should round averages to nearest integer', () => {
@@ -336,7 +344,9 @@ describe('Stat utils', () => {
 
       const averages = getScoreAverageByDate(games, 'score')
 
-      expect(averages).toEqual({ '01/01/26': 11 })
+      expect(averages).toEqual([
+        { label: 'Score Trend', data: { '01/01/26': 11 } },
+      ])
     })
 
     it('should handle a single game per date', () => {
@@ -347,7 +357,9 @@ describe('Stat utils', () => {
 
       const averages = getScoreAverageByDate(games, 'score')
 
-      expect(averages).toEqual({ '01/01/26': 25, '02/01/26': 35 })
+      expect(averages).toEqual([
+        { label: 'Score Trend', data: { '01/01/26': 25, '02/01/26': 35 } },
+      ])
     })
 
     it('should group games by formatted date correctly', () => {
@@ -359,7 +371,9 @@ describe('Stat utils', () => {
 
       const averages = getScoreAverageByDate(games, 'score')
 
-      expect(averages).toEqual({ '01/01/26': 200 })
+      expect(averages).toEqual([
+        { label: 'Score Trend', data: { '01/01/26': 200 } },
+      ])
     })
 
     it('should work with different field names', () => {
@@ -371,7 +385,9 @@ describe('Stat utils', () => {
 
       const averages = getScoreAverageByDate(games, 'points')
 
-      expect(averages).toEqual({ '01/01/26': 75, '02/01/26': 75 })
+      expect(averages).toEqual([
+        { label: 'Score Trend', data: { '01/01/26': 75, '02/01/26': 75 } },
+      ])
     })
 
     it('should maintain date order based on input', () => {
@@ -383,10 +399,11 @@ describe('Stat utils', () => {
 
       const averages = getScoreAverageByDate(games, 'score')
 
-      expect(Object.keys(averages)).toHaveLength(3)
-      expect(averages).toHaveProperty('01/01/26')
-      expect(averages).toHaveProperty('03/01/26')
-      expect(averages).toHaveProperty('05/01/26')
+      expect(averages).toHaveLength(1)
+      expect(Object.keys(averages[0].data)).toHaveLength(3)
+      expect(averages[0].data).toHaveProperty('01/01/26')
+      expect(averages[0].data).toHaveProperty('03/01/26')
+      expect(averages[0].data).toHaveProperty('05/01/26')
     })
   })
 
