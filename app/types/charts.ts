@@ -7,3 +7,10 @@ export interface LineDataSet {
   pointBackgroundColor?: string
   sort?: SortFunction
 }
+
+export interface BarDataSet {
+  label: string
+  data: Record<string, number>
+  backgroundColor?: string
+  sort?: SortFunction
+}

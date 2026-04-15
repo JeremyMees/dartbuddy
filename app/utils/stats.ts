@@ -68,12 +68,31 @@ export function getBestGame<T>(games: T[], key: keyof T): T | null {
 export function getScoreDistribution<T>(
   games: T[],
   key: keyof T,
-): Record<string, number> {
-  return games.reduce<Record<string, number>>((distribution, game) => {
-    distribution[game[key] as unknown as string] =
-      (distribution[game[key] as unknown as string] ?? 0) + 1
-    return distribution
-  }, {})
+): {
+  label: string
+  data: Record<string, number>
+  sort: (a: [string, number], b: [string, number]) => number
+}[] {
+  const distribution = games.reduce<Record<string, number>>(
+    (distribution, game) => {
+      distribution[game[key] as unknown as string] =
+        (distribution[game[key] as unknown as string] ?? 0) + 1
+      return distribution
+    },
+    {},
+  )
+
+  if (!Object.keys(distribution).length) {
+    return []
+  }
+
+  return [
+    {
+      label: 'Score Distribution',
+      data: distribution,
+      sort: sortEntriesByNumericValue,
+    },
+  ]
 }
 
 export function getRecentGames<T extends { createdAt: string | Date }>(

@@ -102,11 +102,9 @@ const scoreTrend = computed(() =>
           <Skeleton v-if="isPending" class="w-full aspect-2/1" />
           <BarChart
             v-else
-            :data="scoreDistribution"
+            :datasets="scoreDistribution"
             x-label="Score"
             y-label="Times Thrown"
-            dataset-label="Score Distribution"
-            :sort="sortEntriesByNumericValue"
           />
         </CardContent>
       </Card>

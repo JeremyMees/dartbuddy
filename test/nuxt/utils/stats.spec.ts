@@ -207,11 +207,14 @@ describe('Stat utils', () => {
 
       const distribution = getScoreDistribution(games, 'score')
 
-      expect(distribution).toEqual({
+      expect(distribution).toHaveLength(1)
+      expect(distribution[0]?.label).toBe('Score Distribution')
+      expect(distribution[0]?.data).toEqual({
         '10': 2,
         '20': 2,
         '30': 1,
       })
+      expect(distribution[0]?.sort).toBeTypeOf('function')
     })
 
     it('should return an empty object for an empty array', () => {
@@ -219,7 +222,7 @@ describe('Stat utils', () => {
 
       const distribution = getScoreDistribution(games, 'score')
 
-      expect(distribution).toEqual({})
+      expect(distribution).toEqual([])
     })
   })
 

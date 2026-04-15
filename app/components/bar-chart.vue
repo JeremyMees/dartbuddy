@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { chartColors } from '#shared/constants/charts'
+import type { BarDataSet } from '~/types/charts'
 import { Bar } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -14,43 +16,44 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const props = defineProps<{
-  data: Record<string, number>
+  datasets: BarDataSet[]
   xLabel: string
   yLabel: string
-  datasetLabel?: string
-  sort?: (a: [string, number], b: [string, number]) => number
 }>()
 
 const chartData = computed(() => {
-  let entries = Object.entries(props.data)
+  const sortedEntriesBySeries = props.datasets.map((series) => {
+    const entries = Object.entries(series.data)
+    if (series.sort) entries.sort(series.sort)
+    return entries
+  })
 
-  if (props.sort) {
-    entries = entries.sort(props.sort)
-  }
-
-  const labels = entries.map(([label]) => label)
-  const values = entries.map(([, value]) => value)
+  const labels = Array.from(
+    new Set(
+      sortedEntriesBySeries.flatMap((entries) =>
+        entries.map(([label]) => label),
+      ),
+    ),
+  )
 
   return {
     labels,
-    datasets: [
-      {
-        label: props.datasetLabel ?? '',
-        data: values,
-        backgroundColor: '#D97757',
-        borderColor: '#D97757',
-        borderRadius: 8,
-      },
-    ],
+    datasets: props.datasets.map((series, index) => ({
+      label: series.label,
+      data: labels.map((label) => series.data[label] ?? 0),
+      backgroundColor:
+        series.backgroundColor ?? chartColors[index % chartColors.length],
+      borderRadius: 8,
+    })),
   }
 })
 
-const chartOptions: ChartOptions<'bar'> = {
+const chartOptions = computed<ChartOptions<'bar'>>(() => ({
   responsive: true,
   maintainAspectRatio: true,
   plugins: {
     legend: {
-      display: false,
+      display: props.datasets.length > 1,
     },
   },
   scales: {
@@ -71,7 +74,7 @@ const chartOptions: ChartOptions<'bar'> = {
       },
     },
   },
-}
+}))
 </script>
 
 <template>
