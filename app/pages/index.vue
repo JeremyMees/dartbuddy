@@ -38,9 +38,9 @@ const firstNineDartAverage = computed(() =>
   getAverage(games.value, 'firstNineDartAverage'),
 )
 
-const highestFinish = computed(() => getAverage(games.value, 'highestFinish'))
+const highestFinish = computed(() => getHighest(games.value, 'highestFinish'))
 
-const highestScore = computed(() => getAverage(games.value, 'highestScore'))
+const highestScore = computed(() => getHighest(games.value, 'highestScore'))
 
 const scoreTrend = computed(() => [
   {
