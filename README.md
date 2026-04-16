@@ -31,6 +31,7 @@ At the moment, the data model is focused on training and analytics entries such 
 - singles training results
 - doubles training results
 - scoring training results
+- match game results
 
 These entries are used to calculate and display performance metrics instead of managing full live matches inside the app.
 
