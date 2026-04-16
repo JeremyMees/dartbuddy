@@ -57,6 +57,12 @@ const scoreTrend = computed(() => [
   },
 ])
 
+const winPercentage = computed(() => {
+  if (!games.value?.length) return 0
+  const wins = games.value.filter((g) => g.hasWon).length
+  return Math.round((wins / games.value.length) * 100)
+})
+
 const winLossDistribution = computed(() => {
   const distribution: Record<string, number> = {}
 
@@ -138,7 +144,12 @@ const winLossDistribution = computed(() => {
         </CardHeader>
         <CardContent>
           <Skeleton v-if="isPending" class="w-full aspect-2/1" />
-          <PieChart v-else :datasets="winLossDistribution" />
+          <PieChart
+            v-else
+            :datasets="winLossDistribution"
+            :center-text="winPercentage + '%'"
+            center-subtext="Win Rate"
+          />
         </CardContent>
       </Card>
 

@@ -9,13 +9,23 @@ import {
   Legend,
   ArcElement,
   type ChartOptions,
+  type Plugin,
 } from 'chart.js'
 
 ChartJS.register(ArcElement, Title, Tooltip, Legend)
 
 const props = defineProps<{
   datasets: PieDataSet[]
+  centerText?: string
+  centerSubtext?: string
 }>()
+
+const centerTextPlugin = computed<Plugin<'doughnut'>>(() => ({
+  id: 'centerText',
+  afterDraw(chart) {
+    chartCenterTextPlugin(chart, props.centerText, props.centerSubtext)
+  },
+}))
 
 const chartData = computed(() => {
   const sortedEntriesBySeries = props.datasets.map((series) => {
@@ -51,6 +61,7 @@ const chartData = computed(() => {
 const chartOptions = computed<ChartOptions<'doughnut'>>(() => ({
   responsive: true,
   maintainAspectRatio: true,
+  cutout: '70%',
   plugins: {
     legend: {
       display: true,
@@ -61,5 +72,9 @@ const chartOptions = computed<ChartOptions<'doughnut'>>(() => ({
 </script>
 
 <template>
-  <Doughnut :data="chartData" :options="chartOptions" />
+  <Doughnut
+    :data="chartData"
+    :options="chartOptions"
+    :plugins="[centerTextPlugin]"
+  />
 </template>
