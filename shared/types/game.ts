@@ -1,4 +1,9 @@
-export type GameRange = 'allTime' | 'lastMonth' | 'lastWeek' | 'today'
+export type GameRange =
+  | 'allTime'
+  | 'lastYear'
+  | 'lastMonth'
+  | 'lastWeek'
+  | 'today'
 
 export type GameType =
   | 'aroundTheClock'

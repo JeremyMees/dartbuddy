@@ -17,13 +17,20 @@ export const gameTypeOptions: {
   { value: 'matchGame', label: 'Match Game' },
 ]
 
-export const gameRanges = ['allTime', 'lastMonth', 'lastWeek', 'today'] as const
+export const gameRanges = [
+  'allTime',
+  'lastYear',
+  'lastMonth',
+  'lastWeek',
+  'today',
+] as const
 
 export const gameRangeOptions: {
   value: (typeof gameRanges)[number]
   label: string
 }[] = [
   { value: 'allTime', label: 'All Time' },
+  { value: 'lastYear', label: 'Last Year' },
   { value: 'lastMonth', label: 'Last Month' },
   { value: 'lastWeek', label: 'Last Week' },
   { value: 'today', label: 'Today' },
