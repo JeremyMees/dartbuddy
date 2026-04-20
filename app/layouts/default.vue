@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { useQueryClient } from '@tanstack/vue-query'
 
+defineProps<{
+  errorMessage?: string
+  isEmpty?: boolean
+}>()
+
 const queryClient = useQueryClient()
 const route = useRoute()
 const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
@@ -59,7 +64,24 @@ watch(
     </div>
 
     <main class="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-      <slot />
+      <ErrorMessage v-if="errorMessage" :message="errorMessage" />
+
+      <Empty v-else-if="isEmpty" class="w-full h-full">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Icon name="hugeicons:dart" />
+          </EmptyMedia>
+          <EmptyTitle>No games found</EmptyTitle>
+          <EmptyDescription>
+            It looks like you haven't played any games yet. Start a game to add
+            your stats here!
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+
+      <template v-else>
+        <slot />
+      </template>
     </main>
 
     <div class="shrink-0">

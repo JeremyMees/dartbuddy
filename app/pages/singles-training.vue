@@ -17,117 +17,101 @@ const maxScore = 21 * 9
 </script>
 
 <template>
-  <NuxtLayout>
-    <ErrorMessage v-if="error" :message="error.message" />
+  <NuxtLayout
+    :error-message="error?.message"
+    :is-empty="!isPending && !data?.totalGames"
+  >
+    <div class="grid grid-cols-2 divide-x">
+      <template v-if="isPending">
+        <SkeletonStatCard has-badge />
+        <SkeletonStatCard has-label />
+      </template>
 
-    <Empty v-else-if="!isPending && !data?.totalGames" class="w-full">
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <Icon name="hugeicons:dart" />
-        </EmptyMedia>
-        <EmptyTitle>No games found</EmptyTitle>
-        <EmptyDescription>
-          It looks like you haven't played any games yet. Start a game to add
-          your stats here!
-        </EmptyDescription>
-      </EmptyHeader>
-    </Empty>
+      <template v-else>
+        <StatCard label="Avg Score" :stat="data?.averageScore?.percent ?? 0">
+          <template #footer>
+            <TrendIndicator
+              v-bind="
+                data?.averageScore?.trend ?? {
+                  direction: 'normal',
+                  change: 0,
+                }
+              "
+            />
+          </template>
+        </StatCard>
 
-    <template v-else>
-      <div class="grid grid-cols-2 divide-x">
-        <template v-if="isPending">
-          <SkeletonStatCard has-badge />
-          <SkeletonStatCard has-label />
-        </template>
+        <StatCard label="Best Game" :stat="data?.bestGame?.score ?? 0">
+          <template v-if="data?.bestGame" #footer>
+            <span class="text-xs text-muted-foreground">
+              {{ formatReadDate(data.bestGame.createdAt) }}
+            </span>
+          </template>
+        </StatCard>
+      </template>
+    </div>
 
-        <template v-else>
-          <StatCard label="Avg Score" :stat="data?.averageScore?.percent ?? 0">
-            <template #footer>
-              <TrendIndicator
-                v-bind="
-                  data?.averageScore?.trend ?? {
-                    direction: 'normal',
-                    change: 0,
-                  }
-                "
-              />
-            </template>
-          </StatCard>
+    <Card>
+      <CardHeader>
+        <CardTitle>Score Trend</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Skeleton v-if="isPending" class="w-full aspect-2/1" />
+        <LineChart
+          v-else
+          :datasets="data?.scoreTrend ?? []"
+          x-label="Date"
+          y-label="Score"
+        />
+      </CardContent>
+    </Card>
 
-          <StatCard label="Best Game" :stat="data?.bestGame?.score ?? 0">
-            <template v-if="data?.bestGame" #footer>
-              <span class="text-xs text-muted-foreground">
-                {{ formatReadDate(data.bestGame.createdAt) }}
-              </span>
-            </template>
-          </StatCard>
-        </template>
-      </div>
+    <Card>
+      <CardHeader>
+        <div class="flex items-center justify-between">
+          <CardTitle>Score Distribution</CardTitle>
+          <span class="text-muted-foreground text-sm">Max: {{ maxScore }}</span>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Skeleton v-if="isPending" class="w-full aspect-2/1" />
+        <BarChart
+          v-else
+          :datasets="data?.scoreDistribution ?? []"
+          x-label="Score"
+          y-label="Times Thrown"
+        />
+      </CardContent>
+    </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Score Trend</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Skeleton v-if="isPending" class="w-full aspect-2/1" />
-          <LineChart
-            v-else
-            :datasets="data?.scoreTrend ?? []"
-            x-label="Date"
-            y-label="Score"
-          />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <div class="flex items-center justify-between">
-            <CardTitle>Score Distribution</CardTitle>
-            <span class="text-muted-foreground text-sm"
-              >Max: {{ maxScore }}</span
+    <Card>
+      <CardHeader>
+        <CardTitle>Recent Games</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ul class="divide-y">
+          <template v-if="isPending">
+            <SkeletonSinglesTrainingRow v-for="i in 5" :key="i" />
+          </template>
+          <template v-else-if="data?.recentGames?.length">
+            <li
+              v-for="game in data.recentGames"
+              :key="game.id"
+              class="flex items-center gap-6 py-2"
             >
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Skeleton v-if="isPending" class="w-full aspect-2/1" />
-          <BarChart
-            v-else
-            :datasets="data?.scoreDistribution ?? []"
-            x-label="Score"
-            y-label="Times Thrown"
-          />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Games</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul class="divide-y">
-            <template v-if="isPending">
-              <SkeletonSinglesTrainingRow v-for="i in 5" :key="i" />
-            </template>
-            <template v-else-if="data?.recentGames?.length">
-              <li
-                v-for="game in data.recentGames"
-                :key="game.id"
-                class="flex items-center gap-6 py-2"
-              >
+              <span class="text-sm text-muted-foreground">
+                {{ formatReadDate(game.createdAt) }}
+              </span>
+              <div class="grow flex items-center gap-2">
+                <Progress v-model="game.score" :max="maxScore" />
                 <span class="text-sm text-muted-foreground">
-                  {{ formatReadDate(game.createdAt) }}
+                  {{ game.score }}/{{ maxScore }}
                 </span>
-                <div class="grow flex items-center gap-2">
-                  <Progress v-model="game.score" :max="maxScore" />
-                  <span class="text-sm text-muted-foreground">
-                    {{ game.score }}/{{ maxScore }}
-                  </span>
-                </div>
-              </li>
-            </template>
-          </ul>
-        </CardContent>
-      </Card>
-    </template>
+              </div>
+            </li>
+          </template>
+        </ul>
+      </CardContent>
+    </Card>
   </NuxtLayout>
 </template>
