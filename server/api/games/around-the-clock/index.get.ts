@@ -19,11 +19,35 @@ export default defineEventHandler(async (event) => {
   }
 
   const rangeStartDate = getRangeStartDate(data.range)
+  const where = rangeStartDate
+    ? generateRangeWhereClause(rangeStartDate)
+    : undefined
 
-  return await prisma.aroundTheClockGame.findMany({
+  const games = await prisma.aroundTheClockGame.findMany({
+    where,
     orderBy: { createdAt: 'desc' },
-    ...(rangeStartDate
-      ? { where: generateRangeWhereClause(rangeStartDate) }
-      : {}),
+    select: {
+      id: true,
+      createdAt: true,
+      hitPercent: true,
+      dartsThrown: true,
+    },
   })
+
+  const bestGame = getBestGame(games, 'hitPercent')
+  const lastGame = games.length > 0 ? games[games.length - 1] : null
+
+  return {
+    totalGames: games.length,
+    averageHitPercent: {
+      percent: getAverage(games, 'hitPercent'),
+      trend: getTrendDirection(games, 'hitPercent'),
+    },
+    dartsThrown: games.reduce((total, game) => total + game.dartsThrown, 0),
+    bestGame,
+    lastGame,
+    scoreDistribution: getScoreDistribution(games, 'hitPercent'),
+    scoreTrend: getScoreAverageByDate(games, 'hitPercent'),
+    recentGames: games.slice(0, 5),
+  }
 })

@@ -49,7 +49,7 @@
   "devDependencies": {
     "@iconify-json/hugeicons": "^1.2.25",
     "@nuxt/eslint": "1.15.1",
-    "@nuxt/test-utils": "^4.0.0",
+    "@nuxt/test-utils": "^4.0.2",
     "@tailwindcss/vite": "^4.2.2",
     "@types/pg": "^8.20.0",
     "@vue/test-utils": "^2.4.6",

@@ -5,49 +5,20 @@ const { data, error, isPending } = useSsrQuery({
   queryKey: computed(() => ['aroundTheClock', selectedRange.value]),
   queryFn: delayedFunction(
     () =>
-      $fetch<AroundTheClockGame[]>('/api/games/around-the-clock', {
+      $fetch<AroundTheClockDashboardData>('/api/games/around-the-clock', {
         query: { range: selectedRange.value },
       }),
     1000,
   ),
+  staleTime: 60_000,
 })
-
-const isEmpty = computed(() => !isPending.value && !games.value.length)
-
-const games = computed(() => data.value ?? [])
-
-const averageHitPercent = computed(() => ({
-  percent: getAverage(games.value, 'hitPercent'),
-  trend: getTrendDirection(games.value, 'hitPercent'),
-}))
-
-const dartsThrown = computed(() =>
-  games.value.reduce((total, game) => total + game.dartsThrown, 0),
-)
-
-const recentGames = computed(() => getRecentGames(games.value))
-
-const bestGame = computed(() => getBestGame(games.value, 'hitPercent'))
-
-const lastGame = computed(() => {
-  if (!games.value.length) return null
-  return games.value[games.value.length - 1]
-})
-
-const scoreDistribution = computed(() =>
-  getScoreDistribution(games.value, 'hitPercent'),
-)
-
-const scoreTrend = computed(() =>
-  getScoreAverageByDate(games.value, 'hitPercent'),
-)
 </script>
 
 <template>
   <NuxtLayout>
     <ErrorMessage v-if="error" :message="error.message" />
 
-    <Empty v-else-if="isEmpty" class="w-full">
+    <Empty v-else-if="!isPending && !data?.totalGames" class="w-full">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Icon name="hugeicons:dart" />
@@ -72,39 +43,46 @@ const scoreTrend = computed(() =>
         <template v-else>
           <StatCard
             label="Avg Hit %"
-            :stat="averageHitPercent.percent"
+            :stat="data?.averageHitPercent?.percent ?? 0"
             percentage
           >
             <template #footer>
-              <TrendIndicator v-bind="averageHitPercent.trend" />
+              <TrendIndicator
+                v-bind="
+                  data?.averageHitPercent?.trend ?? {
+                    direction: 'normal',
+                    change: 0,
+                  }
+                "
+              />
             </template>
           </StatCard>
 
           <StatCard
             label="Best Game"
-            :stat="bestGame ? bestGame.hitPercent : 0"
+            :stat="data?.bestGame?.hitPercent ?? 0"
             percentage
           >
-            <template v-if="bestGame" #footer>
+            <template v-if="data?.bestGame" #footer>
               <span class="text-xs text-muted-foreground">
-                {{ formatReadDate(bestGame.createdAt) }}
+                {{ formatReadDate(data.bestGame.createdAt) }}
               </span>
             </template>
           </StatCard>
 
           <StatCard
             label="Last Game"
-            :stat="lastGame ? lastGame.hitPercent : 0"
+            :stat="data?.lastGame?.hitPercent ?? 0"
             percentage
           >
-            <template v-if="lastGame" #footer>
+            <template v-if="data?.lastGame" #footer>
               <span class="text-xs text-muted-foreground">
-                {{ formatReadDate(lastGame.createdAt) }}
+                {{ formatReadDate(data.lastGame.createdAt) }}
               </span>
             </template>
           </StatCard>
 
-          <StatCard label="Total Darts" :stat="dartsThrown">
+          <StatCard label="Total Darts" :stat="data?.dartsThrown ?? 0">
             <template #footer>
               <span class="text-xs text-muted-foreground">
                 thrown overall
@@ -122,7 +100,7 @@ const scoreTrend = computed(() =>
           <Skeleton v-if="isPending" class="w-full aspect-2/1" />
           <LineChart
             v-else
-            :datasets="scoreTrend"
+            :datasets="data?.scoreTrend ?? []"
             x-label="Date"
             y-label="Score"
           />
@@ -137,7 +115,7 @@ const scoreTrend = computed(() =>
           <Skeleton v-if="isPending" class="w-full aspect-2/1" />
           <BarChart
             v-else
-            :datasets="scoreDistribution"
+            :datasets="data?.scoreDistribution ?? []"
             x-label="Score"
             y-label="Times Thrown"
           />
@@ -153,9 +131,9 @@ const scoreTrend = computed(() =>
             <template v-if="isPending">
               <SkeletonAroundTheClockRow v-for="i in 5" :key="i" />
             </template>
-            <template v-else-if="recentGames.length">
+            <template v-else-if="data?.recentGames?.length">
               <li
-                v-for="game in recentGames"
+                v-for="game in data.recentGames"
                 :key="game.id"
                 class="flex items-center gap-6 py-2"
               >

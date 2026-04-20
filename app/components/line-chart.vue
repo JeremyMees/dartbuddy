@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { chartColors } from '#shared/constants/charts'
-import type { LineDataSet } from '~/types/charts'
 import { Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,

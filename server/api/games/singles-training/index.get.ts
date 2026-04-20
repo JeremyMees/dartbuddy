@@ -19,11 +19,29 @@ export default defineEventHandler(async (event) => {
   }
 
   const rangeStartDate = getRangeStartDate(data.range)
+  const where = rangeStartDate
+    ? generateRangeWhereClause(rangeStartDate)
+    : undefined
 
-  return await prisma.singlesTrainingGame.findMany({
+  const games = await prisma.singlesTrainingGame.findMany({
+    where,
     orderBy: { createdAt: 'desc' },
-    ...(rangeStartDate
-      ? { where: generateRangeWhereClause(rangeStartDate) }
-      : {}),
+    select: {
+      id: true,
+      createdAt: true,
+      score: true,
+    },
   })
+
+  return {
+    totalGames: games.length,
+    averageScore: {
+      percent: getAverage(games, 'score'),
+      trend: getTrendDirection(games, 'score'),
+    },
+    bestGame: getBestGame(games, 'score'),
+    scoreDistribution: getScoreDistribution(games, 'score'),
+    scoreTrend: getScoreAverageByDate(games, 'score'),
+    recentGames: games.slice(0, 5),
+  }
 })

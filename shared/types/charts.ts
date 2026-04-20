@@ -21,3 +21,5 @@ export interface PieDataSet {
   backgroundColor?: string | string[]
   sort?: SortFunction
 }
+
+export type ChartDataSet = LineDataSet | BarDataSet | PieDataSet

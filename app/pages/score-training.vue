@@ -5,52 +5,20 @@ const { data, isPending, error } = useSsrQuery({
   queryKey: computed(() => ['scoreTraining', selectedRange.value]),
   queryFn: delayedFunction(
     () =>
-      $fetch<ScoreTrainingGame[]>('/api/games/score-training', {
+      $fetch<ScoreTrainingDashboardData>('/api/games/score-training', {
         query: { range: selectedRange.value },
       }),
     1000,
   ),
+  staleTime: 60_000,
 })
-
-const isEmpty = computed(() => !isPending.value && !games.value.length)
-
-const games = computed(() => data.value ?? [])
-
-const averageScore = computed(() => ({
-  percent: getAverage(games.value, 'totalScore'),
-  trend: getTrendDirection(games.value, 'totalScore'),
-}))
-
-const recentGames = computed(() => getRecentGames(games.value))
-
-const bestGame = computed(() => getBestGame(games.value, 'totalScore'))
-
-const bestThreeDarts = computed(() =>
-  games.value.reduce((best, { threeDartAverage }) => {
-    return threeDartAverage > best ? threeDartAverage : best
-  }, 0),
-)
-
-const thrownOneEighties = computed(() =>
-  games.value.reduce((count, game) => count + game.oneEightyCount, 0),
-)
-
-const highestThrow = computed(() => getHighest(games.value, 'highestScore'))
-
-const averageHighestThrow = computed(() =>
-  getAverage(games.value, 'highestScore'),
-)
-
-const scoreTrend = computed(() =>
-  getScoreAverageByDate(games.value, 'totalScore'),
-)
 </script>
 
 <template>
   <NuxtLayout>
     <ErrorMessage v-if="error" :message="error.message" />
 
-    <Empty v-else-if="isEmpty" class="w-full">
+    <Empty v-else-if="!isPending && !data?.totalGames" class="w-full">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Icon name="hugeicons:dart" />
@@ -75,25 +43,32 @@ const scoreTrend = computed(() =>
         </template>
 
         <template v-else>
-          <StatCard label="Avg Score" :stat="averageScore.percent">
+          <StatCard label="Avg Score" :stat="data?.averageScore?.percent ?? 0">
             <template #footer>
-              <TrendIndicator v-bind="averageScore.trend" />
+              <TrendIndicator
+                v-bind="
+                  data?.averageScore?.trend ?? {
+                    direction: 'normal',
+                    change: 0,
+                  }
+                "
+              />
             </template>
           </StatCard>
-          <StatCard
-            label="Best Game"
-            :stat="bestGame ? bestGame.totalScore : 0"
-          >
-            <template v-if="bestGame" #footer>
+          <StatCard label="Best Game" :stat="data?.bestGame?.totalScore ?? 0">
+            <template v-if="data?.bestGame" #footer>
               <span class="text-xs text-muted-foreground">
-                {{ formatReadDate(bestGame.createdAt) }}
+                {{ formatReadDate(data.bestGame.createdAt) }}
               </span>
             </template>
           </StatCard>
-          <StatCard label="Best 3-Dart Avg" :stat="bestThreeDarts" />
-          <StatCard label="Total 180S" :stat="thrownOneEighties" />
-          <StatCard label="Highest Throw" :stat="highestThrow" />
-          <StatCard label="Avg Highest throw" :stat="averageHighestThrow" />
+          <StatCard label="Best 3-Dart Avg" :stat="data?.bestThreeDarts ?? 0" />
+          <StatCard label="Total 180S" :stat="data?.thrownOneEighties ?? 0" />
+          <StatCard label="Highest Throw" :stat="data?.highestThrow ?? 0" />
+          <StatCard
+            label="Avg Highest throw"
+            :stat="data?.averageHighestThrow ?? 0"
+          />
         </template>
       </div>
 
@@ -105,7 +80,7 @@ const scoreTrend = computed(() =>
           <Skeleton v-if="isPending" class="w-full aspect-2/1" />
           <LineChart
             v-else
-            :datasets="scoreTrend"
+            :datasets="data?.scoreTrend ?? []"
             x-label="Date"
             y-label="Score"
           />
@@ -131,9 +106,9 @@ const scoreTrend = computed(() =>
               <template v-if="isPending">
                 <SkeletonScoreTrainingRow v-for="i in 5" :key="i" />
               </template>
-              <template v-else-if="recentGames.length">
+              <template v-else-if="data?.recentGames?.length">
                 <TableRow
-                  v-for="game in recentGames"
+                  v-for="game in data.recentGames"
                   :key="game.id"
                   class="text-sm text-muted-foreground"
                 >

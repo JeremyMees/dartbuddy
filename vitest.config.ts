@@ -5,8 +5,13 @@ export default defineVitestConfig({
     environment: 'nuxt',
     setupFiles: ['./test/nuxt/unit.setup.ts'],
 
-    onConsoleLog: (l) => {
-      return !l.startsWith('<Suspense>')
+    onConsoleLog: (line) => {
+      return (
+        !line.startsWith('<Suspense>') &&
+        !line.startsWith(
+          'Importing from "vitest/environments" is deprecated since Vitest 4.1.',
+        )
+      )
     },
   },
 })

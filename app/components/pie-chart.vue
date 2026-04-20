@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { chartColors } from '#shared/constants/charts'
-import type { PieDataSet } from '~/types/charts'
 import { Doughnut } from 'vue-chartjs'
 import {
   Chart as ChartJS,

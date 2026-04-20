@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { chartColors } from '#shared/constants/charts'
-import type { BarDataSet } from '~/types/charts'
 import { Bar } from 'vue-chartjs'
 import {
   Chart as ChartJS,
