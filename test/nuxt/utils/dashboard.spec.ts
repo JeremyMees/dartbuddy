@@ -366,11 +366,16 @@ describe('Dashboard utils', () => {
 
       const averages = getScoreAverageByDate(games, 'score')
 
-      expect(averages).toHaveLength(1)
-      expect(Object.keys(averages[0]!.data)).toHaveLength(3)
-      expect(averages[0]!.data).toHaveProperty('01/01/26')
-      expect(averages[0]!.data).toHaveProperty('03/01/26')
-      expect(averages[0]!.data).toHaveProperty('05/01/26')
+      expect(averages).toEqual([
+        {
+          label: 'Score Trend',
+          data: {
+            '01/01/26': 20,
+            '03/01/26': 30,
+            '05/01/26': 10,
+          },
+        },
+      ])
     })
   })
 

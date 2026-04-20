@@ -1,7 +1,4 @@
 import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
-
-dayjs.extend(customParseFormat)
 
 export function getAverage<T>(items: T[], key: keyof T): number {
   if (items.length === 0) return 0
@@ -97,24 +94,26 @@ export function getScoreAverageByDate<T extends { createdAt: string | Date }>(
   games: T[],
   key: keyof T,
 ): LineDataSet[] {
-  const grouped = games.reduce<Record<string, number[]>>((acc, game) => {
-    const date = formatDate(game.createdAt)
+  const grouped = games.reduce<
+    Record<string, { label: string; scores: number[] }>
+  >((acc, game) => {
+    const dateKey = formatDateKey(game.createdAt)
     const score = game[key] as number
 
-    if (!Number.isNaN(score)) {
-      acc[date] ??= []
-      acc[date].push(score)
+    if (dateKey !== null && !Number.isNaN(score)) {
+      acc[dateKey] ??= { label: formatDateLabel(game.createdAt), scores: [] }
+      acc[dateKey].scores.push(score)
     }
 
     return acc
   }, {})
 
   const sortedAverages = Object.entries(grouped)
-    .map(([date, scores]): [string, number] => [
-      date,
+    .sort(([leftDate], [rightDate]) => leftDate.localeCompare(rightDate))
+    .map(([, { label, scores }]): [string, number] => [
+      label,
       Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length),
     ])
-    .sort(sortEntriesByDate)
 
   if (sortedAverages.length === 0) {
     return []
@@ -174,24 +173,20 @@ export function getWinLossDistribution<
   ]
 }
 
-function formatDate(date: Date | string) {
-  return dayjs(date).format('DD/MM/YY')
+function formatDateKey(date: Date | string) {
+  const parsedDate = dayjs(date)
+
+  return parsedDate.isValid() ? parsedDate.format('YYYY-MM-DD') : null
 }
 
-function parseChartDate(label: string) {
-  const parsedDate = dayjs(label, 'DD/MM/YY')
-
-  return parsedDate.isValid() ? parsedDate.valueOf() : Number.NaN
+function formatDateLabel(date: Date | string) {
+  return dayjs(date).format('DD/MM/YY')
 }
 
 function parseNumericLabel(label: string) {
   const value = Number(label)
 
   return Number.isNaN(value) ? null : value
-}
-
-function sortEntriesByDate(a: [string, number], b: [string, number]) {
-  return parseChartDate(a[0]) - parseChartDate(b[0])
 }
 
 function sortEntriesByNumericValue(a: [string, number], b: [string, number]) {
