@@ -76,9 +76,12 @@ export default defineNuxtConfig({
         'chart.js',
         'dayjs', // CJS
         'dayjs/plugin/relativeTime', // CJS
+        'dayjs/plugin/customParseFormat', // CJS
         'reka-ui',
         'vaul-vue',
         'zod',
+        '@tanstack/vue-query',
+        '@inspira-ui/plugins', // CJS
       ],
     },
     plugins: [tailwindcss()],
