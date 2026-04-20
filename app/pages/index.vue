@@ -8,7 +8,7 @@ const { data, isPending, error } = useSsrQuery({
       $fetch<MatchGameDashboardData>('/api/games/match-game', {
         query: { range: selectedRange.value },
       }),
-    1000,
+    250,
   ),
   staleTime: 60_000,
 })

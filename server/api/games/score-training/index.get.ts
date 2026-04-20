@@ -23,34 +23,74 @@ export default defineEventHandler(async (event) => {
     ? generateRangeWhereClause(rangeStartDate)
     : undefined
 
-  const games = await prisma.scoreTrainingGame.findMany({
-    where,
-    orderBy: { createdAt: 'desc' },
-    select: {
-      id: true,
-      createdAt: true,
-      totalScore: true,
-      highestScore: true,
-      threeDartAverage: true,
-      oneEightyCount: true,
-    },
-  })
+  const [aggregate, bestGame, scoreTrend, trend, recentGames] =
+    await Promise.all([
+      prisma.scoreTrainingGame.aggregate({
+        where,
+        _avg: {
+          totalScore: true,
+          highestScore: true,
+        },
+        _sum: {
+          oneEightyCount: true,
+        },
+        _max: {
+          highestScore: true,
+          threeDartAverage: true,
+        },
+        _count: {
+          _all: true,
+        },
+      }),
+      prisma.scoreTrainingGame.findFirst({
+        where,
+        orderBy: [{ totalScore: 'desc' }, { createdAt: 'desc' }],
+        select: {
+          id: true,
+          createdAt: true,
+          totalScore: true,
+          highestScore: true,
+          threeDartAverage: true,
+          oneEightyCount: true,
+        },
+      }),
+      getScoreAverageByDateForColumn(
+        'ScoreTrainingGame',
+        'totalScore',
+        rangeStartDate,
+      ),
+      getTrendDirectionForColumn(
+        'ScoreTrainingGame',
+        'totalScore',
+        rangeStartDate,
+      ),
+      prisma.scoreTrainingGame.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        take: 5,
+        select: {
+          id: true,
+          createdAt: true,
+          totalScore: true,
+          highestScore: true,
+          threeDartAverage: true,
+          oneEightyCount: true,
+        },
+      }),
+    ])
 
   return {
-    totalGames: games.length,
+    totalGames: aggregate._count._all,
     averageScore: {
-      percent: getAverage(games, 'totalScore'),
-      trend: getTrendDirection(games, 'totalScore'),
+      percent: Math.round(aggregate._avg.totalScore ?? 0),
+      trend,
     },
-    bestGame: getBestGame(games, 'totalScore'),
-    bestThreeDarts: getHighest(games, 'threeDartAverage'),
-    thrownOneEighties: games.reduce(
-      (count, game) => count + game.oneEightyCount,
-      0,
-    ),
-    highestThrow: getHighest(games, 'highestScore'),
-    averageHighestThrow: getAverage(games, 'highestScore'),
-    scoreTrend: getScoreAverageByDate(games, 'totalScore'),
-    recentGames: games.slice(0, 5),
+    bestGame,
+    bestThreeDarts: Math.round(aggregate._max.threeDartAverage ?? 0),
+    thrownOneEighties: aggregate._sum.oneEightyCount ?? 0,
+    highestThrow: aggregate._max.highestScore ?? 0,
+    averageHighestThrow: Math.round(aggregate._avg.highestScore ?? 0),
+    scoreTrend,
+    recentGames,
   }
 })

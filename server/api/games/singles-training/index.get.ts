@@ -23,25 +23,64 @@ export default defineEventHandler(async (event) => {
     ? generateRangeWhereClause(rangeStartDate)
     : undefined
 
-  const games = await prisma.singlesTrainingGame.findMany({
-    where,
-    orderBy: { createdAt: 'desc' },
-    select: {
-      id: true,
-      createdAt: true,
-      score: true,
-    },
-  })
+  const [
+    aggregate,
+    bestGame,
+    scoreDistribution,
+    scoreTrend,
+    trend,
+    recentGames,
+  ] = await Promise.all([
+    prisma.singlesTrainingGame.aggregate({
+      where,
+      _avg: {
+        score: true,
+      },
+      _count: {
+        _all: true,
+      },
+    }),
+    prisma.singlesTrainingGame.findFirst({
+      where,
+      orderBy: [{ score: 'desc' }, { createdAt: 'desc' }],
+      select: {
+        id: true,
+        createdAt: true,
+        score: true,
+      },
+    }),
+    getScoreDistributionForColumn(
+      'SinglesTrainingGame',
+      'score',
+      rangeStartDate,
+    ),
+    getScoreAverageByDateForColumn(
+      'SinglesTrainingGame',
+      'score',
+      rangeStartDate,
+    ),
+    getTrendDirectionForColumn('SinglesTrainingGame', 'score', rangeStartDate),
+    prisma.singlesTrainingGame.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+      select: {
+        id: true,
+        createdAt: true,
+        score: true,
+      },
+    }),
+  ])
 
   return {
-    totalGames: games.length,
+    totalGames: aggregate._count._all,
     averageScore: {
-      percent: getAverage(games, 'score'),
-      trend: getTrendDirection(games, 'score'),
+      percent: Math.round(aggregate._avg.score ?? 0),
+      trend,
     },
-    bestGame: getBestGame(games, 'score'),
-    scoreDistribution: getScoreDistribution(games, 'score'),
-    scoreTrend: getScoreAverageByDate(games, 'score'),
-    recentGames: games.slice(0, 5),
+    bestGame,
+    scoreDistribution,
+    scoreTrend,
+    recentGames,
   }
 })

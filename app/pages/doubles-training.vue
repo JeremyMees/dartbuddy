@@ -8,7 +8,7 @@ const { data, error, isPending } = useSsrQuery({
       $fetch<DoublesTrainingDashboardData>('/api/games/doubles-training', {
         query: { range: selectedRange.value },
       }),
-    1000,
+    250,
   ),
   staleTime: 60_000,
 })

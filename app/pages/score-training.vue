@@ -8,7 +8,7 @@ const { data, isPending, error } = useSsrQuery({
       $fetch<ScoreTrainingDashboardData>('/api/games/score-training', {
         query: { range: selectedRange.value },
       }),
-    1000,
+    250,
   ),
   staleTime: 60_000,
 })

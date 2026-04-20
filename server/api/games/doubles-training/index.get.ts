@@ -23,25 +23,68 @@ export default defineEventHandler(async (event) => {
     ? generateRangeWhereClause(rangeStartDate)
     : undefined
 
-  const games = await prisma.doublesTrainingGame.findMany({
-    where,
-    orderBy: { createdAt: 'desc' },
-    select: {
-      id: true,
-      createdAt: true,
-      hitPercent: true,
-    },
-  })
+  const [
+    aggregate,
+    bestGame,
+    scoreDistribution,
+    scoreTrend,
+    trend,
+    recentGames,
+  ] = await Promise.all([
+    prisma.doublesTrainingGame.aggregate({
+      where,
+      _avg: {
+        hitPercent: true,
+      },
+      _count: {
+        _all: true,
+      },
+    }),
+    prisma.doublesTrainingGame.findFirst({
+      where,
+      orderBy: [{ hitPercent: 'desc' }, { createdAt: 'desc' }],
+      select: {
+        id: true,
+        createdAt: true,
+        hitPercent: true,
+      },
+    }),
+    getScoreDistributionForColumn(
+      'DoublesTrainingGame',
+      'hitPercent',
+      rangeStartDate,
+    ),
+    getScoreAverageByDateForColumn(
+      'DoublesTrainingGame',
+      'hitPercent',
+      rangeStartDate,
+    ),
+    getTrendDirectionForColumn(
+      'DoublesTrainingGame',
+      'hitPercent',
+      rangeStartDate,
+    ),
+    prisma.doublesTrainingGame.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+      select: {
+        id: true,
+        createdAt: true,
+        hitPercent: true,
+      },
+    }),
+  ])
 
   return {
-    totalGames: games.length,
+    totalGames: aggregate._count._all,
     averageScore: {
-      percent: getAverage(games, 'hitPercent'),
-      trend: getTrendDirection(games, 'hitPercent'),
+      percent: Math.round(aggregate._avg.hitPercent ?? 0),
+      trend,
     },
-    bestGame: getBestGame(games, 'hitPercent'),
-    scoreDistribution: getScoreDistribution(games, 'hitPercent'),
-    scoreTrend: getScoreAverageByDate(games, 'hitPercent'),
-    recentGames: games.slice(0, 5),
+    bestGame,
+    scoreDistribution,
+    scoreTrend,
+    recentGames,
   }
 })

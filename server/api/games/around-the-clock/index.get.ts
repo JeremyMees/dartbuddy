@@ -23,31 +23,86 @@ export default defineEventHandler(async (event) => {
     ? generateRangeWhereClause(rangeStartDate)
     : undefined
 
-  const games = await prisma.aroundTheClockGame.findMany({
-    where,
-    orderBy: { createdAt: 'desc' },
-    select: {
-      id: true,
-      createdAt: true,
-      hitPercent: true,
-      dartsThrown: true,
-    },
-  })
-
-  const bestGame = getBestGame(games, 'hitPercent')
-  const lastGame = games.length > 0 ? games[games.length - 1] : null
-
-  return {
-    totalGames: games.length,
-    averageHitPercent: {
-      percent: getAverage(games, 'hitPercent'),
-      trend: getTrendDirection(games, 'hitPercent'),
-    },
-    dartsThrown: games.reduce((total, game) => total + game.dartsThrown, 0),
+  const [
+    aggregate,
     bestGame,
     lastGame,
-    scoreDistribution: getScoreDistribution(games, 'hitPercent'),
-    scoreTrend: getScoreAverageByDate(games, 'hitPercent'),
-    recentGames: games.slice(0, 5),
+    scoreDistribution,
+    scoreTrend,
+    trend,
+    recentGames,
+  ] = await Promise.all([
+    prisma.aroundTheClockGame.aggregate({
+      where,
+      _avg: {
+        hitPercent: true,
+      },
+      _sum: {
+        dartsThrown: true,
+      },
+      _count: {
+        _all: true,
+      },
+    }),
+    prisma.aroundTheClockGame.findFirst({
+      where,
+      orderBy: [{ hitPercent: 'desc' }, { createdAt: 'desc' }],
+      select: {
+        id: true,
+        createdAt: true,
+        hitPercent: true,
+        dartsThrown: true,
+      },
+    }),
+    prisma.aroundTheClockGame.findFirst({
+      where,
+      orderBy: { createdAt: 'asc' },
+      select: {
+        id: true,
+        createdAt: true,
+        hitPercent: true,
+        dartsThrown: true,
+      },
+    }),
+    getScoreDistributionForColumn(
+      'AroundTheClockGame',
+      'hitPercent',
+      rangeStartDate,
+    ),
+    getScoreAverageByDateForColumn(
+      'AroundTheClockGame',
+      'hitPercent',
+      rangeStartDate,
+    ),
+    getTrendDirectionForColumn(
+      'AroundTheClockGame',
+      'hitPercent',
+      rangeStartDate,
+    ),
+    prisma.aroundTheClockGame.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+      select: {
+        id: true,
+        createdAt: true,
+        hitPercent: true,
+        dartsThrown: true,
+      },
+    }),
+  ])
+
+  return {
+    totalGames: aggregate._count._all,
+    averageHitPercent: {
+      percent: Math.round(aggregate._avg.hitPercent ?? 0),
+      trend,
+    },
+    dartsThrown: aggregate._sum.dartsThrown ?? 0,
+    bestGame,
+    lastGame,
+    scoreDistribution,
+    scoreTrend,
+    recentGames,
   }
 })
