@@ -14,7 +14,9 @@ async function setGameType(
 
   if (type) {
     await nextTick()
-    document.querySelector<HTMLInputElement>('form input')?.focus()
+    document
+      .querySelector<HTMLElement>('form input, form [role="combobox"]')
+      ?.focus()
   }
 }
 </script>
