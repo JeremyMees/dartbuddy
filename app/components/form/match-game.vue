@@ -2,11 +2,15 @@
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm, Field as VeeField } from 'vee-validate'
 import { createMatchGameSchema } from '#shared/form-schemas'
+import { useMutation } from '@tanstack/vue-query'
+import type { z } from 'zod'
 
 const emit = defineEmits<{
   back: []
   created: []
 }>()
+
+type FormData = z.infer<typeof createMatchGameSchema>
 
 const formSchema = toTypedSchema(createMatchGameSchema)
 
@@ -17,19 +21,19 @@ const { handleSubmit, resetForm } = useForm({
   },
 })
 
-const onSubmit = handleSubmit(async (data) => {
-  try {
-    await $fetch('/api/games/match-game', {
+const { mutate } = useMutation({
+  mutationFn: (game: FormData) =>
+    $fetch<MatchGame>('/api/games/match-game', {
       method: 'POST',
-      body: data,
-    })
-
+      body: game,
+    }),
+  onSuccess: () => {
     resetForm()
     emit('created')
-  } catch (error) {
-    console.error('Error creating game:', error)
-  }
+  },
 })
+
+const onSubmit = handleSubmit((data) => mutate(data))
 </script>
 
 <template>
