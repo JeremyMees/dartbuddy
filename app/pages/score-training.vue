@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
+const selectedRange = useRouteQuery<GameRange>('range', 'lastMonth')
 
 const { data, isPending, error } = useSsrQuery({
   queryKey: computed(() => ['scoreTraining', selectedRange.value]),

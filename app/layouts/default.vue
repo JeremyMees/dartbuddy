@@ -8,7 +8,7 @@ defineProps<{
 
 const queryClient = useQueryClient()
 const route = useRoute()
-const selectedRange = useRouteQuery<GameRange>('range', 'lastWeek')
+const selectedRange = useRouteQuery<GameRange>('range', 'lastMonth')
 
 const selectedGameType = ref<GameType>('matchGame')
 const formTitle = ref<string>()
