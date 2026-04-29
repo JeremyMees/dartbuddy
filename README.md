@@ -1,6 +1,5 @@
 ![CI](https://www.shieldcn.dev/github/ci/jeremyMees/dartBuddy.svg?variant=secondary&size=sm)
 ![License](https://www.shieldcn.dev/github/license/jeremyMees/dartBuddy.svg?variant=ghost&size=sm)
-![Commits](https://www.shieldcn.dev/github/commits/jeremyMees/dartBuddy.svg?variant=secondary&size=sm)
 ![Open issues](https://www.shieldcn.dev/github/open-issues/jeremyMees/dartBuddy.svg?variant=secondary&size=sm)
 ![Open PRs](https://www.shieldcn.dev/github/open-prs/jeremyMees/dartBuddy.svg?variant=secondary&size=sm)
 
