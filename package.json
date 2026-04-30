@@ -23,6 +23,7 @@
     "@nuxt/image": "2.0.0",
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
+    "@rexa-developer/tiks": "^0.1.8",
     "@tanstack/vue-query": "^5.99.2",
     "@tanstack/vue-table": "^8.21.3",
     "@vee-validate/zod": "^4.15.1",

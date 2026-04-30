@@ -4,11 +4,14 @@ import { useForm, Field as VeeField } from 'vee-validate'
 import { createMatchGameSchema } from '#shared/form-schemas'
 import { useMutation } from '@tanstack/vue-query'
 import type { z } from 'zod'
+import { useTiks } from '@rexa-developer/tiks/vue'
 
 const emit = defineEmits<{
   back: []
   created: []
 }>()
+
+const { success, error } = useTiks()
 
 type FormData = z.infer<typeof createMatchGameSchema>
 
@@ -28,9 +31,11 @@ const { mutate } = useMutation({
       body: game,
     }),
   onSuccess: () => {
+    success()
     resetForm()
     emit('created')
   },
+  onError: () => error(),
 })
 
 const onSubmit = handleSubmit((data) => mutate(data))

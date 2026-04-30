@@ -2,6 +2,7 @@
 import type { CheckboxRootEmits, CheckboxRootProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'reka-ui'
+import { useTiks } from '@rexa-developer/tiks/vue'
 
 const props = defineProps<
   CheckboxRootProps & { class?: HTMLAttributes['class'] }
@@ -11,6 +12,8 @@ const emits = defineEmits<CheckboxRootEmits>()
 const delegatedProps = reactiveOmit(props, 'class')
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
+
+const { toggle } = useTiks()
 </script>
 
 <template>
@@ -24,6 +27,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
         props.class,
       )
     "
+    @update:model-value="(value) => toggle(!value)"
   >
     <CheckboxIndicator
       data-slot="checkbox-indicator"
